@@ -45,4 +45,4 @@ go test -v ./04-datastructs/...
 
 ## 🔗 Связанные материалы
 - **Теория:** [Том 6: Алгоритмы и собеседования (Разделы 30–31: Списки, деревья, хеш-таблицы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md)
-- **Практическое ДЗ:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-04) (Реализация собственного двусвязного списка для поискового движка)
+- **Практическое ДЗ:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/homework-04) (Реализация собственного двусвязного списка для поискового движка)

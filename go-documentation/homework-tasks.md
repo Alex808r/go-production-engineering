@@ -299,7 +299,7 @@ func main() {
 
 > 📖 **Теория:** [Том 1: Раздел 5 (Массивы и слайсы, append, cap)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#5-массивы-и-слайсы-arrays--slices)  
 > 💻 **Код лекции:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map)  
-> 🛠️ **Домашнее задание:** [homework-02 (GoSearch crawler)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02)  
+> 🛠️ **Домашнее задание:** [homework-02 (GoSearch crawler)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие:
@@ -352,7 +352,7 @@ func main() {
 
 > 📖 **Теория:** [Том 1: Раздел 6 (Карты maps, устройство и доступ)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#6-карты-maps)  
 > 💻 **Код лекции:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map)  
-> 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03)  
+> 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 03)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-03-алгоритмы-и-вычислительная-сложность)
 
 ### 🎯 Условие:
@@ -411,7 +411,7 @@ func main() {
 
 > 📖 **Теория:** [Том 1: Разделы 7, 8 (Указатели и структуры)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#7-указатели-в-деталях-pointers), [Том 2: Раздел 9 (Методы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
 > 💻 **Код лекции:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/2-structures), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/4-pointers), [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop)  
-> 🛠️ **Домашнее задание:** [homework-06 (ООП движок)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06)  
+> 🛠️ **Домашнее задание:** [homework-06 (ООП движок)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 06)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-06-ооп-в-go-методы-композиция-и-dip)
 
 ### 🎯 Условие:
@@ -518,7 +518,7 @@ func main() {
 
 > 📖 **Теория:** [Том 2: Раздел 9 (Интерфейсы, полиморфизм, duck typing)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
 > 💻 **Код лекции:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop), [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/09-interfaces)  
-> 🛠️ **Домашние задания:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06), [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-09)  
+> 🛠️ **Домашние задания:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06), [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/09-interfaces/homework-09)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-09-интерфейсы-и-полиморфизм)
 
 ### 🎯 Условие:
@@ -598,7 +598,7 @@ func main() {
 
 > 📖 **Теория:** [Том 3: Разделы 11, 15 (Горутины, каналы, sync, Worker Pool)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md#11-конкурентность-горутины-и-каналы-concurrency)  
 > 💻 **Код лекции:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/21-interview)  
-> 🛠️ **Домашнее задание:** [homework-10 (Ping-Pong)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10)  
+> 🛠️ **Домашнее задание:** [homework-10 (Ping-Pong)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10)  
 > 💡 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-10-конкурентность-горутины-и-каналы)
 
@@ -750,7 +750,7 @@ func main() {
 
 > 📖 **Теория:** [Том 4: Раздел 12 (HTTP сервер, маршрутизация, middleware)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка-и-http-nethttp)  
 > 💻 **Код лекции:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps), [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api)  
-> 🛠️ **Домашние задания:** [homework-12 (Web-сервер)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-12), [homework-13 (REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-13)  
+> 🛠️ **Домашние задания:** [homework-12 (Web-сервер)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps/homework-12), [homework-13 (REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api/homework-13)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 12–13)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-12-веб-приложения-и-http-сервер)
 
 ### 🎯 Условие:
@@ -874,7 +874,7 @@ func main() {
 > 📖 **Теория:** [Том 4: Раздел 13 (PostgreSQL, pgxpool, транзакции)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-postgresql--pgxpool)  
 > 🗄️ **Гайд по БД:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)  
 > 💻 **Код лекции:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps)  
-> 🛠️ **Домашние задания:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-15), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-16)  
+> 🛠️ **Домашние задания:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 15–16)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-15-реляционные-базы-данных-и-sql)
 
 ### 🎯 Условие:
@@ -1128,10 +1128,10 @@ func main() {
 
 > 📖 **Теория:** [Том 1: Раздел 5 (Массивы и слайсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#5-массивы-и-слайсы-arrays--slices)  
 > 💻 **Код лекции:** [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax)  
-> 📁 **Каталог решения:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02)  
-> 💻 **Исполняемый пакет:** [homework-02/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02/cmd/gosearch/main.go)  
-> 📦 **Пакеты:** [crawler](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02/pkg/crawler), [spider](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02/pkg/crawler/spider), [membot](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02/pkg/crawler/membot)  
-> 🧪 **Тесты:** [homework-02/cmd/gosearch/main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02/cmd/gosearch/main_test.go)  
+> 📁 **Каталог решения:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02)  
+> 💻 **Исполняемый пакет:** [homework-02/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02/cmd/gosearch/main.go)  
+> 📦 **Пакеты:** [crawler](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02/pkg/crawler), [spider](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02/pkg/crawler/spider), [membot](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02/pkg/crawler/membot)  
+> 🧪 **Тесты:** [homework-02/cmd/gosearch/main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02/cmd/gosearch/main_test.go)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие задачи:
@@ -1151,10 +1151,10 @@ func main() {
 
 > 📖 **Теория:** [Том 1: Раздел 6 (Карты maps)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#6-карты-maps), [Том 6: Разделы 26–27 (Сложность O, поиск)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md#26-базовые-алгоритмы-и-o-нотация-в-go)  
 > 💻 **Код лекции:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms)  
-> 📁 **Каталог решения:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03)  
-> 💻 **Исполняемый пакет:** [homework-03/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03/cmd/gosearch/main.go)  
-> 📦 **Пакеты:** [pkg/index](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03/pkg/index), [pkg/crawler](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03/pkg/crawler)  
-> 🧪 **Тесты:** [index_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03/pkg/index/index_test.go), [main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03/cmd/gosearch/main_test.go)  
+> 📁 **Каталог решения:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03)  
+> 💻 **Исполняемый пакет:** [homework-03/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03/cmd/gosearch/main.go)  
+> 📦 **Пакеты:** [pkg/index](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03/pkg/index), [pkg/crawler](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03/pkg/crawler)  
+> 🧪 **Тесты:** [index_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03/pkg/index/index_test.go), [main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03/cmd/gosearch/main_test.go)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 03)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-03-алгоритмы-и-вычислительная-сложность)
 
 ### 🎯 Условие задачи:
@@ -1179,8 +1179,8 @@ func main() {
 
 > 📖 **Теория:** [Том 6: Раздел 27 (Классические структуры данных)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md#27-классические-структуры-данных-data-structures-в-go)  
 > 💻 **Код лекции:** [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs)  
-> 📁 **Каталог решения:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-04) и [04-datastructs/1-list](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/1-list)  
-> 🧪 **Тесты:** [list_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-04/pkg/list/list_test.go)  
+> 📁 **Каталог решения:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/homework-04) и [04-datastructs/1-list](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/1-list)  
+> 🧪 **Тесты:** [list_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/homework-04/pkg/list/list_test.go)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 04)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-04-классические-структуры-данных)
 
 ### 🎯 Условие задачи:
@@ -1353,12 +1353,12 @@ func (l *List) Reverse() *List {
 
 > 📖 **Теория:** [Том 2: Раздел 9.6 (Потоковый ввод-вывод io.Reader / io.Writer)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#96-потоковый-ввод-вывод-интерфейсы-ioreader-и-iowriter)  
 > 💻 **Код лекции:** [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/05-io)  
-> 📁 **Каталог решения:** [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-05)  
-> 📦 **Пакеты:** [homework-05/pkg/storage](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-05/pkg/storage)  
-> 🧪 **Тесты:** `go test -v ./homework-05/...`  
+> 📁 **Каталог решения:** [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/05-io/homework-05)  
+> 📦 **Пакеты:** [homework-05/pkg/storage](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/05-io/homework-05/pkg/storage)  
+> 🧪 **Тесты:** `go test -v ./05-io/homework-05/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 05)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-05-потоковый-ввод-вывод-файлы-и-json)
 
-В данном домашнем задании (каталог `go_course_4/homework-05/`) реализована персистентность поисковых данных робота **GoSearch**: сохранение отсканированных веб-страниц в файл на диске и их мгновенная загрузка при повторном запуске без необходимости повторного сетевого сканирования.
+В данном домашнем задании (каталог `go_course_4/05-io/homework-05/`) реализована персистентность поисковых данных робота **GoSearch**: сохранение отсканированных веб-страниц в файл на диске и их мгновенная загрузка при повторном запуске без необходимости повторного сетевого сканирования.
 
 ### 🎯 Условия задач занятия №5:
 
@@ -1388,7 +1388,7 @@ import (
 	"fmt"
 	"io"
 
-	"go-core-4/homework-05/pkg/crawler"
+	"go-core-4/05-io/homework-05/pkg/crawler"
 )
 
 // Store выполняет сериализацию документов в формате JSON и записывает их в io.Writer.
@@ -1448,7 +1448,7 @@ func LoadGOB(r io.Reader) ([]crawler.Document, error) {
 ### 🔍 Прохождение тестов:
 
 ```bash
-$ cd go_course_4/homework-05 && go test -v ./...
+$ cd go_course_4/05-io/homework-05 && go test -v ./...
 === RUN   TestFileExists
 --- PASS: TestFileExists (0.00s)
 === RUN   TestStorageWorkflowWithTempFile
@@ -1471,12 +1471,12 @@ ok      go-core-4/homework-05/pkg/storage       0.512s
 
 > 📖 **Теория:** [Том 2: Раздел 9 (Методы, получатели, встраивание, DIP)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
 > 💻 **Код лекции:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop)  
-> 📁 **Каталог решения:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06)  
-> 📦 **Пакеты:** [engine](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06/pkg/engine), [geom](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06/pkg/geom)  
-> 🧪 **Тесты:** `go test -v ./homework-06/...`  
+> 📁 **Каталог решения:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06)  
+> 📦 **Пакеты:** [engine](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06/pkg/engine), [geom](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06/pkg/geom)  
+> 🧪 **Тесты:** `go test -v ./06-oop/homework-06/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 06)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-06-ооп-в-go-методы-композиция-и-dip)
 
-В рамках данного занятия (каталоги `go_course_4/06-oop/5-hw/` и `go_course_4/homework-06/`) решаются две ключевые задачи:
+В рамках данного занятия (каталоги `go_course_4/06-oop/5-hw/` и `go_course_4/06-oop/homework-06/`) решаются две ключевые задачи:
 
 1. **Задача №1 (Рефакторинг пакета геометрии):** Исправление стилистических, математических и архитектурных ошибок в исходном коде `hw.go` с выписыванием всех исправленных недостатков.
 2. **Задача №2 (ООП-архитектура поискового движка GoSearch):** Превращение процедурного кода поисковика в полноценный объект `engine.Engine`, инкапсулирующий состояние (список документов) и зависимости (краулер, инвертированный индекс), с инициализацией зависимостей на верхнем уровне (`main`) и передачей через конструктор `New()`.
@@ -1530,7 +1530,7 @@ func (geom Geom) CalculateDistance() (distance float64) {
 
 ---
 
-### 💻 Эталонное решение задачи №1 (`go_course_4/homework-06/pkg/geom/geom.go`):
+### 💻 Эталонное решение задачи №1 (`go_course_4/06-oop/homework-06/pkg/geom/geom.go`):
 
 ```go
 package geom
@@ -1587,9 +1587,9 @@ import (
 	"io"
 	"sort"
 
-	"go-core-4/homework-06/pkg/crawler"
-	"go-core-4/homework-06/pkg/index"
-	"go-core-4/homework-06/pkg/storage"
+	"go-core-4/06-oop/homework-06/pkg/crawler"
+	"go-core-4/06-oop/homework-06/pkg/index"
+	"go-core-4/06-oop/homework-06/pkg/storage"
 )
 
 // Engine инкапсулирует состояние поискового сервиса и его зависимости.
@@ -1676,7 +1676,7 @@ func (e *Engine) Load(r io.Reader) error {
 ### 🔍 Прохождение тестов и бенчмарков:
 
 ```bash
-$ cd go_course_4 && go test -v -bench=. ./homework-06/...
+$ cd go_course_4 && go test -v -bench=. ./06-oop/homework-06/...
 === RUN   TestFileExists
 --- PASS: TestFileExists (0.00s)
 === RUN   TestEngineIntegration
@@ -1720,9 +1720,9 @@ ok  	go-core-4/homework-06/pkg/storage	0.173s
 
 > 📖 **Теория:** [Том 5: Разделы 17.1–17.5 (Unit-тесты, Table-Driven, бенчмарки)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#17-тестирование-бенчмарки-и-профилирование-testing--pprof)  
 > 💻 **Код лекции:** [07-testing](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing)  
-> 📁 **Каталог решения:** [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-07)  
-> 📦 **Пакеты:** [sorts](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-07/pkg/sorts), [storage](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-07/pkg/storage)  
-> 🧪 **Тесты:** `go test -v -bench=. ./homework-07/...`  
+> 📁 **Каталог решения:** [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07)  
+> 📦 **Пакеты:** [sorts](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07/pkg/sorts), [storage](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07/pkg/storage)  
+> 🧪 **Тесты:** `go test -v -bench=. ./07-testing/homework-07/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 07)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-07-промышленное-тестирование-и-tdd)
 
 ### 🎯 Условие задачи:
@@ -1776,7 +1776,7 @@ ok  	go-core-4/homework-06/pkg/storage	0.173s
 
 ### 💻 Эталонное решение (Clean Code / Production-ready):
 
-#### 1. Модульные и табличные тесты сортировок ([`pkg/sorts/sorts_test.go`](../homework-07/pkg/sorts/sorts_test.go)):
+#### 1. Модульные и табличные тесты сортировок ([`pkg/sorts/sorts_test.go`](../07-testing/homework-07/pkg/sorts/sorts_test.go)):
 
 ```go
 package sorts
@@ -1878,12 +1878,12 @@ func BenchmarkSortFloat64s(b *testing.B) {
 }
 ```
 
-#### 2. Мокирование зависимостей краулера ([`pkg/crawler/membot/membot.go`](../homework-07/pkg/crawler/membot/membot.go)):
+#### 2. Мокирование зависимостей краулера ([`pkg/crawler/membot/membot.go`](../07-testing/homework-07/pkg/crawler/membot/membot.go)):
 
 ```go
 package membot
 
-import "go-core-4/homework-07/pkg/crawler"
+import "go-core-4/07-testing/homework-07/pkg/crawler"
 
 // Service реализует crawler.Interface полностью в памяти без обращения к сети.
 type Service struct{}
@@ -1902,7 +1902,7 @@ func (s *Service) Scan(url string, depth int) ([]crawler.Document, error) {
 }
 ```
 
-#### 3. Тестирование поискового движка ([`pkg/engine/engine_test.go`](../homework-07/pkg/engine/engine_test.go)):
+#### 3. Тестирование поискового движка ([`pkg/engine/engine_test.go`](../07-testing/homework-07/pkg/engine/engine_test.go)):
 
 ```go
 package engine
@@ -1911,8 +1911,8 @@ import (
 	"bytes"
 	"testing"
 
-	"go-core-4/homework-07/pkg/crawler/membot"
-	"go-core-4/homework-07/pkg/index"
+	"go-core-4/07-testing/homework-07/pkg/crawler/membot"
+	"go-core-4/07-testing/homework-07/pkg/index"
 )
 
 func TestEngine_ScanAndSearch(t *testing.T) {
@@ -1976,7 +1976,7 @@ func TestEngine_SaveAndLoad(t *testing.T) {
 #### 2. Лог прогона тестов и покрытия кода:
 
 ```bash
-$ cd go_course_4 && go test -v -cover -bench=. -benchmem -benchtime=100ms ./homework-07/...
+$ cd go_course_4 && go test -v -cover -bench=. -benchmem -benchtime=100ms ./07-testing/homework-07/...
 === RUN   TestExecuteSearch
 --- PASS: TestExecuteSearch (0.00s)
 PASS
@@ -2025,13 +2025,13 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 > 📖 **Теория:** [Том 5: Разделы 17.6–17.9 (pprof, трассировка)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#17-тестирование-бенчмарки-и-профилирование-testing--pprof)  
 > 💻 **Код лекции:** [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug)  
-> 📁 **Каталог решения:** [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-08)  
-> 🧪 **Тесты:** `go test -v -bench=. ./homework-08/...`  
+> 📁 **Каталог решения:** [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08)  
+> 🧪 **Тесты:** `go test -v -bench=. ./08-prof_debug/homework-08/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 08)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-08-профилирование-бенчмарки-и-трейсинг)
 
-Решение полностью реализовано в директории [`go_course_4/homework-08`](../homework-08).
+Решение полностью реализовано в директории [`go_course_4/08-prof_debug/homework-08`](../08-prof_debug/homework-08).
 
-#### 1. Отладка приложения в Delve ([`pkg/twosum/twosum.go`](../homework-08/pkg/twosum/twosum.go)):
+#### 1. Отладка приложения в Delve ([`pkg/twosum/twosum.go`](../08-prof_debug/homework-08/pkg/twosum/twosum.go)):
 - **Локализация бага**: В исходном варианте `TwoSumBuggy` вложенный цикл `for j := 0; j < len(nums); j++` при `nums = [2, 10, 6, 12, 14], target = 20` брал один и тот же элемент `nums[1] = 10` дважды и возвращал `[1, 1]` вместо `[2, 4]`.
 - **Сессия Delve CLI**:
   ```text
@@ -2051,10 +2051,10 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
   ```
   Оптимальный алгоритм на хеш-таблице работает в **14 раз быстрее**.
 
-#### 2. Профилирование процессора и памяти ([`pkg/search`](../homework-08/pkg/search), [`cmd/app_profile`](../homework-08/cmd/app_profile)):
+#### 2. Профилирование процессора и памяти ([`pkg/search`](../08-prof_debug/homework-08/pkg/search), [`cmd/app_profile`](../08-prof_debug/homework-08/cmd/app_profile)):
 - **Снятие профилей бенчмарка**:
   ```bash
-  go test -bench=BenchmarkBinarySearch_100k -benchmem -cpuprofile=cpu.out -memprofile=mem.out ./homework-08/pkg/search
+  go test -bench=BenchmarkBinarySearch_100k -benchmem -cpuprofile=cpu.out -memprofile=mem.out ./08-prof_debug/homework-08/pkg/search
   ```
   Замер показал: `48.54 ns/op, 0 B/op, 0 allocs/op`.
 - **Инспекция `go tool pprof -text cpu.out`**:
@@ -2062,7 +2062,7 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 - **Профилирование сервиса через `net/http/pprof`**:
   Сервер на `:6060` предоставляет эндпоинты `/debug/pprof/profile` и `/debug/pprof/heap`. Анализ разделяет утечки (`inuse_space`) и нагрузку на GC (`alloc_space`).
 
-#### 3. Трассировка выполнения (`runtime/trace`) ([`cmd/app_trace`](../homework-08/cmd/app_trace)):
+#### 3. Трассировка выполнения (`runtime/trace`) ([`cmd/app_trace`](../08-prof_debug/homework-08/cmd/app_trace)):
 - Запись журнала событий через `trace.Start(f)` и `trace.Stop()`.
 - Просмотр через `go tool trace trace.out`.
 
@@ -2072,13 +2072,13 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 > 📖 **Теория:** [Том 2: Раздел 9 (Методы и интерфейсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
 > 💻 **Код лекции:** [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/09-interfaces)  
-> 📁 **Каталог решения:** [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-09)  
-> 🧪 **Тесты:** `go test -v ./homework-09/...`  
+> 📁 **Каталог решения:** [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/09-interfaces/homework-09)  
+> 🧪 **Тесты:** `go test -v ./09-interfaces/homework-09/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-09-интерфейсы-и-полиморфизм)
 
-Решение полностью реализовано и протестировано в директории [`go_course_4/homework-09`](../homework-09).
+Решение полностью реализовано и протестировано в директории [`go_course_4/09-interfaces/homework-09`](../09-interfaces/homework-09).
 
-#### 1. Полиморфизм через общий контракт интерфейса ([`pkg/users/users.go`](../homework-09/pkg/users/users.go)):
+#### 1. Полиморфизм через общий контракт интерфейса ([`pkg/users/users.go`](../09-interfaces/homework-09/pkg/users/users.go)):
 - Интерфейс `Ager` с методом `Age() int` и утиная типизация для `Employee` и `Customer`.
 - Функция `MaxAge(people ...Ager) int` находит максимальный возраст среди произвольных типов.
 
@@ -2089,7 +2089,7 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 #### 3. Фильтрация типов и потоковый вывод в `io.Writer`:
 - Функция `WriteOnlyStrings(w io.Writer, args ...any) (int, error)` проверяет типы через `switch v := arg.(type)` и пишет строковые аргументы в поток.
 
-#### 4. Тестирование ([`pkg/users/users_test.go`](../homework-09/pkg/users/users_test.go)):
+#### 4. Тестирование ([`pkg/users/users_test.go`](../09-interfaces/homework-09/pkg/users/users_test.go)):
 - Покрытие: 100% statements, 0 data races.
 
 ---
@@ -2098,22 +2098,22 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 > 📖 **Теория:** [Том 3: Разделы 11, 15 (Конкурентность, горутины, каналы, sync)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md#11-конкурентность-горутины-и-каналы-concurrency)  
 > 💻 **Код лекции:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency)  
-> 📁 **Каталог решения:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10)  
-> 🧪 **Тесты:** `go test -v -race ./homework-10/...`  
+> 📁 **Каталог решения:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10)  
+> 🧪 **Тесты:** `go test -v -race ./10-concurrency/homework-10/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-10-конкурентность-горутины-и-каналы)
 
-Решение полностью реализовано и протестировано в директории [`go_course_4/homework-10`](../homework-10).
+Решение полностью реализовано и протестировано в директории [`go_course_4/10-concurrency/homework-10`](../10-concurrency/homework-10).
 
-#### 1. Игровой движок на горутинах и каналах ([`pkg/pingpong/pingpong.go`](../homework-10/pkg/pingpong/pingpong.go)):
+#### 1. Игровой движок на горутинах и каналах ([`pkg/pingpong/pingpong.go`](../10-concurrency/homework-10/pkg/pingpong/pingpong.go)):
 - Два независимых игрока в отдельных горутинах обмениваются строковыми сообщениями (`"ping"`, `"pong"`) через небуферизованный канал `table`.
 - Подача начинается с команды `"begin"`.
 - 20% вероятность критического удара в угол (`"stop"`), приносящего победное очко.
 - **Синхронизация через `sync.WaitGroup`**: судья ведет счет до `TargetScore` (по умолчанию 11 очков), закрывает канал `close(table)` и через `wg.Wait()` гарантирует корректное завершение обеих горутин без утечек памяти (`Goroutine Leaks`).
 
-#### 2. Консольное приложение матча ([`cmd/pingpong/main.go`](../homework-10/cmd/pingpong/main.go)):
+#### 2. Консольное приложение матча ([`cmd/pingpong/main.go`](../10-concurrency/homework-10/cmd/pingpong/main.go)):
 - Поддерживает флаги командной строки: `-p1` (имя первого игрока), `-p2` (имя второго игрока), `-score` (очки для победы), `-delay` (задержка между ударами для зрелищности).
 
-#### 3. Тестирование ([`pkg/pingpong/pingpong_test.go`](../homework-10/pkg/pingpong/pingpong_test.go)):
+#### 3. Тестирование ([`pkg/pingpong/pingpong_test.go`](../10-concurrency/homework-10/pkg/pingpong/pingpong_test.go)):
 - Покрытие пакета: **98.8%** statements.
 - Полная безопасность конкурентности: **0 race conditions** при запуске `go test -race`.
 
@@ -2123,29 +2123,29 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 > 📖 **Теория:** [Том 4: Раздел 28 (Сетевое программирование, TCP, UDP, сокеты)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#28-сетевое-программирование-network-programming)  
 > 💻 **Код лекции:** [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network)  
-> 📁 **Каталог решения:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-11)  
-> 🧪 **Тесты:** `go test -v -race ./homework-11/...`  
+> 📁 **Каталог решения:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network/homework-11)  
+> 🧪 **Тесты:** `go test -v -race ./11-network/homework-11/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 11)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-11-сетевое-программирование-tcpudp)
 
-Решение полностью реализовано и протестировано в директории [`go_course_4/homework-11`](../homework-11).
+Решение полностью реализовано и протестировано в директории [`go_course_4/11-network/homework-11`](../11-network/homework-11).
 
-#### 1. Очистка поисковика от устаревших артефактов (Задача №1, [`cmd/netsrv/main.go`](../homework-11/cmd/netsrv/main.go)):
+#### 1. Очистка поисковика от устаревших артефактов (Задача №1, [`cmd/netsrv/main.go`](../11-network/homework-11/cmd/netsrv/main.go)):
 - Полностью удалены флаги командной строки (`-s`), интерактивный ввод `os.Stdin` в сервере и рудиментарные файлы.
 - Сервер фокусируется исключительно на сетевом взаимодействии: сканирует/индексирует документы, инициализирует движок и запускает службу `netsrv`.
 - Реализован Graceful Shutdown по сигналам `SIGINT` и `SIGTERM`.
 
-#### 2. Сетевой пакет `netsrv` (Задача №2, [`pkg/netsrv/server.go`](../homework-11/pkg/netsrv/server.go)):
+#### 2. Сетевой пакет `netsrv` (Задача №2, [`pkg/netsrv/server.go`](../11-network/homework-11/pkg/netsrv/server.go)):
 - Служба принимает подключения на порту 8000 на всех сетевых интерфейсах (`:8000` / `0.0.0.0:8000`).
 - **Конкурентная обработка:** каждое входящее клиентское соединение передается в отдельную горутину `go s.HandleConn(conn)`.
 - **Потоковый протокол:** читает текстовые запросы от клиентов, ищет документы через абстракцию `Searcher`, форматирует результаты и отправляет обратно в сокет.
 - **Безопасность:** выставляется таймаут на бездействие (`conn.SetDeadline`), корректно обрабатываются команды завершения (`exit`/`quit`) и обрыв связи.
 
-#### 3. Интерактивный консольный клиент (Задача №3, [`cmd/netclient/main.go`](../homework-11/cmd/netclient/main.go)):
+#### 3. Интерактивный консольный клиент (Задача №3, [`cmd/netclient/main.go`](../11-network/homework-11/cmd/netclient/main.go)):
 - Подключается по TCP (`net.Dial`) к `localhost:8000`.
 - В интерактивном цикле передает поисковые запросы из `os.Stdin` на сервер и асинхронно транслирует ответы сервера пользователю.
 - Поддерживает подключение как специализированным клиентом, так и стандартной утилитой `telnet localhost 8000`.
 
-#### 4. Тестирование сетевой службы в памяти ([`pkg/netsrv/server_test.go`](../homework-11/pkg/netsrv/server_test.go)):
+#### 4. Тестирование сетевой службы в памяти ([`pkg/netsrv/server_test.go`](../11-network/homework-11/pkg/netsrv/server_test.go)):
 - Тестирование реализовано с применением **`net.Pipe()`** в полном соответствии со слайдом 22.
 - Обеспечивает мгновенные изолированные тесты без конфликта занятых портов ОС (`bind: address already in use`).
 - Покрытие пакета: **88.6%** statements, **0 data races** под `-race`.
@@ -2156,13 +2156,13 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 > 📖 **Теория:** [Том 4: Раздел 12 (Backend Web-разработка, HTTP, routing, templates)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка)  
 > 💻 **Код лекции:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps)  
-> 📁 **Каталог решения:** [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-12)  
-> 🧪 **Тесты:** `go test -v -race ./homework-12/...`  
+> 📁 **Каталог решения:** [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps/homework-12)  
+> 🧪 **Тесты:** `go test -v -race ./12-web-apps/homework-12/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 12)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-12-веб-приложения-и-шаблонизация)
 
-Решение полностью реализовано и протестировано в отдельной директории [`go_course_4/homework-12`](../homework-12) без изменения или затирания предыдущих домашних работ.
+Решение полностью реализовано и протестировано в отдельной директории [`go_course_4/12-web-apps/homework-12`](../12-web-apps/homework-12) без изменения или затирания предыдущих домашних работ.
 
-#### 1. Веб-пакет `webapp` (Задача №1, [`pkg/webapp/webapp.go`](../homework-12/pkg/webapp/webapp.go)):
+#### 1. Веб-пакет `webapp` (Задача №1, [`pkg/webapp/webapp.go`](../12-web-apps/homework-12/pkg/webapp/webapp.go)):
 - **Маршрутизация на базе `github.com/gorilla/mux`:**
   - Привязаны эндпоинты `GET /docs` и `GET /index`.
   - Строгая валидация методов: для любых других HTTP-методов (`POST`, `PUT`, `DELETE`) автоматически возвращается статус `405 Method Not Allowed`.
@@ -2173,11 +2173,11 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 - **Поддержка согласования контента (Content Negotiation):**
   - При открытии в обычном веб-браузере отдается полноценная HTML-страница (`Content-Type: text/html; charset=utf-8`).
   - При наличии query-параметра `?format=json` или HTTP-заголовка `Accept: application/json` отдается структурированный JSON (`Content-Type: application/json; charset=utf-8`), что превращает веб-пакет также в полноценный REST API.
-- **Потокобезопасное хранилище `SearchDB` ([`pkg/webapp/db.go`](../homework-12/pkg/webapp/db.go)):**
+- **Потокобезопасное хранилище `SearchDB` ([`pkg/webapp/db.go`](../12-web-apps/homework-12/pkg/webapp/db.go)):**
   - Реализует контракт `DataProvider` с инвертированным поисковым индексом и хранилищем документов.
   - Защищено `sync.RWMutex` для безопасного конкурентного чтения и обновления данных.
 
-#### 2. Модульные тесты обработчиков (Задача №2, [`pkg/webapp/webapp_test.go`](../homework-12/pkg/webapp/webapp_test.go)):
+#### 2. Модульные тесты обработчиков (Задача №2, [`pkg/webapp/webapp_test.go`](../12-web-apps/homework-12/pkg/webapp/webapp_test.go)):
 - Реализованы через стандартный пакет `net/http/httptest` (`httptest.NewRequest`, `httptest.NewRecorder`).
 - Запросы отправляются напрямую в метод `router.ServeHTTP(rec, req)` без открытия реальных TCP-сокетов ОС, что исключает флаки-тесты и конфликты портов.
 - **Протестированные сценарии:**
@@ -2189,7 +2189,7 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
   - `TestNotFoundRoute` (обработка несуществующих путей со статусом 404).
 - **Результаты тестирования:** Покрытие пакета составляет **98.6%** statements, **0 data races** при проверке с флагом `-race`.
 
-#### 3. Серверное приложение ([`cmd/webapp/main.go`](../homework-12/cmd/webapp/main.go)):
+#### 3. Серверное приложение ([`cmd/webapp/main.go`](../12-web-apps/homework-12/cmd/webapp/main.go)):
 - Инициализирует поисковую базу с демонстрационными данными.
 - Настраивает промышленный `http.Server` с таймаутами (`ReadTimeout`, `WriteTimeout`, `IdleTimeout`).
 - Реализует корректное завершение работы (**Graceful Shutdown**) по сигналам `os.Interrupt` и `syscall.SIGTERM`.
@@ -2200,14 +2200,14 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 > 📖 **Теория:** [Том 4: Раздел 12 (Backend Web-разработка, REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка) | [Том 1: Раздел 1 (Модель памяти Go)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#1-внутреннее-устройство-go-и-система-типов)  
 > 💻 **Код лекции:** [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api)  
-> 📁 **Каталог решения:** [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-13)  
-> 🧪 **Тесты:** `go test -v -race ./homework-13/...`  
+> 📁 **Каталог решения:** [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api/homework-13)  
+> 🧪 **Тесты:** `go test -v -race ./13-api/homework-13/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 13)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-13-rest-api-и-промежуточное-по-middleware)
 
-Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/homework-13`](../homework-13) без изменения или затирания предыдущих решений.
+Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/13-api/homework-13`](../13-api/homework-13) без изменения или затирания предыдущих решений.
 
 #### 1. REST API поисковика GoSearch (Задача №1):
-- **Пакет хранения данных ([`pkg/storage/storage.go`](../homework-13/pkg/storage/storage.go)):**
+- **Пакет хранения данных ([`pkg/storage/storage.go`](../13-api/homework-13/pkg/storage/storage.go)):**
   - Реализует потокобезопасную структуру `DB` с `sync.RWMutex`, инвертированным поисковым индексом `map[string][]int` и коллекцией документов `map[int]Document`.
   - Предоставляет методы интерфейса `storage.Interface`:
     - `Search(query string) []Document` — полнотекстовый поиск по токенизированным словам с дедупликацией и сортировкой по ID.
@@ -2216,7 +2216,7 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
     - `Add(doc Document) Document` — создание документа с автогенерацией уникального ID (`maxID++`) и добавлением в инвертированный индекс.
     - `Update(doc Document) error` — полное обновление документа (по условию перестраивать индекс не требуется).
     - `Delete(id int) error` — удаление документа из хранилища.
-- **Пакет API ([`pkg/api/api.go`](../homework-13/pkg/api/api.go)):**
+- **Пакет API ([`pkg/api/api.go`](../13-api/homework-13/pkg/api/api.go)):**
   - Спроектирован в ООП-стиле: структура `API` инкапсулирует `*mux.Router` и `storage.Interface`.
   - Конструктор `New(db storage.Interface) *API` конфигурирует цепочки middleware и регистрирует endpoints.
   - **Спецификация REST-маршрутов:**
@@ -2226,13 +2226,13 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
     - `POST /api/v1/docs` — создание нового документа из JSON тела (`201 Created`, валидация обязательных полей `title` и `url`).
     - `PUT /api/v1/docs/{id:[0-9]+}` — обновление документа (`200 OK`, либо `404 Not Found`).
     - `DELETE /api/v1/docs/{id:[0-9]+}` — удаление документа (`200 OK`, либо `404 Not Found`).
-- **Сквозное промежуточное ПО ([`pkg/api/middleware.go`](../homework-13/pkg/api/middleware.go)):**
+- **Сквозное промежуточное ПО ([`pkg/api/middleware.go`](../13-api/homework-13/pkg/api/middleware.go)):**
   - `headersMiddleware`: автоматически выставляет заголовок `Content-Type: application/json; charset=utf-8`.
   - `requestIDMiddleware`: читает заголовок `X-Request-ID` от клиента или генерирует криптографически случайный идентификатор, внедряет его в контекст запроса через `context.WithValue` и `r.WithContext(ctx)`, а также выставляет в заголовках ответа.
   - `loggingMiddleware`: логирует метод, URL, Request ID и продолжительность обработки каждого HTTP-запроса.
 
 #### 2. Модульное тестирование методов API (Задача №2):
-- **Тесты пакета API ([`pkg/api/api_test.go`](../homework-13/pkg/api/api_test.go)):**
+- **Тесты пакета API ([`pkg/api/api_test.go`](../13-api/homework-13/pkg/api/api_test.go)):**
   - Инициализация тестового окружения выполнена через стандартную функцию `TestMain(m *testing.M)` в соответствии со слайдом 13 презентации курса.
   - Тестирование обработчиков изолировано в памяти через `httptest.NewRequest` и `httptest.NewRecorder` без поднятия TCP-портов.
   - Проверены сценарии:
@@ -2244,7 +2244,7 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 #### 3. Разбор Задачи №3 (Модель памяти в Go и `size.Of`):
 
 - **Ссылка на задачу:** https://go.dev/play/p/_an3p5w9qB9
-- **Исполняемая программа с подробным выводом:** [`cmd/task3/main.go`](../homework-13/cmd/task3/main.go).
+- **Исполняемая программа с подробным выводом:** [`cmd/task3/main.go`](../13-api/homework-13/cmd/task3/main.go).
 
 ##### Исходный код структуры:
 ```go
@@ -2295,7 +2295,7 @@ ex1 := example{
 #### 4. Лог выполнения тестов и замеров покрытия:
 
 ```bash
-$ cd go_course_4 && go test -v -race -cover ./homework-13/...
+$ cd go_course_4 && go test -v -race -cover ./13-api/homework-13/...
 === RUN   TestTask3_Sizes
 --- PASS: TestTask3_Sizes (0.00s)
 PASS
@@ -2350,38 +2350,38 @@ ok  	go-core-4/homework-13/pkg/storage	2.460s	coverage: 99.0% of statements
 
 > 📖 **Теория:** [Том 5: Раздел 20 (Удаленный вызов процедур RPC / gRPC)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#20-удаленный-вызов-процедур-rpc--grpc)  
 > 💻 **Код лекции:** [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC)  
-> 📁 **Каталог решения:** [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-14)  
-> 🧪 **Тесты:** `go test -v -race ./homework-14/...`  
+> 📁 **Каталог решения:** [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC/homework-14)  
+> 🧪 **Тесты:** `go test -v -race ./14-RPC/homework-14/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 14)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-14-удаленный-вызов-процедур-rpc)
 
-Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/homework-14`](../homework-14) без изменения или затирания предыдущих решений.
+Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/14-RPC/homework-14`](../14-RPC/homework-14) без изменения или затирания предыдущих решений.
 
 #### 1. Архитектура решения и модель данных:
-- **Структура сообщения ([`pkg/messages/messages.go`](../homework-14/pkg/messages/messages.go)):**
+- **Структура сообщения ([`pkg/messages/messages.go`](../14-RPC/homework-14/pkg/messages/messages.go)):**
   - Содержит обязательные поля по условию задачи:
     - `ID int` — числовой идентификатор сообщения;
     - `Time time.Time` — точная метка времени отправки;
     - `Text string` — строковое содержимое сообщения.
-- **RPC-сервис сообщений ([`pkg/rpcservice/service.go`](../homework-14/pkg/rpcservice/service.go)):**
+- **RPC-сервис сообщений ([`pkg/rpcservice/service.go`](../14-RPC/homework-14/pkg/rpcservice/service.go)):**
   - Реализован строго по контракту стандартного пакета Go `net/rpc`:
     1. `Service` — экспортируемый тип данных структуры.
     2. Потокобезопасность обеспечена через `sync.RWMutex`.
     3. Метод `Send(req []messages.Message, resp *int) error` — принимает массив сообщений, конкатенирует их с внутренним слайсом сервиса и записывает в `*resp` количество добавленных элементов.
     4. Метод `Messages(req struct{}, resp *[]messages.Message) error` — возвращает клиенту полную копию среза всех накопленных сообщений.
 
-#### 2. Серверное приложение ([`cmd/server/main.go`](../homework-14/cmd/server/main.go)):
+#### 2. Серверное приложение ([`cmd/server/main.go`](../14-RPC/homework-14/cmd/server/main.go)):
 - Регистрирует сервис через `rpc.Register(svc)`.
 - Открывает TCP-слушатель на порту `:8080` (`net.Listen("tcp", ":8080")`).
 - Каждое входящее подключение обслуживается конкурентно в отдельной горутине: `go rpc.ServeConn(conn)`.
 - Реализует Graceful Shutdown при перехвате сигналов `os.Interrupt` и `syscall.SIGTERM`.
 
-#### 3. Клиентское приложение ([`cmd/client/main.go`](../homework-14/cmd/client/main.go)):
+#### 3. Клиентское приложение ([`cmd/client/main.go`](../14-RPC/homework-14/cmd/client/main.go)):
 - Подключается к RPC-серверу через `rpc.Dial("tcp", "localhost:8080")`.
 - Создает пакет из нескольких тестовых сообщений и отправляет их методом `client.Call("Service.Send", newBatch, &ackCount)`.
 - Запрашивает всю накопленную историю сообщений с сервера: `client.Call("Service.Messages", struct{}{}, &allMessages)`.
 - Форматирует и выводит таблицу сообщений в терминал с таймстемпами.
 
-#### 4. Изолированное тестирование в памяти ([`pkg/rpcservice/service_test.go`](../homework-14/pkg/rpcservice/service_test.go)):
+#### 4. Изолированное тестирование в памяти ([`pkg/rpcservice/service_test.go`](../14-RPC/homework-14/pkg/rpcservice/service_test.go)):
 - **Сетевое тестирование без реальных сокетов (`net.Pipe()`):**
   - Используется виртуальная двунаправленная сетевая трубка `net.Pipe()`, позволяющая тестировать полный стек `net/rpc` (бинарная GOB-сериализация, передача байт, десериализация и вызов обработчика) мгновенно и без конфликтов сетевых портов.
   - Протестирован как синхронный `client.Call`, так и асинхронный вызов через канал `client.Go(...).Done`.
@@ -2391,7 +2391,7 @@ ok  	go-core-4/homework-13/pkg/storage	2.460s	coverage: 99.0% of statements
 #### 5. Лог выполнения тестов:
 
 ```bash
-$ cd go_course_4 && go test -v -race -cover ./homework-14/...
+$ cd go_course_4 && go test -v -race -cover ./14-RPC/homework-14/...
 === RUN   TestService_DirectMethods
 --- PASS: TestService_DirectMethods (0.00s)
 === RUN   TestService_RPCOverNetPipe
@@ -2410,13 +2410,13 @@ ok  	go-core-4/homework-14/pkg/rpcservice	1.495s	coverage: 100.0% of statements
 > 📖 **Теория:** [Том 4: Раздел 13 (Работа с базами данных: SQL, PostgreSQL, pgx)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд)  
 > 📚 **Руководства:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md) | [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)  
 > 💻 **Код лекции:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql)  
-> 📁 **Каталог решения:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-15)  
-> 🧪 **Тесты:** `go test -v ./homework-15/...`  
+> 📁 **Каталог решения:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15)  
+> 🧪 **Тесты:** `go test -v ./15-sql/homework-15/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 15)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-15-проектирование-реляционных-бд-и-sql)
 
-Решение полностью реализовано в отдельной изолированной директории [`go_course_4/homework-15`](../homework-15) без изменения или затирания предыдущих решений.
+Решение полностью реализовано в отдельной изолированной директории [`go_course_4/15-sql/homework-15`](../15-sql/homework-15) без изменения или затирания предыдущих решений.
 
-#### 1. Схема базы данных ([`schema.sql`](../homework-15/schema.sql)):
+#### 1. Схема базы данных ([`schema.sql`](../15-sql/homework-15/schema.sql)):
 - **Нормализованная модель данных:**
   - `studios` — киностудии (`id SERIAL PRIMARY KEY`, `name TEXT NOT NULL UNIQUE`).
   - `actors` — актёры (`id SERIAL PRIMARY KEY`, `first_name`, `last_name`, `birth_date DATE`).
@@ -2429,17 +2429,17 @@ ok  	go-core-4/homework-14/pkg/rpcservice	1.495s	coverage: 100.0% of statements
   - PL/pgSQL триггер `check_movie_year()` — проверка, что год не превышает текущий +10.
 - **Индексы:** B-Tree на внешние ключи, даты и `lower(title)`.
 
-#### 2. Демонстрационные данные ([`data.sql`](../homework-15/data.sql)):
+#### 2. Демонстрационные данные ([`data.sql`](../15-sql/homework-15/data.sql)):
 - 5 киностудий, 6 режиссёров, 10 актёров, 12 культовых фильмов.
 - Полные ассоциативные связи `movies_actors` и `movies_directors`.
 
-#### 3. Аналитические SQL-запросы ([`queries.sql`](../homework-15/queries.sql)):
+#### 3. Аналитические SQL-запросы ([`queries.sql`](../15-sql/homework-15/queries.sql)):
 - 10 типовых аналитических задач: `JOIN`, `GROUP BY`, `HAVING`, `UNION ALL`, `COUNT(DISTINCT ...)`, подзапросы `WHERE id IN (SELECT ...)`, поиск дубликатов по `title`.
 
 #### 4. Лог выполнения тестов:
 
 ```bash
-$ cd go_course_4 && go test -v ./homework-15/...
+$ cd go_course_4 && go test -v ./15-sql/homework-15/...
 --- PASS: TestSchemaSQL_ValidSyntax
 --- PASS: TestSchemaSQL_AllConstraints
 PASS
@@ -2453,13 +2453,13 @@ ok  	go-core-4/homework-15
 > 📖 **Теория:** [Том 4: Раздел 13 (Работа с базами данных: SQL, транзакции, Repository)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд)  
 > 📚 **Руководство:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)  
 > 💻 **Код лекции:** [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps)  
-> 📁 **Каталог решения:** [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-16)  
-> 🧪 **Тесты:** `go test -v -race ./homework-16/...`  
+> 📁 **Каталог решения:** [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16)  
+> 🧪 **Тесты:** `go test -v -race ./16-db-apps/homework-16/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 16)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-16-работа-с-бд-в-go-интерфейсы-и-драйверы)
 
-Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/homework-16`](../homework-16) на основе схемы БД информационного сайта о фильмах из Занятия №15.
+Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/16-db-apps/homework-16`](../16-db-apps/homework-16) на основе схемы БД информационного сайта о фильмах из Занятия №15.
 
-#### 1. Интерфейс взаимодействия с БД — Задача №1 ([`pkg/db/db.go`](../homework-16/pkg/db/db.go)):
+#### 1. Интерфейс взаимодействия с БД — Задача №1 ([`pkg/db/db.go`](../16-db-apps/homework-16/pkg/db/db.go)):
 - **Модель данных `Movie`** с JSON-тегами (поля: `id`, `title`, `release_year`, `box_office`, `rating`, `studio_id`, `studio_name`).
 - **Интерфейс `db.Interface`** по контракту Задачи №1:
   - `AddMovies(ctx, movies)` — добавление массива фильмов;
@@ -2467,9 +2467,9 @@ ok  	go-core-4/homework-15
   - `UpdateMovie(ctx, m)` — обновление данных фильма;
   - `Movies(ctx, studioID)` — получение массива фильмов (если `studioID == 0` — возвращаются все фильмы, если `studioID > 0` — фильтрация по ID киностудии);
   - `MovieByID(ctx, id)` — получение фильма по ID.
-- **Sentinel Errors** ([`pkg/db/errors.go`](../homework-16/pkg/db/errors.go)): `db.ErrNotFound`.
+- **Sentinel Errors** ([`pkg/db/errors.go`](../16-db-apps/homework-16/pkg/db/errors.go)): `db.ErrNotFound`.
 
-#### 2. Пакет для PostgreSQL — Задача №2 ([`pkg/db/pgsql/pgsql.go`](../homework-16/pkg/db/pgsql/pgsql.go)):
+#### 2. Пакет для PostgreSQL — Задача №2 ([`pkg/db/pgsql/pgsql.go`](../16-db-apps/homework-16/pkg/db/pgsql/pgsql.go)):
 - Пул соединений через `github.com/jackc/pgx/v5/pgxpool`.
 - **Пакетная вставка (`AddMovies`)** в рамках одной транзакции через `pgx.Batch` (слайд 21 лекции №16).
 - **Фильтрация по студии (`Movies`)** через `LEFT JOIN studios` с условием `WHERE ($1 = 0 OR m.studio_id = $1)`.
@@ -2486,13 +2486,13 @@ ok  	go-core-4/homework-15
 - **`pkg/api/api_test.go`**: тесты HTTP REST API для фильмов (`GET /api/v1/movies?studio_id=X`, `POST`, `PUT`, `DELETE`).
 
 #### 4. REST API и веб-сервер:
-- Маршрутизация на базе `gorilla/mux` ([`pkg/api/api.go`](../homework-16/pkg/api/api.go)).
-- Демонстрационный сервер с таймаутами и Graceful Shutdown ([`cmd/server/main.go`](../homework-16/cmd/server/main.go)).
+- Маршрутизация на базе `gorilla/mux` ([`pkg/api/api.go`](../16-db-apps/homework-16/pkg/api/api.go)).
+- Демонстрационный сервер с таймаутами и Graceful Shutdown ([`cmd/server/main.go`](../16-db-apps/homework-16/cmd/server/main.go)).
 
 #### 5. Лог выполнения тестов:
 
 ```bash
-$ cd go_course_4 && go test -count=1 -v -race -cover ./homework-16/...
+$ cd go_course_4 && go test -count=1 -v -race -cover ./16-db-apps/homework-16/...
 === RUN   TestHandleMovies_Empty
 --- PASS: TestHandleMovies_Empty (0.00s)
 === RUN   TestHandleMovies_WithFilterByStudio
@@ -2536,11 +2536,11 @@ ok  	go-core-4/homework-16/pkg/db/pgsql	1.497s
 > 📖 **Теория:** [Том 5: Разделы 18, 19 (Архитектура сервисов, Clean Architecture, SOLID)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#18-архитектура-сервисов-и-паттерны-проектирования)  
 > 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)  
 > 💻 **Код лекции:** [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design)  
-> 📁 **Каталог решения:** [homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-17)  
-> 🧪 **Тесты:** `go test -v -race ./homework-17/...`  
+> 📁 **Каталог решения:** [homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design/homework-17)  
+> 🧪 **Тесты:** `go test -v -race ./17-system-design/homework-17/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 17)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-17-системный-дизайн-и-чистая-архитектура)
 
-Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/homework-17`](../homework-17) без изменения или затирания предыдущих решений.
+Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/17-system-design/homework-17`](../17-system-design/homework-17) без изменения или затирания предыдущих решений.
 
 #### 1. Анализ книги Роберта Мартина «Чистая архитектура» (Clean Architecture):
 - **Цель архитектуры**: минимизировать человеческие трудозатраты на создание и сопровождение системы, откладывая решения по деталям реализации.
@@ -2548,20 +2548,20 @@ ok  	go-core-4/homework-16/pkg/db/pgsql	1.497s
 - **Кричащая архитектура (Screaming Architecture)**: структура пакетов отражает предметную область (Cinema/Movies), а не обезличенные технические слои MVC.
 - **База данных и Веб — это детали**: бизнес-правила не зависят от протокола HTTP, драйверов СУБД или форматов сериализации.
 
-#### 2. Практическая реализация принципов SOLID в Go ([`solid/`](../homework-17/solid)):
-- **SRP** ([`solid/srp/srp.go`](../homework-17/solid/srp/srp.go)): Разделение бизнес-логики управления фильмами (`MovieService`) и форматирования отчетов (`ReportFormatter`) по независимым акторам.
-- **OCP** ([`solid/ocp/ocp.go`](../homework-17/solid/ocp/ocp.go)): Фильтрация фильмов по спецификациям (`YearFilter`, `RatingFilter`, `AndSpecification`) — добавление новых условий без модификации алгоритма фильтрации.
-- **LSP** ([`solid/lsp/lsp.go`](../homework-17/solid/lsp/lsp.go)): Взаимозаменяемость реализаций (`EmailNotifier`, `SMSNotifier`) через единый контракт `Notifier` с сохранением семантики.
-- **ISP** ([`solid/isp/isp.go`](../homework-17/solid/isp/isp.go)): Разделение толстого интерфейса на узкие: `Reader`, `Writer`, `Deleter`. Клиент (`ReadOnlyService`) зависит исключительно от `Reader`.
-- **DIP** ([`solid/dip/dip.go`](../homework-17/solid/dip/dip.go)): Сервис бронирования билетов зависит от интерфейсов `PaymentGateway` и `TicketRepository`, адаптеры инжектируются через конструктор.
+#### 2. Практическая реализация принципов SOLID в Go ([`solid/`](../17-system-design/homework-17/solid)):
+- **SRP** ([`solid/srp/srp.go`](../17-system-design/homework-17/solid/srp/srp.go)): Разделение бизнес-логики управления фильмами (`MovieService`) и форматирования отчетов (`ReportFormatter`) по независимым акторам.
+- **OCP** ([`solid/ocp/ocp.go`](../17-system-design/homework-17/solid/ocp/ocp.go)): Фильтрация фильмов по спецификациям (`YearFilter`, `RatingFilter`, `AndSpecification`) — добавление новых условий без модификации алгоритма фильтрации.
+- **LSP** ([`solid/lsp/lsp.go`](../17-system-design/homework-17/solid/lsp/lsp.go)): Взаимозаменяемость реализаций (`EmailNotifier`, `SMSNotifier`) через единый контракт `Notifier` с сохранением семантики.
+- **ISP** ([`solid/isp/isp.go`](../17-system-design/homework-17/solid/isp/isp.go)): Разделение толстого интерфейса на узкие: `Reader`, `Writer`, `Deleter`. Клиент (`ReadOnlyService`) зависит исключительно от `Reader`.
+- **DIP** ([`solid/dip/dip.go`](../17-system-design/homework-17/solid/dip/dip.go)): Сервис бронирования билетов зависит от интерфейсов `PaymentGateway` и `TicketRepository`, адаптеры инжектируются через конструктор.
 
-#### 3. Эталонная реализация Clean Architecture ([`cleanarch/`](../homework-17/cleanarch)):
-- **Entities** ([`cleanarch/entity/movie.go`](../homework-17/cleanarch/entity/movie.go)): чистая сущность `Movie` с доменной валидацией, 0 внешних зависимостей.
-- **Use Cases** ([`cleanarch/usecase/movie_usecase.go`](../homework-17/cleanarch/usecase/movie_usecase.go)): бизнес-сценарии приложения, Input Port (`MovieUseCase`), Output Port (`MovieRepository`), изоляция DTO.
+#### 3. Эталонная реализация Clean Architecture ([`cleanarch/`](../17-system-design/homework-17/cleanarch)):
+- **Entities** ([`cleanarch/entity/movie.go`](../17-system-design/homework-17/cleanarch/entity/movie.go)): чистая сущность `Movie` с доменной валидацией, 0 внешних зависимостей.
+- **Use Cases** ([`cleanarch/usecase/movie_usecase.go`](../17-system-design/homework-17/cleanarch/usecase/movie_usecase.go)): бизнес-сценарии приложения, Input Port (`MovieUseCase`), Output Port (`MovieRepository`), изоляция DTO.
 - **Adapters**:
-  - `repository.MemoryMovieRepository` ([`cleanarch/adapter/repository/memory_repo.go`](../homework-17/cleanarch/adapter/repository/memory_repo.go)): реализация хранилища.
-  - `controller.MovieHTTPController` ([`cleanarch/adapter/controller/http_controller.go`](../homework-17/cleanarch/adapter/controller/http_controller.go)): HTTP-адаптер маршрутов.
-- **Composition Root** ([`cmd/app/main.go`](../homework-17/cmd/app/main.go)): инициализация и связывание слоев.
+  - `repository.MemoryMovieRepository` ([`cleanarch/adapter/repository/memory_repo.go`](../17-system-design/homework-17/cleanarch/adapter/repository/memory_repo.go)): реализация хранилища.
+  - `controller.MovieHTTPController` ([`cleanarch/adapter/controller/http_controller.go`](../17-system-design/homework-17/cleanarch/adapter/controller/http_controller.go)): HTTP-адаптер маршрутов.
+- **Composition Root** ([`cmd/app/main.go`](../17-system-design/homework-17/cmd/app/main.go)): инициализация и связывание слоев.
 
 #### 4. Анализ архитектуры: Монолит vs Микросервисы:
 - Согласно рекомендациям занятия и Мартина Фаулера, начинать проект практически всегда следует с модульного монолита с чистой архитектурой.
@@ -2570,7 +2570,7 @@ ok  	go-core-4/homework-16/pkg/db/pgsql	1.497s
 #### 5. Лог выполнения тестов:
 
 ```bash
-$ cd go_course_4 && go test -v -race ./homework-17/...
+$ cd go_course_4 && go test -v -race ./17-system-design/homework-17/...
 === RUN   TestCleanArchitecture_FullFlow
 --- PASS: TestCleanArchitecture_FullFlow (0.00s)
 PASS
@@ -2608,18 +2608,18 @@ ok  	go-core-4/homework-17/solid/srp	2.561s
 > 📖 **Теория:** [Том 5: Раздел 23 (Cloud-Ready и микросервисная архитектура, Docker, Prometheus)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#23-cloud-ready-и-микросервисная-архитектура)  
 > 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)  
 > 💻 **Код лекции:** [18-microservices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices)  
-> 📁 **Каталог решения:** [homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-18)  
-> 🧪 **Тесты:** `go test -v -race ./homework-18/...`  
+> 📁 **Каталог решения:** [homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices/homework-18)  
+> 🧪 **Тесты:** `go test -v -race ./18-microservices/homework-18/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 18)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-18-микросервисы-docker-и-контейнеризация)
 
-Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/homework-18`](../homework-18) со всеми требованиями к микросервисной архитектуре и контейнеризации.
+Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/18-microservices/homework-18`](../18-microservices/homework-18) со всеми требованиями к микросервисной архитектуре и контейнеризации.
 
 #### 1. HTTP REST API и хранилище в памяти — Задача №1:
-- **Хранилище на базе слайса** ([`pkg/storage/slicestore.go`](../homework-18/pkg/storage/slicestore.go)):
+- **Хранилище на базе слайса** ([`pkg/storage/slicestore.go`](../18-microservices/homework-18/pkg/storage/slicestore.go)):
   - Строгое выполнение условия ТЗ: хранилище реализовано в виде среза в памяти (`[]Link`).
   - Потокобезопасность (`sync.RWMutex`), валидация URL и исключение дубликатов.
   - Генерация уникальных 8-символьных идентификаторов ссылок.
-- **REST API** ([`pkg/api/api.go`](../homework-18/pkg/api/api.go)):
+- **REST API** ([`pkg/api/api.go`](../18-microservices/homework-18/pkg/api/api.go)):
   - `POST /api/v1/links`: добавление ссылки в хранилище и генерация короткой.
   - `GET /api/v1/links/{id}`: получение оригинальной ссылки по идентификатору.
   - `POST /api/v1/links/resolve`: получение оригинальной ссылки по переданному короткому URL.
@@ -2631,16 +2631,16 @@ ok  	go-core-4/homework-17/solid/srp	2.561s
   - Graceful Shutdown по сигналам `SIGINT`/`SIGTERM` с таймаутом контекста.
 
 #### 2. Контейнеризация — Задача №2:
-- **Multi-stage `Dockerfile`** ([`Dockerfile`](../homework-18/Dockerfile)):
+- **Multi-stage `Dockerfile`** ([`Dockerfile`](../18-microservices/homework-18/Dockerfile)):
   - `builder` на базе `golang:1.22-alpine`: сборка статического бинарника (`CGO_ENABLED=0`, `-ldflags="-s -w"`).
   - `runtime` на базе `alpine:3.19` (размер образа < 25 МБ).
   - Запуск от имени непривилегированного пользователя `appuser` (UID 1000).
-- **Декларативная оркестрация**: [`docker-compose.yml`](../homework-18/docker-compose.yml) со встроенным Healthcheck.
+- **Декларативная оркестрация**: [`docker-compose.yml`](../18-microservices/homework-18/docker-compose.yml) со встроенным Healthcheck.
 
 #### 3. Лог выполнения тестов:
 
 ```bash
-$ cd go_course_4 && go test -v -race -cover ./homework-18/...
+$ cd go_course_4 && go test -v -race -cover ./18-microservices/homework-18/...
 === RUN   TestAPI_CreateAndGetLink
 --- PASS: TestAPI_CreateAndGetLink (0.00s)
 === RUN   TestAPI_ErrorCases
@@ -2668,16 +2668,16 @@ ok  	go-core-4/homework-18/pkg/storage	1.797s
 > 📖 **Теория:** [Том 5: Раздел 21 (Очереди сообщений: Kafka, RabbitMQ, EDA)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#21-очереди-сообщений-и-брокеры-kafka-rabbitmq)  
 > 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)  
 > 💻 **Код лекции:** [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue)  
-> 📁 **Каталог решения:** [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-19)  
-> 🧪 **Тесты:** `go test -v -race ./homework-19/...`  
+> 📁 **Каталог решения:** [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue/homework-19)  
+> 🧪 **Тесты:** `go test -v -race ./19-queue/homework-19/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 19)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-19-очереди-сообщений-и-брокеры-kafka)
 
-Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/homework-19`](../homework-19) без затирания решений предыдущих уроков.
+Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/19-queue/homework-19`](../19-queue/homework-19) без затирания решений предыдущих уроков.
 
 #### 1. Архитектура распределенной событийно-ориентированной системы:
 - **Event-Driven Architecture (Событийная модель)**:
   - Микросервисы общаются асинхронно через брокер сообщений (**Apache Kafka**).
-  - Событие `LinkCreatedEvent` ([`pkg/event/event.go`](../homework-19/pkg/event/event.go)) содержит `event_id`, `link_id`, `original_url`, `short_url`, `created_at`.
+  - Событие `LinkCreatedEvent` ([`pkg/event/event.go`](../19-queue/homework-19/pkg/event/event.go)) содержит `event_id`, `link_id`, `original_url`, `short_url`, `created_at`.
 - **Гарантии доставки и фиксация смещений (слайд 14 лекции)**:
   - Реализован паттерн At-Least-Once Delivery: **Вычитка сообщения (`FetchMessage`) ➔ Обработка в сервисе аналитики (`RecordLink`) ➔ Ручная фиксация смещения (`CommitMessages`)**.
   - Защита от Poison Pill: при поврежденном JSON смещение фиксируется с выводом предупреждения в лог для недопущения вечного цикла.
@@ -2698,17 +2698,17 @@ ok  	go-core-4/homework-18/pkg/storage	1.797s
    - Предоставляет REST API: `GET /api/v1/stats`, `GET /healthz`, `GET /ready`, `GET /metrics`.
 
 #### 3. Тестируемость и In-Memory брокер:
-- Для обеспечения мгновенного прохождения тестов без обязательного наличия запущенного кластера Kafka спроектирован [`ChannelBroker`](../homework-19/pkg/event/channel.go) на каналах Go.
-- Написан сквозной интеграционный тест [`e2e_test.go`](../homework-19/e2e_test.go), проверяющий весь цикл: `Shortener POST -> Broker -> Analytics Consumer -> Analytics GET /api/v1/stats`.
+- Для обеспечения мгновенного прохождения тестов без обязательного наличия запущенного кластера Kafka спроектирован [`ChannelBroker`](../19-queue/homework-19/pkg/event/channel.go) на каналах Go.
+- Написан сквозной интеграционный тест [`e2e_test.go`](../19-queue/homework-19/e2e_test.go), проверяющий весь цикл: `Shortener POST -> Broker -> Analytics Consumer -> Analytics GET /api/v1/stats`.
 
 #### 4. Контейнеризация и Docker Compose:
-- **Multi-Stage Dockerfile** ([`Dockerfile`](../homework-19/Dockerfile)): компилирует оба статических бинарника (`shortener` и `analytics`) на этапе `golang:1.22-alpine` и упаковывает в защищенный образ `alpine:3.19` с непривилегированным пользователем `appuser`.
-- **Оркестрация** ([`docker-compose.yml`](../homework-19/docker-compose.yml)): одновременный запуск `zookeeper`, `kafka`, `shortener` и `analytics` с Healthchecks.
+- **Multi-Stage Dockerfile** ([`Dockerfile`](../19-queue/homework-19/Dockerfile)): компилирует оба статических бинарника (`shortener` и `analytics`) на этапе `golang:1.22-alpine` и упаковывает в защищенный образ `alpine:3.19` с непривилегированным пользователем `appuser`.
+- **Оркестрация** ([`docker-compose.yml`](../19-queue/homework-19/docker-compose.yml)): одновременный запуск `zookeeper`, `kafka`, `shortener` и `analytics` с Healthchecks.
 
 #### 5. Лог выполнения тестов:
 
 ```bash
-$ cd go_course_4 && go test -v -race ./homework-19/...
+$ cd go_course_4 && go test -v -race ./19-queue/homework-19/...
 === RUN   TestE2E_ShortenerToAnalytics_AsyncFlow
 --- PASS: TestE2E_ShortenerToAnalytics_AsyncFlow (0.02s)
 PASS
@@ -2762,11 +2762,11 @@ ok  	go-core-4/homework-19/pkg/shortener/storage	0.510s
 > 📖 **Теория:** [Том 4: Раздел 13 (Базы данных)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд) | [Том 5: Разделы 18, 23 (Архитектура, микросервисы, NoSQL/Redis)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#21-очереди-сообщений-и-брокеры-kafka-rabbitmq)  
 > 📚 **Руководства:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md) | [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-database-interview-guide.md)  
 > 💻 **Код лекции:** [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL)  
-> 📁 **Каталог решения:** [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-20) | Исходная спецификация: [`lynks/final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks/final.md)  
-> 🧪 **Тесты:** `go test -v -race ./homework-20/...`  
+> 📁 **Каталог решения:** [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20) | Исходная спецификация: [`lynks/final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks/final.md)  
+> 🧪 **Тесты:** `go test -v -race ./20-NoSQL/homework-20/...`  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 20)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-20-nosql-базы-данных-и-кэширование-redis)
 
-Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/homework-20`](../homework-20) без затирания решений предыдущих уроков в строгом соответствии со спецификацией [`final.md`](../lynks/final.md).
+Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/20-NoSQL/homework-20`](../20-NoSQL/homework-20) без затирания решений предыдущих уроков в строгом соответствии со спецификацией [`final.md`](../lynks/final.md).
 
 #### 1. Архитектура сервиса Lynks и Cache-Aside Pattern:
 - **Микросервис коротких ссылок (`shortener`)**:
@@ -2797,13 +2797,13 @@ ok  	go-core-4/homework-19/pkg/shortener/storage	0.510s
   - Пакет `github.com/rs/zerolog` выводит в `stdout` структурированные JSON-логи каждого запроса (метод, путь, статус, длительность, ошибки).
 
 #### 4. Контейнеризация и Docker Compose:
-- Отдельные Dockerfile: [`Dockerfile.shortener`](../homework-20/Dockerfile.shortener) и [`Dockerfile.memcache`](../homework-20/Dockerfile.memcache) на базе `alpine:3.19` с непривилегированным пользователем `appuser`.
-- Итоговый [`docker-compose.yml`](../homework-20/docker-compose.yml), поднимающий весь комплекс: `postgres`, `redis`, `memcache` и `shortener` с автоматическими проверками работоспособности (`healthcheck`).
+- Отдельные Dockerfile: [`Dockerfile.shortener`](../20-NoSQL/homework-20/Dockerfile.shortener) и [`Dockerfile.memcache`](../20-NoSQL/homework-20/Dockerfile.memcache) на базе `alpine:3.19` с непривилегированным пользователем `appuser`.
+- Итоговый [`docker-compose.yml`](../20-NoSQL/homework-20/docker-compose.yml), поднимающий весь комплекс: `postgres`, `redis`, `memcache` и `shortener` с автоматическими проверками работоспособности (`healthcheck`).
 
 #### 5. Лог выполнения тестов:
 
 ```bash
-$ cd go_course_4 && go test -v -race ./homework-20/...
+$ cd go_course_4 && go test -v -race ./20-NoSQL/homework-20/...
 === RUN   TestE2E_Lynks_FullFlow
 --- PASS: TestE2E_Lynks_FullFlow (0.02s)
 PASS

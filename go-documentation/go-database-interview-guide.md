@@ -9,7 +9,7 @@
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и детальный разбор всех 32 домашних заданий.
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).
 > - 💻 **Код лекций:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql) (проектирование реляционных схем), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps) (драйверы pgx/sql, репозитории), [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL) (Redis, кэширование).
-> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-15) (схема БД кинотеатра), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-16) (PostgreSQL репозиторий фильмов), [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-20) (проект Lynks: Postgres + Redis Cache-Aside).
+> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15) (схема БД кинотеатра), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов), [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20) (проект Lynks: Postgres + Redis Cache-Aside).
 
 ---
 

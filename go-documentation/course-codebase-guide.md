@@ -69,9 +69,9 @@ flowchart TD
   * `3-array_slice_map/` — массивы vs срезы (`SliceHeader`: pointer, len, cap, механика `append`), словари `map`.
   * `4-pointers/` — указатели `&` и `*`, отсутствие адресной арифметики.
   * `6-errors/` — модель ошибок через возврат значения `error`.
-* 🛠️ **Домашнее задание:** **[homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02)** — Реализация поискового робота (краулера) для проекта `GoSearch`.
-  * Точка входа: [homework-02/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02/cmd/gosearch/main.go)
-  * Пакет сканера: [homework-02/pkg/crawler/spider/spider.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02/pkg/crawler/spider/spider.go)
+* 🛠️ **Домашнее задание:** **[homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02)** — Реализация поискового робота (краулера) для проекта `GoSearch`.
+  * Точка входа: [homework-02/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02/cmd/gosearch/main.go)
+  * Пакет сканера: [homework-02/pkg/crawler/spider/spider.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02/pkg/crawler/spider/spider.go)
 * ⚠️ **Подводный камень:** Слайс-потомок `s2 := s1[1:3]` ссылается на тот же массив, что и `s1`. Изменение `s2[0]` неявно мутирует `s1[1]`, пока емкость (`cap`) не превышена.
 
 ---
@@ -88,9 +88,9 @@ flowchart TD
   go test -v ./03-algorithms/...
   go test -bench=. ./03-algorithms/1-search
   ```
-* 🛠️ **Домашнее задание:** **[homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03)** — Построение инвертированного индекса (`map[string][]int`) и бинарный поиск документов в `GoSearch`.
-  * Реализация индекса: [homework-03/pkg/index/index.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03/pkg/index/index.go)
-  * Поиск документов: [homework-03/pkg/index/search.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03/pkg/index/search.go)
+* 🛠️ **Домашнее задание:** **[homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03)** — Построение инвертированного индекса (`map[string][]int`) и бинарный поиск документов в `GoSearch`.
+  * Реализация индекса: [homework-03/pkg/index/index.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03/pkg/index/index.go)
+  * Поиск документов: [homework-03/pkg/index/search.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03/pkg/index/search.go)
 
 ---
 
@@ -100,9 +100,9 @@ flowchart TD
   * `0-arrays/` — память массивов фиксированной длины.
   * `1-list/` — двусвязный кольцевой список на указателях (`list.go`: `Push`, `Pop`, `Reverse`).
   * `2-bst/` — бинарное дерево поиска (BST: рекурсивная вставка и поиск).
-* 🛠️ **Домашнее задание:** **[homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-04)** — Реализация собственного двусвязного списка со сторожевым элементом для истории поисковых запросов.
-  * Реализация: [homework-04/pkg/list/list.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-04/pkg/list/list.go)
-  * Тесты: [homework-04/pkg/list/list_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-04/pkg/list/list_test.go)
+* 🛠️ **Домашнее задание:** **[homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/homework-04)** — Реализация собственного двусвязного списка со сторожевым элементом для истории поисковых запросов.
+  * Реализация: [homework-04/pkg/list/list.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/homework-04/pkg/list/list.go)
+  * Тесты: [homework-04/pkg/list/list_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/homework-04/pkg/list/list_test.go)
 
 ---
 
@@ -113,8 +113,8 @@ flowchart TD
   * `4-files/` — открытие файлов `os.Open`, `os.Create`, закрытие через `defer`.
   * `6-flags/` — парсинг аргументов командной строки через пакет `flag`.
   * `7-json_serialize/` — потоковый JSON (`json.NewDecoder`, `json.NewEncoder`, теги структур).
-* 🛠️ **Домашнее задание:** **[homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-05)** — Сохранение просканированных документов `GoSearch` на диск в файл и загрузка кэша при старте.
-  * Хранилище: [homework-05/pkg/storage/storage.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-05/pkg/storage/storage.go)
+* 🛠️ **Домашнее задание:** **[homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/05-io/homework-05)** — Сохранение просканированных документов `GoSearch` на диск в файл и загрузка кэша при старте.
+  * Хранилище: [homework-05/pkg/storage/storage.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/05-io/homework-05/pkg/storage/storage.go)
 * ⚠️ **Подводный камень:** `defer f.Close()` внутри длинного цикла не закрывает файл до окончания всей функции, что приводит к исчерпанию файловых дескрипторов ОС (`too many open files`).
 
 ---
@@ -133,9 +133,9 @@ flowchart TD
   * `3-embedding/` — встраивание структур и интерфейсов.
   * `4-constructor/` — идиоматичный паттерн конструктора `New()`.
   * `5-hw/` — сущности `Point`, `Geom`, расчет евклидова расстояния и бенчмарк.
-* 🛠️ **Домашнее задание:** **[homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06)** — Выделение слоя поискового движка `engine` с инъекцией зависимостей (индекса и хранилища).
-  * Движок: [homework-06/pkg/engine/engine.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06/pkg/engine/engine.go)
-  * Геометрия: [homework-06/pkg/geom/geom.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-06/pkg/geom/geom.go)
+* 🛠️ **Домашнее задание:** **[homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06)** — Выделение слоя поискового движка `engine` с инъекцией зависимостей (индекса и хранилища).
+  * Движок: [homework-06/pkg/engine/engine.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06/pkg/engine/engine.go)
+  * Геометрия: [homework-06/pkg/geom/geom.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/06-oop/homework-06/pkg/geom/geom.go)
 
 ---
 
@@ -148,9 +148,9 @@ flowchart TD
   * `6-handler/` — тестирование HTTP-обработчиков через `httptest.NewRecorder` и `httptest.NewRequest`.
   * `7-tdd/` — цикл разработки Red-Green-Refactor.
   * `8-benchmarks/` — замеры производительности (`b.N`, `b.ResetTimer`, `b.ReportAllocs`).
-* 🛠️ **Домашнее задание:** **[homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-07)** — Реализация и тестирование алгоритмов сортировки (QuickSort, MergeSort) для ранжирования документов поисковика.
-  * Пакет сортировок: [homework-07/pkg/sorts/sorts.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-07/pkg/sorts/sorts.go)
-  * Табличные тесты и бенчмарки: [homework-07/pkg/sorts/sorts_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-07/pkg/sorts/sorts_test.go)
+* 🛠️ **Домашнее задание:** **[homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07)** — Реализация и тестирование алгоритмов сортировки (QuickSort, MergeSort) для ранжирования документов поисковика.
+  * Пакет сортировок: [homework-07/pkg/sorts/sorts.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07/pkg/sorts/sorts.go)
+  * Табличные тесты и бенчмарки: [homework-07/pkg/sorts/sorts_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07/pkg/sorts/sorts_test.go)
 
 ---
 
@@ -165,9 +165,9 @@ flowchart TD
   go test -bench=. -cpuprofile=cpu.out -memprofile=mem.out ./08-prof_debug/1-bench_profile
   go tool pprof -http=:8080 cpu.out
   ```
-* 🛠️ **Домашнее задание:** **[homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-08)** — Анализ узких мест алгоритма Two Sum, снятие профилей и ускорение поиска документов в `GoSearch`.
-  * Оптимизированный поиск: [homework-08/pkg/search/search.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-08/pkg/search/search.go)
-  * Профили: [cpu.out](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-08/cpu.out), [mem.out](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-08/mem.out), [trace.out](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-08/trace.out)
+* 🛠️ **Домашнее задание:** **[homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08)** — Анализ узких мест алгоритма Two Sum, снятие профилей и ускорение поиска документов в `GoSearch`.
+  * Оптимизированный поиск: [homework-08/pkg/search/search.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08/pkg/search/search.go)
+  * Профили: [cpu.out](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08/cpu.out), [mem.out](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08/mem.out), [trace.out](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08/trace.out)
 
 ---
 
@@ -178,8 +178,8 @@ flowchart TD
   * `2-quiz/` — главная ловушка интерфейсов: `nil` интерфейс со значением `nil`-указателя не равен `nil`!
   * `3-assertion/`, `4-type_switch/` — приведение типов и ветвление по типам.
   * `6-generics/` — обобщенное программирование (type parameters, constraints `any`, `comparable`).
-* 🛠️ **Домашнее задание:** **[homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-09)** — Проектирование гибкой системы сущностей пользователей через интерфейсные контракты.
-  * Пакет пользователей: [homework-09/pkg/users/users.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-09/pkg/users/users.go)
+* 🛠️ **Домашнее задание:** **[homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/09-interfaces/homework-09)** — Проектирование гибкой системы сущностей пользователей через интерфейсные контракты.
+  * Пакет пользователей: [homework-09/pkg/users/users.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/09-interfaces/homework-09/pkg/users/users.go)
 
 ---
 
@@ -197,8 +197,8 @@ flowchart TD
   ```bash
   go test -race -v ./10-concurrency/...
   ```
-* 🛠️ **Домашнее задание:** **[homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10)** — Реализация состязания двух игроков Ping-Pong через синхронизацию каналов.
-  * Движок игры: [homework-10/pkg/pingpong/pingpong.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10/pkg/pingpong/pingpong.go)
+* 🛠️ **Домашнее задание:** **[homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10)** — Реализация состязания двух игроков Ping-Pong через синхронизацию каналов.
+  * Движок игры: [homework-10/pkg/pingpong/pingpong.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10/pkg/pingpong/pingpong.go)
 
 ---
 
@@ -214,9 +214,9 @@ flowchart TD
   * `1-daytime/` — сетевой сервер и клиент точного времени по протоколу TCP (`net.Listen`, `net.Dial`).
   * `2-echo/` — параллельный TCP эхо-сервер с отдельной горутиной на каждое соединение.
   * `3-deadline/` — предотвращение зависания соединений через `conn.SetDeadline()`.
-* 🛠️ **Домашнее задание:** **[homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-11)** — Создание сетевой TCP-службы для поисковой системы `GoSearch` и консольного сетевого клиента `netclient`.
-  * TCP-сервер: [homework-11/pkg/netsrv/netsrv.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-11/pkg/netsrv/netsrv.go)
-  * Сетевой клиент: [homework-11/cmd/netclient/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-11/cmd/netclient/main.go)
+* 🛠️ **Домашнее задание:** **[homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network/homework-11)** — Создание сетевой TCP-службы для поисковой системы `GoSearch` и консольного сетевого клиента `netclient`.
+  * TCP-сервер: [homework-11/pkg/netsrv/netsrv.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network/homework-11/pkg/netsrv/netsrv.go)
+  * Сетевой клиент: [homework-11/cmd/netclient/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network/homework-11/cmd/netclient/main.go)
 
 ---
 
@@ -227,8 +227,8 @@ flowchart TD
   * `2-custom_server/` — тонкая настройка `http.Server` (таймауты чтения/записи, защита от атак Slowloris).
   * `3-gorilla_mux/` — маршрутизация с параметрами путей через `gorilla/mux`.
   * `4-template/` — рендеринг HTML с автоматическим экранированием XSS через `html/template`.
-* 🛠️ **Домашнее задание:** **[homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-12)** — Полноценный Web-интерфейс для поисковика `GoSearch` с HTML-формами поиска.
-  * Веб-хэндлеры: [homework-12/pkg/webapp/webapp.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-12/pkg/webapp/webapp.go)
+* 🛠️ **Домашнее задание:** **[homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps/homework-12)** — Полноценный Web-интерфейс для поисковика `GoSearch` с HTML-формами поиска.
+  * Веб-хэндлеры: [homework-12/pkg/webapp/webapp.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps/homework-12/pkg/webapp/webapp.go)
 
 ---
 
@@ -237,8 +237,8 @@ flowchart TD
 * 💻 **Код лекции:** Директория [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api):
   * `1-api/` — CRUD эндпоинты, цепочки Middleware (логирование, CORS, авторизация), graceful shutdown.
   * `2-api/` — разделение на `cmd/server` и чистый библиотечный пакет `pkg/api`.
-* 🛠️ **Домашнее задание:** **[homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-13)** — Проектирование промышленного REST API для `GoSearch` (добавление, обновление, удаление и поиск документов по API).
-  * Контроллеры и роутинг: [homework-13/pkg/api/api.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-13/pkg/api/api.go)
+* 🛠️ **Домашнее задание:** **[homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api/homework-13)** — Проектирование промышленного REST API для `GoSearch` (добавление, обновление, удаление и поиск документов по API).
+  * Контроллеры и роутинг: [homework-13/pkg/api/api.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api/homework-13/pkg/api/api.go)
 
 ---
 
@@ -247,8 +247,8 @@ flowchart TD
 * 💻 **Код лекции:** Директория [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC):
   * `1-Go-RPC/` — встроенный механизм `net/rpc` в Go (клиент и сервер каталога книг).
   * `2-gRPC/` — Google Protocol Buffers + gRPC: описание контракта `.proto`, сгенерированные структуры, gRPC сервер и клиент со стримингом.
-* 🛠️ **Домашнее задание:** **[homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-14)** — Создание сетевой RPC-службы передачи сообщений.
-  * Сервис и клиент: [homework-14/pkg/rpcservice/rpcservice.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-14/pkg/rpcservice/rpcservice.go)
+* 🛠️ **Домашнее задание:** **[homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC/homework-14)** — Создание сетевой RPC-службы передачи сообщений.
+  * Сервис и клиент: [homework-14/pkg/rpcservice/rpcservice.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC/homework-14/pkg/rpcservice/rpcservice.go)
 * ⚠️ **Подводный камень:** Сгенерированные структуры Protobuf содержат внутренний `sync.Mutex`. Передавать их нужно **только по указателю** (`*pb.Book`), избегая копирования lock-значений по значению.
 
 ---
@@ -258,9 +258,9 @@ flowchart TD
 * 💻 **Код лекции:** Директория [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql):
   * `books_db/1-schema.sql` — DDL создания таблиц, внешние ключи (Foreign Keys), индексы, связи многие-ко-многим.
   * `books_db/2-data.sql` — наполнение тестовыми данными и написание сложных выборок с `JOIN` и `GROUP BY`.
-* 🛠️ **Домашнее задание:** **[homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-15)** — Проектирование полной реляционной схемы базы данных кинотеатра (фильмы, залы, сеансы, билеты, заказы).
-  * Схема БД: [homework-15/schema.sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-15/schema.sql)
-  * Аналитические SQL-запросы: [homework-15/queries.sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-15/queries.sql)
+* 🛠️ **Домашнее задание:** **[homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15)** — Проектирование полной реляционной схемы базы данных кинотеатра (фильмы, залы, сеансы, билеты, заказы).
+  * Схема БД: [homework-15/schema.sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15/schema.sql)
+  * Аналитические SQL-запросы: [homework-15/queries.sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15/queries.sql)
 
 ---
 
@@ -270,9 +270,9 @@ flowchart TD
   * `1-database-sql/` — стандартный интерфейс `database/sql` и пул соединений `sql.DB`.
   * `2-pgx/` — высокопроизводительный драйвер PostgreSQL `pgxpool.Pool`.
   * `pkg/db/` — паттерн **Repository**: интерфейс `Storage`, продакшн-реализация для PostgreSQL (`pgsql`) и легковесный мок в оперативной памяти (`memsql`) для быстрых тестов.
-* 🛠️ **Домашнее задание:** **[homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-16)** — Интеграция базы данных кинотеатра с REST-сервером через паттерн Репозиторий.
-  * Слой БД: [homework-16/pkg/db/db.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-16/pkg/db/db.go)
-  * Сервер: [homework-16/cmd/server/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-16/cmd/server/main.go)
+* 🛠️ **Домашнее задание:** **[homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16)** — Интеграция базы данных кинотеатра с REST-сервером через паттерн Репозиторий.
+  * Слой БД: [homework-16/pkg/db/db.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16/pkg/db/db.go)
+  * Сервер: [homework-16/cmd/server/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16/cmd/server/main.go)
 * ⚠️ **Подводный камень:** **Никогда** не конкатенируйте строки в SQL-запросах! Всегда используйте параметризованные плейсхолдеры (`$1, $2`), чтобы гарантировать защиту от SQL Injection.
 
 ---
@@ -288,9 +288,9 @@ flowchart TD
 * 💻 **Код лекции:** Директория [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design):
   * `SOLID/` — изолированные примеры всех 5 принципов на Go (SRP, OCP, LSP, ISP, DIP).
   * `app/` — каноническая реализация сервиса по Чистой Архитектуре с защищенным каталогом `internal/` (models, api, db, server).
-* 🛠️ **Домашнее задание:** **[homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-17)** — Реализация слоистой архитектуры приложения и модульные тесты для всех принципов SOLID.
-  * Пакет Clean Architecture: [homework-17/cleanarch/cleanarch_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-17/cleanarch/cleanarch_test.go)
-  * SOLID пакеты: [homework-17/solid/](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-17/solid)
+* 🛠️ **Домашнее задание:** **[homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design/homework-17)** — Реализация слоистой архитектуры приложения и модульные тесты для всех принципов SOLID.
+  * Пакет Clean Architecture: [homework-17/cleanarch/cleanarch_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design/homework-17/cleanarch/cleanarch_test.go)
+  * SOLID пакеты: [homework-17/solid/](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design/homework-17/solid)
 
 ---
 
@@ -299,9 +299,9 @@ flowchart TD
 * 💻 **Код лекции:** Директория [18-microservices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices):
   * `microservice/build/Dockerfile` — многоэтапная сборка (Multi-stage build) с компиляцией в `golang:alpine` и финальным образом на `scratch` (размер бинарника ~15 МБ).
   * `microservice/build/deployment.yaml`, `service.yaml` — Kubernetes манифесты с Liveness и Readiness пробами.
-* 🛠️ **Домашнее задание:** **[homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-18)** — Старт итогового микросервисного проекта **lynks**: сервис `shortener` (сокращение ссылок), переменные окружения, Dockerfile и docker-compose.
-  * API сервиса: [homework-18/pkg/api/api.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-18/pkg/api/api.go)
-  * Контейнеризация: [homework-18/Dockerfile](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-18/Dockerfile)
+* 🛠️ **Домашнее задание:** **[homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices/homework-18)** — Старт итогового микросервисного проекта **lynks**: сервис `shortener` (сокращение ссылок), переменные окружения, Dockerfile и docker-compose.
+  * API сервиса: [homework-18/pkg/api/api.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices/homework-18/pkg/api/api.go)
+  * Контейнеризация: [homework-18/Dockerfile](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices/homework-18/Dockerfile)
 
 ---
 
@@ -310,9 +310,9 @@ flowchart TD
 * 💻 **Код лекции:** Директория [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue):
   * `1-kafka/kafka.go` — публикация событий продюсером (Producer) и асинхронное чтение консьюмером (Consumer).
   * `docker-compose.yml` — запуск локального кластера Kafka и Zookeeper.
-* 🛠️ **Домашнее задание:** **[homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-19)** — Реализация асинхронного сервиса аналитики переходов по ссылкам в проекте `lynks` через топик Kafka.
-  * Сервис аналитики: [homework-19/cmd/analytics/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-19/cmd/analytics/main.go)
-  * Событийная модель: [homework-19/pkg/event/event.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-19/pkg/event/event.go)
+* 🛠️ **Домашнее задание:** **[homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue/homework-19)** — Реализация асинхронного сервиса аналитики переходов по ссылкам в проекте `lynks` через топик Kafka.
+  * Сервис аналитики: [homework-19/cmd/analytics/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue/homework-19/cmd/analytics/main.go)
+  * Событийная модель: [homework-19/pkg/event/event.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue/homework-19/pkg/event/event.go)
 
 ---
 
@@ -322,11 +322,11 @@ flowchart TD
   * `1-mongo/` — MongoDB: подключение, коллекции, документы BSON.
   * `2-KVStore/` — собственная Key-Value база данных в памяти на `sync.RWMutex`.
   * `3-redis/` — кэширование в Redis: команды `SET`, `GET`, TTL и `EXPIRE`.
-* 🛠️ **Домашнее задание:** **[homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-20)** — **Финальный проект Lynks**:
+* 🛠️ **Домашнее задание:** **[homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20)** — **Финальный проект Lynks**:
   * Реализация сервиса кэширования `memcache` по паттерну Cache-Aside.
   * Сбор Prometheus метрик (`http_requests_total`, `cache_hits_total`, `cache_misses_total`).
-  * Полный сквозной прогон интеграционных тестов: [homework-20/e2e_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-20/e2e_test.go).
-  * Оркестрация: [homework-20/docker-compose.yml](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-20/docker-compose.yml).
+  * Полный сквозной прогон интеграционных тестов: [homework-20/e2e_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20/e2e_test.go).
+  * Оркестрация: [homework-20/docker-compose.yml](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20/docker-compose.yml).
 
 ---
 
@@ -383,8 +383,8 @@ go test ./...
 go vet ./...
 
 # Прогон тестов конкретного этапа или ДЗ с проверкой гонок данных
-go test -v -race ./homework-10/...
-go test -v -race ./homework-20/...
+go test -v -race ./10-concurrency/homework-10/...
+go test -v -race ./20-NoSQL/homework-20/...
 ```
 
 ### 2. Бенчмарки и профилирование (pprof)
@@ -405,7 +405,7 @@ go tool pprof -http=:8080 cpu.out
 cd homework-20 && docker compose up -d --build
 
 # Запуск E2E интеграционных тестов
-go test -v ./homework-20/e2e_test.go
+go test -v ./20-NoSQL/homework-20/e2e_test.go
 
 # Остановка контейнеров
 docker compose down -v

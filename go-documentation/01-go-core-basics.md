@@ -8,7 +8,7 @@
 >
 > - 📂 **Код лекций:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/00-docs) (Тулчейн, Go Modules), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/01-intro) (Hello World, CLI-приложения), [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax) (Фундаментальный синтаксис, срезы, мапы, указатели, структуры, ошибки).
 > - 🎯 **Задачник:** [homework-tasks.md (Уроки 1–8)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt) (Бизнес-логика Goflex: переменные, условия, циклы, срезы, мапы, структуры).
-> - 🛠️ **Решение домашнего задания:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02) (Краулер и поиск документов GoSearch с обходом слайсов).
+> - 🛠️ **Решение домашнего задания:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02) (Краулер и поиск документов GoSearch с обходом слайсов).
 > - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 1: Junior Go Developer)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#этап-1-junior-go-developer--фундамент-языка-и-структуры-данных).
 
 ---
@@ -1801,7 +1801,7 @@ strings.ReplaceAll("aaa", "a", "b")   // "bbb" — замена всех вхо�
 
 ## 5. Массивы и Слайсы (Arrays & Slices)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-02 (GoSearch)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02) | 🎯 **Задачи:** [homework-tasks.md (Урок 6: Слайсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-6-слайсы-slices-и-управление-каталогом)
+> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-02 (GoSearch)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02) | 🎯 **Задачи:** [homework-tasks.md (Урок 6: Слайсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-6-слайсы-slices-и-управление-каталогом)
 
 Слайс — фундаментальная динамическая структура данных в Go, представляющая собой легковесный 24-байтный заголовок поверх фиксированного базового массива в памяти.
 
@@ -2672,7 +2672,7 @@ sessions = sessions[:0] // теперь и len=0, и объекты в куче 
 
 ## 6. Карты (Maps)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03) | 🎯 **Задачи:** [homework-tasks.md (Урок 7: Словари maps)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-7-словари-maps-и-быстрый-поиск-тайтлов)
+> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03) | 🎯 **Задачи:** [homework-tasks.md (Урок 7: Словари maps)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-7-словари-maps-и-быстрый-поиск-тайтлов)
 
 Встроенная хэш-таблица Go со сложностью поиска $O(1)$. Понимание её устройства — обязательное требование на технических собеседованиях.
 
