@@ -44,6 +44,7 @@ go-course-4/
 │   ├── go-livecoding-guide.md              # Задачи для лайвкодинга с разбором
 │   ├── go-database-interview-guide.md      # Вопросы и практика по SQL и NoSQL
 │   ├── go-system-design-guide.md           # Проектирование распределенных систем
+│   ├── go-modern-features-guide.md         # Руководство по фичам Go 1.21–1.24 (slog, iter, routing)
 │   ├── homework-tasks.md                   # Формулировки домашних заданий
 │   └── sql-livecoding-guide.md             # Практика SQL запросов
 └── README.md                   # Главный путеводитель (этот файл)
@@ -77,6 +78,7 @@ go-course-4/
 | **19** | Очереди сообщений | [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue) | [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue/homework-19) | Apache Kafka, Event-Driven Architecture, Producer / Consumer группы, асинхронная аналитика |
 | **20** | NoSQL и кэширование | [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL) | [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20) | Redis, In-Memory Cache (Cache-Aside), MongoDB, Prometheus метрики |
 | **21** | Подготовка к собеседованиям | [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/21-interview) | — | Разбор типовых ошибок, неблокирующий select, Fan-In, слайсы, UTF-8 руны |
+| **22** | Современный Go (1.21–1.24) | [22-modern-go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/22-modern-go) | — | `log/slog`, `iter.Seq` (Range over func), ServeMux `{id}`, `testing.F`, `slices`, `maps`, `cmp` |
 
 ---
 

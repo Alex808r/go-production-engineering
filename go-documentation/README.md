@@ -13,12 +13,13 @@
 
 > [!TIP]
 > 🎯 **Практические задачники и гайды курса:**
+> - 🚀 **[go-modern-features-guide.md (Гайд по Modern Go 1.21–1.24)](go-modern-features-guide.md)** — разбор `log/slog`, `iter.Seq` (Range over func), ServeMux `{id}`, `testing.F`, `slices`, `maps`, `cmp`.
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex & GoSearch)](homework-tasks.md)**
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)**
 > - 💻 **[go-livecoding-guide.md (Live-Coding на Go: 43 задачи + Гайд по интервью)](go-livecoding-guide.md)** — топ задач от Junior до Senior, 5-шаговый фреймворк решения, табличные тесты и топ-10 вопросов с подвохом.
 > - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник: 28 задач)](sql-livecoding-guide.md)** — практические задачи с собеседований (Junior/Middle/Senior): оконные функции, JOIN, пагинация, блокировки, UPSERT, EXPLAIN ANALYZE.
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)**
-> - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и примерам курса)](course-codebase-guide.md)** — сквозная карта курса Thinknetica: 22 лекционных модуля (00–21), проекты GoSearch и Lynks, навигатор по домашним заданиям (homework-02–20).
+> - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и примерам курса)](course-codebase-guide.md)** — сквозная карта курса Thinknetica: 22 лекционных модуля (00–22), проекты GoSearch и Lynks, навигатор по домашним заданиям.
 
 ---
 
