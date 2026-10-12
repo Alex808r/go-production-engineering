@@ -1,25 +1,44 @@
+// Package api предоставляет HTTP API для работы с репозиторием книг.
 package api
 
 import (
 	"encoding/json"
-	"go-core-4/16-db-apps/pkg/db"
 	"net/http"
+
+	"go-core-4/16-db-apps/pkg/db"
 )
 
+// API инкапсулирует абстрактное хранилище книг.
 type API struct {
 	db db.Interface
 }
 
+// New создает экземпляр API с переданным интерфейсом БД.
 func New(db db.Interface) *API {
 	return &API{db: db}
 }
 
-func (api *API) handler(w http.ResponseWriter, r *http.Request) {
-	books, _ := api.db.Books(r.Context())
+// Handler возвращает HTTP-обработчик для маршрута получения книг.
+func (api *API) Handler() http.HandlerFunc {
+	return api.handler
+}
 
-	for _, book := range books {
-		_ = book
+// ServeHTTP реализует интерфейс http.Handler.
+func (api *API) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	api.handler(w, r)
+}
+
+func (api *API) handler(w http.ResponseWriter, r *http.Request) {
+	books, err := api.db.Books(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
-	json.NewEncoder(w).Encode(books)
+	if books == nil {
+		books = []db.Book{}
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	_ = json.NewEncoder(w).Encode(books)
 }
