@@ -13,47 +13,79 @@ import (
 
 var testMux *mux.Router
 
+// TestMain запускается перед выполнением тестов пакета.
+// Позволяет единоразово инициализировать общие ресурсы (например, тестовый роутер).
 func TestMain(m *testing.M) {
-	testMux = mux.NewRouter()
-	endpoints(testMux)
+	testMux = newRouter()
 	m.Run()
 }
 
+// Test_mainHandler демонстрирует использование пакета net/http/httptest
+// для быстрого и детерминированного тестирования HTTP-обработчиков.
+//
+// Преимущества httptest:
+// 1. Вызовы происходят в оперативной памяти (ServeHTTP), без открытия реальных сетевых TCP-портов.
+// 2. Нет конфликтов занятых портов при параллельном запуске в CI/CD (Zero port collision).
+// 3. Тесты выполняются за микросекунды.
 func Test_mainHandler(t *testing.T) {
-	data := []int{}
+	// -------------------------------------------------------------------------
+	// Сценарий 1: Проверка запрета метода (POST вместо GET -> 405 Method Not Allowed)
+	// -------------------------------------------------------------------------
+	data := []int{1, 2, 3}
 	payload, _ := json.Marshal(data)
 
-	// Создаём HTTP=запрос.
-	req := httptest.NewRequest(http.MethodPost, "/Name", bytes.NewBuffer(payload))
-	req.Header.Add("Сontent-type", "plain/text")
+	// httptest.NewRequest создает *http.Request, оптимизированный для вызова в тестах
+	req := httptest.NewRequest(http.MethodPost, "/Alex", bytes.NewBuffer(payload))
+	req.Header.Set("Content-Type", "application/json")
 
-	// Объект для записи ответа HTTP-сервера.
+	// httptest.NewRecorder() возвращает *httptest.ResponseRecorder,
+	// который реализует интерфейс http.ResponseWriter и накапливает в памяти
+	// код ответа (Code), заголовки (HeaderMap) и буфер тела ответа (Body).
 	rr := httptest.NewRecorder()
 
-	// Вызов маршрутизатора и обслуживание запроса.
+	// Напрямую вызываем метод ServeHTTP роутера
 	testMux.ServeHTTP(rr, req)
 
-	// Анализ ответа сервера (неверный метод HTTP).
+	// Проверяем, что Gorilla Mux отклонил POST-запрос с кодом 405
 	if rr.Code != http.StatusMethodNotAllowed {
-		t.Errorf("код неверен: получили %d, а хотели %d", rr.Code, http.StatusOK)
+		t.Errorf("ожидался HTTP %d (Method Not Allowed), получен: %d", http.StatusMethodNotAllowed, rr.Code)
 	}
 
-	t.Log("Response: ", rr.Body)
-
-	//=========================================================
-
-	req = httptest.NewRequest(http.MethodGet, "/Name", nil)
-	req.Header.Add("Сontent-type", "plain/text")
-
+	// -------------------------------------------------------------------------
+	// Сценарий 2: Успешный GET-запрос (200 OK + проверка тела ответа)
+	// -------------------------------------------------------------------------
+	req = httptest.NewRequest(http.MethodGet, "/Alex", nil)
 	rr = httptest.NewRecorder()
 
 	testMux.ServeHTTP(rr, req)
 
 	if rr.Code != http.StatusOK {
-		t.Errorf("код неверен: получили %d, а хотели %d", rr.Code, http.StatusOK)
+		t.Errorf("ожидался HTTP %d (OK), получен: %d", http.StatusOK, rr.Code)
 	}
+
 	body := rr.Body.String()
-	if !strings.Contains(body, "Name") {
-		t.Fatal(body)
+	expected := "Hi, Alex"
+	if !strings.Contains(body, expected) {
+		t.Errorf("тело ответа должно содержать %q, получено:\n%s", expected, body)
+	}
+
+	// Проверяем Content-Type заголовок
+	ct := rr.Header().Get("Content-Type")
+	if !strings.Contains(ct, "text/html") {
+		t.Errorf("ожидался заголовок text/html, получен: %s", ct)
 	}
 }
+
+// Benchmark_mainHandler измеряет производительность сквозной обработки запроса через роутер и хэндлер.
+func Benchmark_mainHandler(b *testing.B) {
+	req := httptest.NewRequest(http.MethodGet, "/Gopher", nil)
+
+	b.ResetTimer()
+	b.ReportAllocs()
+
+	for i := 0; i < b.N; i++ {
+		rr := httptest.NewRecorder()
+		testMux.ServeHTTP(rr, req)
+	}
+}
+
