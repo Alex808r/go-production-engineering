@@ -20,7 +20,7 @@
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и разбор всех 32 домашних заданий.
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).
 > - 💻 **Код лекций:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms), [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs), [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/21-interview).
-> - 📁 **Решения ДЗ:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-03) (бинарный поиск), [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-04) (список и BST дерево), [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10) (пинг-понг на горутинах и каналах).
+> - 📁 **Решения ДЗ:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03) (бинарный поиск), [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/homework-04) (список и BST дерево), [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10) (пинг-понг на горутинах и каналах).
 
 ---
 

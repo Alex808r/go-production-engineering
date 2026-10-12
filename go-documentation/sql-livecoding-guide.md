@@ -18,7 +18,7 @@
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и разбор всех 32 домашних заданий.  
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).  
 > - 💻 **Код лекций:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql) (схемы DDL и аналитические запросы SQL), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps) (интерфейсы БД и репозитории).  
-> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-15) (схема БД кинотеатра, данные и запросы), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-16) (PostgreSQL репозиторий фильмов).
+> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15) (схема БД кинотеатра, данные и запросы), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов).
 
 ---
 

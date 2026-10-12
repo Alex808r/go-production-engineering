@@ -50,4 +50,4 @@ go test -v ./02-syntax/...
 
 ## 🔗 Связанные материалы
 - **Теория:** [Том 1: Основы языка Go (Разделы 1–8: Типы, срезы, структуры, указатели)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md)
-- **Практическое ДЗ:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-02) (первая версия краулера GoSearch)
+- **Практическое ДЗ:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02) (первая версия краулера GoSearch)

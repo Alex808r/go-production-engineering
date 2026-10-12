@@ -66,4 +66,4 @@ go test -bench=. -benchmem ./07-testing/8-benchmarks
 
 ## 🔗 Связанные материалы
 - **Теория:** [Том 5: Тестирование и архитектура (Разделы 17–19: Unit-тесты, TestMain, TDD)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)
-- **Практическое ДЗ:** [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-07) (Тестирование алгоритмов сортировки и поискового движка)
+- **Практическое ДЗ:** [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07) (Тестирование алгоритмов сортировки и поискового движка)

@@ -7,7 +7,7 @@
 > 💻 **Практика, примеры кода и домашние задания к этому тому:**
 > - 📂 **Код лекций:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency) (Горутины, каналы, `sync.Mutex`, `sync.WaitGroup`, Worker Pool, `context`), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/21-interview) (Live-задачи на каналы: pipeline, fan-in, генераторы), [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug) (Диагностика горутин и планировщика).
 > - 🎯 **Задачник:** [homework-tasks.md (Урок 10: Конкурентность)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-10-конкурентность-горутины-каналы-sync-worker-pool-context), [homework-tasks.md (ДЗ 10: Пинг-Понг)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-10-конкурентное-программирование-игра-в-пинг-понг).
-> - 🛠️ **Решение домашнего задания:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10) — Синхронизация двух горутин по каналам (игра «Пинг-понг») и параллельная обработка.
+> - 🛠️ **Решение домашнего задания:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10) — Синхронизация двух горутин по каналам (игра «Пинг-понг») и параллельная обработка.
 > - 💡 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md) — 43 практические задачи с собеседований (Worker Pool, Semaphore, Rate Limiter).
 > - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 2: Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-10-конкурентность-горутины-и-каналы).
 
@@ -15,7 +15,7 @@
 
 ## 11. Конкурентность: Горутины и Каналы (Concurrency)
 
-> 🔗 **Практика и примеры кода:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/21-interview) | 🛠️ **Домашнее задание:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10) | 🎯 **Задачи:** [homework-tasks.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-10-конкурентность-горутины-каналы-sync-worker-pool-context), [homework-tasks.md (ДЗ 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-10-конкурентное-программирование-игра-в-пинг-понг) | 💻 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
+> 🔗 **Практика и примеры кода:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/21-interview) | 🛠️ **Домашнее задание:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10) | 🎯 **Задачи:** [homework-tasks.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-10-конкурентность-горутины-каналы-sync-worker-pool-context), [homework-tasks.md (ДЗ 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-10-конкурентное-программирование-игра-в-пинг-понг) | 💻 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
 
 > _«Do not communicate by sharing memory; instead, share memory by communicating.»_ — Роб Пайк  
 > _«Concurrency is not parallelism.»_ (Конкурентность — это не параллелизм) — Роб Пайк
@@ -956,7 +956,7 @@ func CallC(str string) {
 
 ## 15. Продвинутая Синхронизация и Паттерны Конкурентности
 
-> 🔗 **Практика и примеры кода:** [10-concurrency/4-race](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/4-race), [10-concurrency/5-patterns](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/5-patterns) | 🛠️ **ДЗ:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/homework-10) | 🎯 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
+> 🔗 **Практика и примеры кода:** [10-concurrency/4-race](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/4-race), [10-concurrency/5-patterns](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/5-patterns) | 🛠️ **ДЗ:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/10-concurrency/homework-10) | 🎯 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
 
 ### 15.1. `sync.RWMutex`, `sync.Once` и `sync.Pool`
 
