@@ -1,5 +1,10 @@
 # Курс «Современная разработка на Go» (go-core-4)
 
+[![CI](https://github.com/Alex808r/go_course_4/actions/workflows/ci.yml/badge.svg)](https://github.com/Alex808r/go_course_4/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Alex808r/go_course_4)](https://goreportcard.com/report/github.com/Alex808r/go_course_4)
+[![Go Version](https://img.shields.io/badge/Go-1.22%20%7C%201.23%20%7C%201.24%2B-00ADD8?logo=go)](https://go.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 > **Thinknetica**  
 > Примеры кода для четвертого потока курса «Современная разработка на Go».  
 > **Автор курса:** Дмитрий Титов.  

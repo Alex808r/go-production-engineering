@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build, Vet & Race Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+          check-latest: true
+
+      - name: Verify module dependencies
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Run static analysis (go vet)
+        run: go vet ./...
+
+      - name: Compile all packages (go build)
+        run: go build ./...
+
+      - name: Run all tests with race detector
+        run: go test -v -race -timeout 10m ./...
