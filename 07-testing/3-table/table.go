@@ -1,6 +1,11 @@
+// Package table демонстрирует подход табличного тестирования (Table-Driven Tests) в Go.
 package table
 
-// reverse разворачивает строку.
+// reverse разворачивает строку с корректной поддержкой многобайтовых символов Unicode (UTF-8).
+//
+// Для разворота строки обязательно преобразование в []rune (руны),
+// так как один символ в UTF-8 (например, кириллица или эмодзи) может занимать от 1 до 4 байт.
+// Разворот байтового среза []byte привел бы к повреждению (corrupted bytes) не-ASCII символов.
 func reverse(s string) string {
 	runes := []rune(s)
 
@@ -10,3 +15,4 @@ func reverse(s string) string {
 
 	return string(runes)
 }
+
