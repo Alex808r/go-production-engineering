@@ -1,44 +1,70 @@
+// Package main демонстрирует паттерн параллельной потоковой обработки Pipeline (Конвейер):
+// связывание стадий обработки данных через однонаправленные каналы.
 package main
 
 import "fmt"
 
+// gen — стадия генерации данных (Producer / Generator).
+// Принимает срез чисел и возвращает канал только для чтения (<-chan int).
 func gen(nums ...int) <-chan int {
 	out := make(chan int)
 	go func() {
+		defer close(out) // гарантируем закрытие канала по завершении отправки
 		for _, n := range nums {
 			out <- n
 		}
-		close(out)
 	}()
 	return out
 }
 
-func proc(in <-chan int) <-chan int {
+// square — промежуточная стадия (Stage 1): возведение в квадрат.
+// Читает элементы из канала `in`, вычисляет n*n, отправляет в канал `out`.
+func square(in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
+		defer close(out)
 		for n := range in {
 			out <- n * n
 		}
-		close(out)
 	}()
 	return out
 }
 
-func proc2(in <-chan int) <-chan int {
+// addTen — промежуточная стадия (Stage 2): прибавление 10.
+func addTen(in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
+		defer close(out)
 		for n := range in {
-			out <- n * n * n
+			out <- n + 10
 		}
-		close(out)
 	}()
 	return out
 }
 
 func main() {
-	res := proc(proc2(proc2(proc(gen(1, 2, 3, 4, 5)))))
+	// ========================================================================
+	// ТЕОРИЯ: ПАТТЕРН PIPELINE (КОНВЕЙЕР)
+	// ========================================================================
+	// Конвейер состоит из серии стадий, соединенных каналами:
+	//  1. Каждая стадия принимает канал только для чтения (<-chan) и возвращает новый канал (<-chan).
+	//  2. Стадия работает в отдельной горутине.
+	//  3. Данные передаются поштучно потоком (streaming), не загружая весь объем в память.
+	//  4. Автоматический Backpressure: если следующая стадия медленная, небуферизованный
+	//     канал притормаживает предыдущую стадию без переполнения памяти!
 
-	for val := range res {
-		fmt.Println(val)
+	fmt.Println("--- Запуск конвейера: gen(1..5) -> square (n^2) -> addTen (+10) ---")
+
+	// Композиция стадий конвейера:
+	numbers := gen(1, 2, 3, 4, 5) // [1, 2, 3, 4, 5]
+	squared := square(numbers)    // [1, 4, 9, 16, 25]
+	result := addTen(squared)     // [11, 14, 19, 26, 35]
+
+	// Терминальная стадия (Consumer / Sink):
+	for val := range result {
+		fmt.Printf("Выход конвейера: %d\n", val)
 	}
+
+	fmt.Println("--- Конвейер успешно завершил обработку всех элементов ---")
 }
+
