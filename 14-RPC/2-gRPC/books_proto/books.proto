@@ -1,23 +1,40 @@
 syntax = "proto3";
+
+// Имя пакета в protobuf (пространство имен)
 package protobuf;
 
+// Опция go_package определяет путь импорта и имя пакета в сгенерированном Go-коде
 option go_package = "./books_proto";
 
-// Книга.
+// Book описывает сущность книги в формате Protocol Buffers.
+// Каждому полю присваивается уникальный числовой номер (field number),
+// который кодируется в бинарном формате вместо имени поля (компактность и быстродействие).
 message Book {
-    int64 id = 1;
-    string title = 2;
-    string author_name = 3;
+    int64 id = 1;          // Уникальный идентификатор книги
+    string title = 2;       // Название книги
+    string author_name = 3; // Имя автора
 }
 
+// Empty — пустое сообщение, аналог void / struct{} для RPC-методов без параметров.
 message Empty {}
 
-// Из каталога 2-gRPC:
-// PB: "protoc -I . --go_out=. ./books_proto/books.proto"
-// gRPC: "protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative .\books_proto\books.proto"
+// =============================================================================
+// Команды для кодогенерации из корня каталога 14-RPC/2-gRPC/:
+// 1. Установка плагинов protoc для Go:
+//    go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+//    go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+// 2. Генерация protobuf структур и gRPC клиента/сервера:
+//    protoc --go_out=. --go_opt=paths=source_relative \
+//           --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+//           ./books_proto/books.proto
+// =============================================================================
 
-// Описание службы gRPC.
+// Bookinist — описание службы gRPC (сервиса).
 service Bookinist {
-  rpc Books (Empty) returns (stream Book) {}
-  rpc AddBook (Book) returns (Empty) {}
+    // Серверный стриминг (Server Streaming): клиент отправляет один запрос (Empty),
+    // а сервер возвращает поток сообщений (stream Book) до наступления EOF.
+    rpc Books (Empty) returns (stream Book) {}
+
+    // Унарный вызов (Unary RPC): стандартный вызов "запрос-ответ" (Book -> Empty).
+    rpc AddBook (Book) returns (Empty) {}
 }
