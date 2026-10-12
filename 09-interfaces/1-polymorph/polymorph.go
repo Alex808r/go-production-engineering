@@ -1,63 +1,74 @@
+// Package main демонстрирует основы полиморфизма через интерфейсы в Go,
+// утиную типизацию (duck typing) и передачу абстракций (serializer, io.Writer).
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"log"
 	"os"
 )
 
-// serializer - абстрактный интерфейсный тип даных.
-// Объявляет контракт на сериализацию.
+// serializer — абстрактный интерфейсный тип данных.
+// Он объявляет контракт: любой тип, имеющий метод serialize() ([]byte, error),
+// неявно реализует данный интерфейс (утиная типизация: "if it quacks like a duck, it's a duck").
 type serializer interface {
 	serialize() ([]byte, error) // контракт интерфейса
 }
 
-// Конкретный тип данных.
+// person — конкретный пользовательский тип данных (структура).
 type person struct {
-	Name string
-	Age  int
+	Name string `json:"name"`
+	Age  int    `json:"age"`
 }
 
-// Метод, выполняющий контракт интерфейса.
+// serialize реализует контракт интерфейса serializer для *person (сериализация в JSON).
+// Обратите внимание на pointer receiver (*person): метод привязан к указателю.
 func (p *person) serialize() ([]byte, error) {
-	b, err := json.Marshal(p)
+	b, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ошибка JSON-сериализации: %w", err)
 	}
 	return b, nil
 }
 
-//
-// Другой тип, выполняющий контракт интерфейса.
-//
-
+// car — другой конкретный тип данных.
 type car struct {
-	Model string
-	Year  int
+	Model string `xml:"model"`
+	Year  int    `xml:"year"`
 }
 
+// serialize реализует контракт интерфейса serializer для *car (сериализация в XML).
 func (c *car) serialize() ([]byte, error) {
-	b, err := xml.Marshal(c)
+	b, err := xml.MarshalIndent(c, "", "  ")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("ошибка XML-сериализации: %w", err)
 	}
 	return b, nil
 }
 
-// Полиморфическая функция, принимающая интерфейс.
+// store — полиморфная функция.
+// Она принимает:
+//  1. s serializer — любой объект, умеющий сериализовать себя в байты.
+//  2. w io.Writer — любой поток вывода (файл, сетевой сокет, HTTP-ответ, буфер памяти bytes.Buffer).
+//
+// ВАЖНОЕ ПРАВИЛО ПРОЕКТИРОВАНИЯ В GO:
+// Если функция принимает io.Writer, она НЕ должна закрывать его (Close), так как вызывающий код
+// владеет ресурсом (например, если передать os.Stdout, закрытие сломает весь консольный вывод программы!).
 func store(s serializer, w io.Writer) error {
-	if wc2, ok := w.(io.WriteCloser); ok {
-		defer wc2.Close()
-	}
-
 	b, err := s.serialize()
 	if err != nil {
 		return err
 	}
 
-	_, err = w.Write(b)
+	// Записываем полученные байты и перевод строки
+	if _, err = w.Write(b); err != nil {
+		return fmt.Errorf("ошибка записи в io.Writer: %w", err)
+	}
+	_, err = w.Write([]byte("\n"))
 	return err
 }
 
@@ -66,32 +77,34 @@ func main() {
 		Name: "Курт",
 		Age:  27,
 	}
+
+	// Переменной интерфейсного типа можно присвоить указатель на person,
+	// так как *person реализует метод serialize().
 	var s serializer = &p
 
-	f, err := os.Create("./output.txt")
-	if err != nil {
+	// 1. Полиморфная запись в буфер памяти bytes.Buffer (вместо захламления диска)
+	var buf bytes.Buffer
+	if err := store(s, &buf); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("--- Запись person в bytes.Buffer (JSON) ---")
+	fmt.Print(buf.String())
+
+	// 2. Полиморфная запись в os.Stdout (консоль)
+	fmt.Println("--- Запись person напрямую в os.Stdout ---")
+	if err := store(&p, os.Stdout); err != nil {
 		log.Fatal(err)
 	}
 
-	err = store(s, f)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = store(&p, f)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// *************************************************** //
-
+	// 3. Другой тип (car), сериализуемый в XML через тот же самый интерфейс serializer
 	c := car{
-		Model: "Beetle",
+		Model: "Volkswagen Beetle",
 		Year:  1970,
 	}
 
-	err = store(&c, os.Stdout)
-	if err != nil {
+	fmt.Println("--- Запись car в os.Stdout (XML) через тот же контракт ---")
+	if err := store(&c, os.Stdout); err != nil {
 		log.Fatal(err)
 	}
 }
+
