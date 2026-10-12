@@ -1,49 +1,78 @@
+// Package main демонстрирует паттерн параллельной обработки Fan-In (Мультиплексор каналов):
+// объединение данных из нескольких независимых входных каналов в один общий выходной канал.
 package main
 
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
-func worker(n int) chan int {
-	ch := make(chan int)
+// worker — имитирует отдельный источник данных (микросервис, поисковый движок и т.д.).
+// Запускает горутину, пишет результат в свой канал и закрывает его.
+func worker(id int) <-chan string {
+	ch := make(chan string)
 	go func() {
 		defer close(ch)
-		ch <- n * n
+		// Имитируем разное время ответа источников
+		time.Sleep(time.Duration(id*20) * time.Millisecond)
+		ch <- fmt.Sprintf("Данные от источника #%d (квадрат: %d)", id, id*id)
 	}()
 	return ch
 }
 
+// fanIn — обобщенная функция (Generics [T any]), объединяющая любое количество каналов `<-chan T`
+// в один общий результирующий канал `<-chan T`.
 func fanIn[T any](channels ...<-chan T) <-chan T {
-	ch := make(chan T)
+	out := make(chan T)
 	var wg sync.WaitGroup
+
+	// Увеличиваем счетчик на число входящих каналов
 	wg.Add(len(channels))
 
+	// Запускаем горутину-читателя для каждого отдельного канала
 	for _, c := range channels {
 		go func(in <-chan T) {
 			defer wg.Done()
-			for i := range in {
-				ch <- i
+			for val := range in {
+				out <- val
 			}
 		}(c)
 	}
 
+	// Отдельная горутина ожидает завершения ВСЕХ входных каналов
+	// и только после этого безопасно закрывает выходной канал `out`.
+	// ВАЖНО: Если попытаться закрыть `out` раньше или в читателе, возникнет паника или дедлок!
 	go func() {
 		wg.Wait()
-		close(ch)
+		close(out)
 	}()
 
-	return ch
+	return out
 }
 
 func main() {
-	var chans []<-chan int
-	for i := 0; i < 10; i++ {
+	// ========================================================================
+	// ТЕОРИЯ: ПАТТЕРН FAN-IN (СЛИЯНИЕ КАНАЛОВ)
+	// ========================================================================
+	// Применяется, когда несколько источников данных производят сообщения параллельно,
+	// а потребитель хочет вычитывать их из одной очереди (stream processing).
+	// Пример: поисковый робот опрашивает 10 внешних сайтов и агрегирует ссылки.
+
+	fmt.Println("--- Запуск Fan-In: опрос 5 независимых источников ---")
+	var chans []<-chan string
+	for i := 1; i <= 5; i++ {
 		chans = append(chans, worker(i))
 	}
 
-	ch := fanIn(chans...)
-	for val := range ch {
-		fmt.Println(val)
+	// Объединяем 5 каналов в один
+	mergedCh := fanIn(chans...)
+
+	// Вычитываем все сообщения из объединенного канала
+	for msg := range mergedCh {
+		fmt.Println("<- Получено в Fan-In:", msg)
 	}
+
+	fmt.Println("--- Все источники обработаны, объединенный канал закрыт ---")
 }
+
