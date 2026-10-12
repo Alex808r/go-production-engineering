@@ -54,3 +54,30 @@ func FanIn[T any](channels ...<-chan T) <-chan T {
 
 	return ch
 }
+
+// WorkerPool реализует классический пул горутин-обработчиков:
+// Запускается numWorkers воркеров, которые параллельно читают задачи из входного канала jobs,
+// применяют к ним функцию process и отправляют результат в результирующий канал.
+// Канал results закрывается только после того, как все воркеры завершат обработку (wg.Wait).
+func WorkerPool[T any, R any](numWorkers int, jobs <-chan T, process func(T) R) <-chan R {
+	results := make(chan R)
+	var wg sync.WaitGroup
+	wg.Add(numWorkers)
+
+	for w := 0; w < numWorkers; w++ {
+		go func() {
+			defer wg.Done()
+			for job := range jobs {
+				results <- process(job)
+			}
+		}()
+	}
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	return results
+}
+
