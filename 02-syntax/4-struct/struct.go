@@ -7,6 +7,11 @@ type point struct {
 	lon float64
 }
 
+// PrintPoint использует value receiver (p point) — метод работает с КОПИЕЙ
+// структуры.
+// Любые изменения полей внутри метода не затронут исходный объект.
+// Чтобы работать с оригиналом или избежать копирования больших структур,
+// используют pointer receiver: (p *point).
 func (p point) PrintPoint() {
 	fmt.Printf("lat:lon - %f, %f\n", p.lat, p.lon)
 }
