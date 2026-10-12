@@ -1,3 +1,5 @@
+// Package refactoring демонстрирует архитектурный рефакторинг для тестируемости (Testability).
+// Разделение чистой бизнес-логики и сетевых зависимостей позволяет писать надежные unit-тесты.
 package refactoring
 
 import (
@@ -6,7 +8,7 @@ import (
 	"net/http"
 )
 
-// Rates - курсы валют.
+// Rates представляет схему ответа API Центрального Банка РФ с котировками валют.
 type Rates struct {
 	Valute struct {
 		USD struct {
@@ -21,6 +23,8 @@ type Rates struct {
 	}
 }
 
+// rublesToUSD — интеграционная функция конвертации рублей в доллары США.
+// Связывает получение курса из сети и математический расчет.
 func rublesToUSD(rubles float64) (float64, error) {
 	ratio, err := data()
 	if err != nil {
@@ -30,6 +34,8 @@ func rublesToUSD(rubles float64) (float64, error) {
 	return calc(rubles, ratio), nil
 }
 
+// data выполняет HTTP-запрос к внешнему API ЦБ РФ и парсит актуальный курс доллара.
+// Функция подвержена сетевым сбоям и задержкам (I/O dependency).
 func data() (float64, error) {
 	var data Rates
 	const url = "https://www.cbr-xml-daily.ru/daily_json.js"
@@ -37,6 +43,7 @@ func data() (float64, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer resp.Body.Close()
 
 	err = json.NewDecoder(resp.Body).Decode(&data)
 	if err != nil {
@@ -44,12 +51,16 @@ func data() (float64, error) {
 	}
 
 	if data.Valute.USD.Value == 0 {
-		return 0, errors.New("деление на 0")
+		return 0, errors.New("курс USD равен 0, деление невозможно")
 	}
 
 	return data.Valute.USD.Value, nil
 }
 
+// calc — ЧИСТАЯ ФУНКЦИЯ (pure function) математического пересчета.
+// Не зависит от сети, времени, глобального состояния или внешних сервисов.
+// Обладает 100% детерминизмом и тестируется тривиально без моков.
 func calc(rubles float64, ratio float64) float64 {
 	return rubles / ratio
 }
+

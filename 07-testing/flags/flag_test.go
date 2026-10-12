@@ -1,3 +1,4 @@
+// Package flags демонстрирует передачу пользовательских флагов командной строки в тесты Go.
 package flags
 
 import (
@@ -5,14 +6,20 @@ import (
 	"testing"
 )
 
-var f = flag.Bool("int", false, "")
+// Пользовательские флаги регистрируются в пакете flag на уровне пакета (до вызова TestXxx).
+// Запуск с флагом: go test -v ./07-testing/flags -int
+// Запуск без флага: go test -v ./07-testing/flags
+var f = flag.Bool("int", false, "пользовательский флаг интеграционного режима")
 
+// TestFunc проверяет значение переданного флага.
 func TestFunc(t *testing.T) {
+	// flag.Parse() парсит аргументы командной строки
 	flag.Parse()
+
 	if *f {
-		t.Log("FLAG")
-	}
-	if !*f {
-		t.Log("NO FLAG")
+		t.Log("Тест запущен с установленным флагом -int (пользовательский режим активен)")
+	} else {
+		t.Log("Тест запущен без флага -int (режим по умолчанию)")
 	}
 }
+

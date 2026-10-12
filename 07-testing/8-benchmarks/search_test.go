@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// TestSearches проверяет корректность работы обоих алгоритмов поиска на эталонных примерах.
 func TestSearches(t *testing.T) {
 	tests := []struct {
 		name string
@@ -15,31 +16,31 @@ func TestSearches(t *testing.T) {
 		want int
 	}{
 		{
-			name: "#1",
+			name: "Найден в середине нечетного среза",
 			data: []int{1, 2, 4, 6, 10},
 			item: 6,
 			want: 3,
 		},
 		{
-			name: "#2",
+			name: "Найден в четном срезе",
 			data: []int{1, 2, 4, 5, 6, 10},
 			item: 6,
 			want: 4,
 		},
 		{
-			name: "#3",
+			name: "Элемент отсутствует в срезе",
 			data: []int{1, 2, 4, 5, 6, 10},
 			item: 16,
 			want: -1,
 		},
 		{
-			name: "#4",
+			name: "Первые позиции среза",
 			data: []int{1, 2, 4, 5, 6, 10},
 			item: 2,
 			want: 1,
 		},
 		{
-			name: "#5",
+			name: "Большой диапазон чисел",
 			data: []int{1, 2, 4, 5, 6, 10, 100},
 			item: 4,
 			want: 2,
@@ -57,35 +58,53 @@ func TestSearches(t *testing.T) {
 	}
 }
 
+// sampleData генерирует отсортированный срез из 1_000_000 случайных чисел для бенчмарков.
 func sampleData() []int {
-	rand.Seed(time.Now().UnixNano())
-	var data []int
+	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
+	data := make([]int, 1_000_000)
 	for i := 0; i < 1_000_000; i++ {
-		data = append(data, rand.Intn(1000))
+		data[i] = rng.Intn(1000)
 	}
 
-	sort.Slice(data, func(i, j int) bool { return data[i] < data[j] })
+	sort.Ints(data)
 	return data
 }
 
+// Глобальная переменная для предотвращения оптимизации компилятора (Compiler Optimization).
+var benchmarkResult int
+
+// BenchmarkBinary замеряет скорость бинарного поиска O(log N).
+//
+// АНАТОМИЯ БЕНЧМАРКА В GO:
+// 1. Имя функции должно начинаться с `Benchmark` и принимать `(b *testing.B)`.
+// 2. b.ResetTimer(): сбрасывает счетчик времени бенчмарка после тяжелой фазы подготовки данных
+//    (sampleData), чтобы генерация и сортировка 1 млн чисел не учитывались в метриках поиска.
+// 3. b.ReportAllocs(): включает автоматический учет выделения памяти (B/op и allocs/op).
+// 4. Цикл `for i := 0; i < b.N; i++`: фреймворк Go автоматически подбирает значение b.N
+//    так, чтобы тест длился заданное время (по умолчанию 1 секунду) для репрезентативной статистики.
 func BenchmarkBinary(b *testing.B) {
 	data := sampleData()
+	b.ReportAllocs()
 	b.ResetTimer()
 
+	var res int
 	for i := 0; i < b.N; i++ {
-		n := rand.Intn(1000)
-		res := Binary(data, n)
-		_ = res
+		res = Binary(data, 500)
 	}
+	benchmarkResult = res
 }
 
+// BenchmarkSimple замеряет скорость линейного поиска O(N).
+// Показывает разницу в производительности: линейный поиск будет медленнее бинарного в тысячи раз.
 func BenchmarkSimple(b *testing.B) {
 	data := sampleData()
+	b.ReportAllocs()
 	b.ResetTimer()
 
+	var res int
 	for i := 0; i < b.N; i++ {
-		n := rand.Intn(1000)
-		res := Simple(data, n)
-		_ = res
+		res = Simple(data, 500)
 	}
+	benchmarkResult = res
 }
+
