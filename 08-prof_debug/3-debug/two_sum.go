@@ -1,23 +1,38 @@
 /*
-Given an array of integers nums and an integer target,
-return indices of the two numbers such that they add up to target.
-You may assume that each input would have exactly one solution,
-and you may not use the same element twice.
-You can return the answer in any order.
+Задача Two Sum:
+Дан массив целых чисел nums и число target.
+Необходимо вернуть индексы двух чисел, сумма которых равна target.
+Каждый элемент разрешается использовать только один раз (i != j).
 
-Example 1:
+Пример 1:
+nums = [2, 7, 11, 15], target = 9  -> [0, 1] (2 + 7 = 9)
 
-Input: nums = [2,7,11,15], target = 9
-Output: [0,1]
-Output: Because nums[0] + nums[1] == 9, we return [0, 1].
-Example 2:
-
-Input: nums = [3,2,4], target = 6
-Output: [1,2]
+Пример 2:
+nums = [2, 10, 6, 12, 14], target = 20 -> правильный ответ [2, 4] (6 + 14 = 20)
 */
 package main
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
+
+// РАБОТА С ОТЛАДЧИКОМ DELVE (dlv):
+// 1. Установка: go install github.com/go-delve/delve/cmd/dlv@latest
+// 2. Запуск отладки: dlv debug two_sum.go
+// 3. Основные команды Delve:
+//    - `b main.main`         — установить breakpoint на функцию main
+//    - `b two_sum.go:48`     — поставить breakpoint на конкретную строку
+//    - `c` (continue)        — продолжить выполнение программы до следующего breakpoint
+//    - `n` (next)            — выполнить следующую строку (без захода внутрь функций)
+//    - `s` (step)            — шаг с заходом внутрь вызываемой функции
+//    - `p nums[i]` (print)   — распечатать значение переменной или выражения
+//    - `locals`              — показать все локальные переменные текущего фрейма
+//    - `args`                — показать аргументы функции
+//    - `stack` (bt)          — вывести трассировку стека вызовов (backtrace)
+//    - `goroutines`          — список всех активных горутин
+//    - `goroutine <id>`      — переключить контекст на горутину с номером id
+//    - `q` (quit)            — завершить сессию отладчика
 
 var a int
 
@@ -26,21 +41,33 @@ func main() {
 	_ = a
 	go double(a)
 
+	// Тест 1: срабатывает успешно, так как 2+11 = 13 (элементы на разных позициях)
 	res := twoSum([]int{2, 7, 11, 15}, 13)
 	if !reflect.DeepEqual(res, [2]int{0, 2}) {
-		println("неверный результат")
+		fmt.Println("неверный результат")
 		return
 	}
-	println("Номера элементов:", res[0], res[1])
+	fmt.Printf("1. Номера элементов: [%d, %d]\n", res[0], res[1])
 
+	// Тест 2: ВОСПРОИЗВЕДЕНИЕ БАГА!
+	// Ожидается пара 6 + 14 = 20 (индексы [2, 4]).
+	// Но алгоритм находит nums[1] + nums[1] == 10 + 10 == 20 и возвращает [1, 1],
+	// нарушая инвариант задачи (элемент не может складываться сам с собой)!
 	res = twoSum([]int{2, 10, 6, 12, 14}, 20)
 	if !reflect.DeepEqual(res, [2]int{2, 4}) {
-		println("неверный результат")
+		fmt.Printf("БАГ ОБНАРУЖЕН: функция вернула [%d, %d] вместо [2, 4]!\n", res[0], res[1])
 		return
 	}
-	println("Номера элементов:", res[0], res[1])
+	fmt.Printf("2. Номера элементов: [%d, %d]\n", res[0], res[1])
 }
 
+// twoSum содержит логическую ошибку:
+// Внутренний цикл j начинается с 0 и не проверяет условие i != j.
+// При nums[i] * 2 == target функция ошибочно возвращает [i, i].
+//
+// ИСПРАВЛЕНИЕ:
+// 1. Brute-force: `for j := i + 1; j < len(nums); j++` (сложность O(N^2), память O(1)).
+// 2. Хеш-таблица: использовать `map[int]int` за один проход (сложность O(N), память O(N)).
 func twoSum(nums []int, target int) [2]int {
 	for i := 0; i < len(nums); i++ {
 		for j := 0; j < len(nums); j++ {
@@ -57,3 +84,4 @@ func double(a int) int {
 	b := a * a
 	return b
 }
+
