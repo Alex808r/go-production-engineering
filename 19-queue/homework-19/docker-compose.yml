@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: homework19-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: homework19-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  shortener:
+    build:
+      context: ..
+      dockerfile: homework-19/Dockerfile
+    container_name: homework19-shortener
+    command: ["/app/shortener"]
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - BASE_URL=http://localhost:8080
+      - KAFKA_BROKERS=kafka:9092
+      - KAFKA_TOPIC=links-events
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  analytics:
+    build:
+      context: ..
+      dockerfile: homework-19/Dockerfile
+    container_name: homework19-analytics
+    command: ["/app/analytics"]
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    environment:
+      - PORT=8081
+      - KAFKA_BROKERS=kafka:9092
+      - KAFKA_TOPIC=links-events
+      - KAFKA_GROUP_ID=analytics-group
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
