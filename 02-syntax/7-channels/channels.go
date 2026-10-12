@@ -27,3 +27,9 @@ func bufChan() chan int {
 	}()
 	return ch
 }
+
+func main() {
+	for val := range unbufChan() {
+		fmt.Printf("Получено значение: %d\n", val)
+	}
+}
