@@ -1,3 +1,4 @@
+// Package main реализует TCP-клиент для подключения к серверу Daytime (RFC 867).
 package main
 
 import (
@@ -8,15 +9,31 @@ import (
 )
 
 func main() {
-	conn, err := net.Dial("tcp4", "localhost:13")
-	if err != nil {
-		log.Fatal(err)
-	}
+	// ========================================================================
+	// 1. УСТАНОВКА TCP-СОЕДИНЕНИЯ ЧЕРЕЗ net.Dial
+	// ========================================================================
+	// net.Dial выполняет 3-стороннее рукопожатие (TCP 3-Way Handshake: SYN -> SYN-ACK -> ACK).
+	// В случае успеха возвращает объект `net.Conn`.
+	serverAddr := "localhost:1313"
+	fmt.Printf("Подключение к Daytime серверу %s...\n", serverAddr)
 
+	conn, err := net.Dial("tcp4", serverAddr)
+	if err != nil {
+		log.Fatalf("Не удалось подключиться к серверу: %v\nУбедитесь, что запущен сервер: go run ./11-network/1-daytime/server/daytime-server.go", err)
+	}
+	defer conn.Close() // освобождаем сокет при выходе
+
+	// ========================================================================
+	// 2. ЧТЕНИЕ ДАННЫХ ИЗ ПОТОКА СОЕДИНЕНИЯ
+	// ========================================================================
+	// net.Conn реализует интерфейс io.Reader, поэтому с ним можно работать
+	// через стандартные функции io.ReadAll, bufio.Reader, io.Copy и др.
+	// Сервер присылает строку и закрывает соединение (сигнал EOF).
 	msg, err := io.ReadAll(conn)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Ошибка чтения ответа: %v", err)
 	}
 
-	fmt.Println("Ответ от сервера:", string(msg))
+	fmt.Println("Ответ от сервера (текущее время):", string(msg))
 }
+
