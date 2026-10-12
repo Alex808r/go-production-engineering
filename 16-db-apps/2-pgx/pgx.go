@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// Книжка.
+// book представляет модель книги в реляционной СУБД.
 type book struct {
 	ID          int
 	Title       string
@@ -22,23 +22,31 @@ type book struct {
 
 func main() {
 	ctx := context.Background()
-	// Подключение к БД. Функция возвращает объект БД.
+
+	// 1. Инициализация пула соединений pgxpool.Pool.
+	// pgx — специализированный драйвер PostgreSQL с поддержкой бинарного протокола,
+	// типов данных Postgres (массивы, jsonb, hstore) и встроенного пула соединений pgxpool.
 	pwd := os.Getenv("pg_password")
-	db, err := pgxpool.New(ctx, "postgres://postgres:"+pwd+"@ubuntu-server.northeurope.cloudapp.azure.com/books")
+	connStr := "postgres://postgres:" + pwd + "@ubuntu-server.northeurope.cloudapp.azure.com/books"
+
+	// pgxpool.New создает пул соединений.
+	// Пул управляет открытыми TCP-соединениями с сервером СУБД,
+	// повторно используя их между горутинами.
+	db, err := pgxpool.New(ctx, connStr)
 	if err != nil {
 		log.Fatalf("Unable to connect to database: %v\n", err)
 	}
-	// Не забываем очищать ресурсы.
+	// Обязательно освобождаем ресурсы пула при завершении работы программы.
 	defer db.Close()
 
-	// Получение списка книг.
+	// 2. Получение списка книг через параметризованный запрос.
 	data, err := books(ctx, db)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("%+v\n", data)
 
-	// добавление книг одной транзакцией
+	// 3. Пакетная вставка нескольких записей в рамках единой транзакции.
 	data = []book{
 		{
 			Title: "The Chronicles of Amber",
@@ -54,7 +62,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Получение списка книг.
+	// 4. Повторное получение обновленного списка книг.
 	data, err = books(ctx, db)
 	if err != nil {
 		log.Fatal(err)
@@ -62,22 +70,27 @@ func main() {
 	fmt.Printf("%+v\n", data)
 }
 
-// books возвращает список книг из БД.
+// books возвращает список книг из БД PostgreSQL.
+// Функция демонстрирует:
+// - передачу контекста для контроля таймаутов;
+// - параметризацию ($1, $2) для защиты от SQL-инъекций;
+// - сканирование курсора rows.Scan и проверку rows.Err().
 func books(ctx context.Context, db *pgxpool.Pool) ([]book, error) {
-	// Выполнение запроса выборки данных.
-	// Query производит следующие действия:
-	// - подготовка запроса;
-	// - выполнение запроса;
-	// - закрытие соединения.
+	// Query выполняет:
+	// 1) захват свободного соединения из пула;
+	// 2) подготовку и отправку запроса;
+	// 3) возврат структуры pgx.Rows;
+	// 4) соединение удерживается до вызова rows.Close().
 	rows, err := db.Query(ctx, `
 		SELECT id, title, year
-		FRoM books
-		WHERE id >= $1 AND id < `,
-		0,
+		FROM books
+		WHERE id >= $1 AND id < $2;`,
+		0, 10_000,
 	)
 	if err != nil {
 		return nil, err
 	}
+	// Обязательно закрываем rows, чтобы вернуть соединение обратно в пул!
 	defer rows.Close()
 
 	var books []book
@@ -93,40 +106,42 @@ func books(ctx context.Context, db *pgxpool.Pool) ([]book, error) {
 		}
 		books = append(books, b)
 	}
-	err = rows.Err()
-	if err != nil {
+
+	// Проверка на сетевые ошибки или сбои сервера при итерации по строкам
+	if err = rows.Err(); err != nil {
 		return nil, err
 	}
+
 	return books, nil
 }
 
-// addBooks добавляет в БД массив книг одной транзакцией.
+// addBooks добавляет в БД массив книг одной транзакцией с использованием pgx.Batch.
+// pgx.Batch позволяет отправить сразу несколько команд на сервер за один сетевой round-trip,
+// что кардинально повышает пропускную способность (throughput) по сравнению с одиночными INSERT.
 func addBooks(ctx context.Context, db *pgxpool.Pool, books []book) error {
-	// начало транзакции
+	// Открываем транзакцию
 	tx, err := db.Begin(ctx)
 	if err != nil {
 		return err
 	}
-	// отмена транзакции в случае ошибки
+	// Гарантированный откат в случае паники или ошибки перед Commit
 	defer tx.Rollback(ctx)
 
-	// пакетный запрос
-	var batch = &pgx.Batch{}
-
-	// добавление заданий в пакет
+	// Формируем пакет команд (batch)
+	batch := &pgx.Batch{}
 	for _, book := range books {
 		batch.Queue(`INSERT INTO books(title, year) VALUES ($1, $2)`, book.Title, book.Year)
 	}
 
-	// отправка пакета в БД (может выполняться для транзакции или соединения)
+	// Отправляем весь пакет команд в транзакцию одним сетевым пакетом
 	res := tx.SendBatch(ctx, batch)
 
-	// обязательная операция закрытия соединения
+	// Закрываем объект batch results (считывает все ответы от сервера)
 	err = res.Close()
 	if err != nil {
 		return err
 	}
 
-	// подтверждение транзакции
+	// Фиксируем транзакцию (COMMIT)
 	return tx.Commit(ctx)
 }
