@@ -26,6 +26,9 @@
 ├── 06-graceful-shutdown/  # Паттерн безопасного завершения серверов
 │   ├── server.go          # signal.NotifyContext, srv.Shutdown, завершение in-flight
 │   └── server_test.go     # Тест отсутствия обрывов активных запросов
+├── 07-secrets-and-traps/  # Скрытые механизмы и ловушки Go (Uber Style & 100 Mistakes)
+│   ├── traps.go           # Struct padding, slice retention, Functional Options, timer leaks
+│   └── traps_test.go      # Тесты выравнивания памяти (33% savings), бенчмарки
 └── 22-modern-go.md        # Данное руководство
 ```
 
@@ -119,6 +122,18 @@ for val := range root.All() {
 
 ---
 
+### 7. Секреты рантайма и ловушки памяти ([`07-secrets-and-traps`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/22-modern-go/07-secrets-and-traps/traps.go))
+Критически важные знания из **Uber Go Style Guide** и книги **100 Go Mistakes**:
+- **Выравнивание структур (Data Alignment):** Размещение полей по убыванию размера сокращает размер структуры на 33.3% за счет устранения пустого байтового отступа (padding).
+- **Утечки памяти при срезах:** Подсрез `huge[:2]` удерживает весь гигантский базовый массив в RAM. Использование `slices.Clone()` изолирует память и позволяет GC удалить исходный массив.
+- **Очистка map:** `delete()` не уменьшает аллокации бакетов `hmap`. Для освобождения памяти мапу необходимо пересоздавать.
+- **Таймеры в циклах:** `time.After` внутри `select` в бесконечном цикле создает утечку памяти до истечения таймаута; решение — `time.NewTimer` с явным `Stop()`.
+- **Kubernetes CFS Throttling:** Go не знает про лимиты cgroups из коробки — решение `go.uber.org/automaxprocs`.
+- **Compile-time проверки интерфейсов:** `var _ Runner = (*Service)(nil)` защищает от рассинхронизации сигнатур еще на этапе компиляции.
+- Полное руководство: см. [`go-documentation/go-secrets-and-traps-guide.md`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md).
+
+---
+
 ## 📊 Результаты бенчмарков
 
 ```text
@@ -128,6 +143,8 @@ BenchmarkSlices_SortFunc-8        917683     1245 ns/op  (~2x быстрее sor
 BenchmarkClassic_SortSlice-8      451970     2636 ns/op
 BenchmarkTree_IterSeq-8          1542219      768 ns/op  (быстрее среза, 0 аллокаций)
 BenchmarkTree_FullSlice-8        1386534      865 ns/op
+BenchmarkGoodStruct_Allocation-8 369654117    3.15 ns/op  (16 байт vs 24 байта, 33% экономия RAM)
+BenchmarkBadStruct_Allocation-8  378972750    3.30 ns/op
 ```
 
 ---
