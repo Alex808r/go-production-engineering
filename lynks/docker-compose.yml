@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: lynks-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: lynks
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d lynks"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: lynks-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  memcache:
+    build:
+      context: ..
+      dockerfile: lynks/Dockerfile.memcache
+    container_name: lynks-memcache
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    environment:
+      - PORT=8082
+      - REDIS_ADDR=redis:6379
+      - CACHE_TTL=24h
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  shortener:
+    build:
+      context: ..
+      dockerfile: lynks/Dockerfile.shortener
+    container_name: lynks-shortener
+    depends_on:
+      postgres:
+        condition: service_healthy
+      memcache:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - BASE_URL=http://localhost:8080
+      - PG_DSN=postgres://postgres:postgres@postgres:5432/lynks?sslmode=disable
+      - MEMCACHE_URL=http://memcache:8082
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
