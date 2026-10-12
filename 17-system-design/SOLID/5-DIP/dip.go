@@ -34,9 +34,19 @@ func (s *WrongServer) BusinessLogic() {
 	_ = books
 }
 
+// NewGoodServer инжектирует зависимость Storage (Dependency Injection).
+func NewGoodServer(db Storage) *GoodServer {
+	return &GoodServer{db: db}
+}
+
 // Бизнес-логика системы.
 func (s *GoodServer) BusinessLogic() {
 	// Принцип DIP выполняется, обращение к интерфейсу.
 	books := s.db.Books()
 	_ = books
+}
+
+// BooksCount возвращает количество книг через интерфейс Storage.
+func (s *GoodServer) BooksCount() int {
+	return len(s.db.Books())
 }
