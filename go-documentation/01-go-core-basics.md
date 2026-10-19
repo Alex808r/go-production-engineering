@@ -1624,6 +1624,24 @@ func main() {
 - Символы кириллицы (русские буквы) занимают **по 2 байта**.
 - Эмодзи и китайские иероглифы занимают **3-4 байта**.
 
+#### ⚠️ Ловушка длины строки: `len(s)` vs `utf8.RuneCountInString(s)`
+
+Встроенная функция `len(s)` возвращает **число байт**, а не количество букв или символов:
+
+```go
+s := "Привет"
+fmt.Println(len(s)) // 12 байт (каждая русская буква в UTF-8 занимает 2 байта!)
+
+// ❌ Неэффективно: len([]rune(s))
+// Создает в куче новый слайс []int32 размером 6 * 4 = 24 байта ради одного только числа!
+fmt.Println(len([]rune(s))) // 6 (но произошла лишняя аллокация памяти!)
+
+// ✅ Идеально: utf8.RuneCountInString из пакета "unicode/utf8"
+// Быстро итерируется по байтам и считает руны за O(N) по времени без единой аллокации (O(1) memory):
+import "unicode/utf8"
+fmt.Println(utf8.RuneCountInString(s)) // 6 (Zero-allocation!)
+```
+
 #### Проблема срезов по индексам:
 
 Выражение `s[a:b]` работает с **байтовыми индексами**, поэтому нарезка многобайтовой строки режет байты, а не буквы:
@@ -1743,59 +1761,409 @@ type StringHeader struct {
 
 ---
 
-### 4.2. Конкатенация строк в цикле: `strings.Builder`
+### 4.2. Неизменяемость строк и генерация строк в циклах: `strings.Builder`
 
-Из-за того, что строки в Go неизменяемы (**immutable**), каждая операция `+` или `+=` создает **абсолютно новую строку** в памяти и копирует туда содержимое обоих частей.
+#### 1. Почему строки в Go неизменяемы (Immutable)
+
+В Go тип `string` принципиально **неизменяем**. Это означает, что после создания байты строки нельзя модифицировать по месту (in-place):
 
 ```go
-// ❌ ПЛОХО: O(N^2) по времени и объёму копируемых байт (N аллокаций, каждая копирует всё накопленное)
+s := "hello"
+s[0] = 'H' // ❌ Ошибка компиляции: cannot assign to s[0] (value of type byte)
+```
+
+Когда вы используете оператор конкатенации `+` или `+=`, Go **не дописывает** данные в существующую память. Вместо этого среда выполнения выделяет в оперативной памяти **новую строку** и копирует туда данные обеих исходных частей:
+
+```go
+s := "Hello" // 1-я строка в памяти
+s += " "     // 2-я строка в памяти ("Hello ")
+s += "world" // 3-я строка в памяти ("Hello world")
+```
+
+Если таких операций всего несколько — это незаметно. Но если вы генерируете текст в цикле (сборка HTML-страниц, динамических SQL-запросов, CSV-отчётов или JSON):
+
+```go
+// ❌ КАТАСТРОФА ДЛЯ ПРОИЗВОДИТЕЛЬНОСТИ:
+// На каждой итерации выделяется новая память и перекопируется ВСЁ предыдущее содержимое!
+// Сложность: O(N^2) по времени и количеству копируемых байт, тысячи лишних аллокаций.
 result := ""
 for i := 0; i < 10000; i++ {
     result += "x"
 }
 ```
 
-#### Решение через `strings.Builder`:
+---
 
-`strings.Builder` накопляет байты во внутреннем слайсе `[]byte`, динамически расширяя его по мере необходимости (амортизированная сложность $O(N)$).
+#### 2. Решение: структура `strings.Builder`
+
+Для эффективной сборки строк стандартная библиотека Go предоставляет тип [`strings.Builder`](https://pkg.go.dev/strings#Builder).
+
+`strings.Builder` накапливает данные во внутреннем динамически расширяющемся буфере `[]byte`, а итоговую строку возвращает через метод `.String()`.
 
 ```go
-// ✅ ПРАВИЛЬНО: склейка через буфер strings.Builder
-import "strings"
+package main
 
-var sb strings.Builder
-sb.Grow(10000) // Предварительное резервирование памяти (сокращает аллокации до 1)
+import (
+    "fmt"
+    "strings"
+)
 
-for i := 0; i < 10000; i++ {
-    sb.WriteString("x")
+func main() {
+    var builder strings.Builder // Готов к использованию сразу, без конструкторов!
+
+    builder.WriteString("Hello")
+    builder.WriteString(" ")
+    builder.WriteString("world")
+
+    result := builder.String()
+    fmt.Println(result) // => Hello world
 }
-result := sb.String()
 ```
 
-#### Вопрос на собеседовании:
+---
 
-> **Вопрос:** Почему `strings.Builder` эффективнее обычного `bytes.Buffer` при получении итоговой строки?  
-> **Ответ:** Метод `sb.String()` в `strings.Builder` использует `unsafe.Pointer` под капотом для возврата строки без повторного копирования байтового буфера (Zero-copy).
+#### 3. Методы записи в `strings.Builder`
+
+В зависимости от типа добавляемых данных `strings.Builder` предоставляет специализированные методы:
+
+| Метод | Что принимает | Для чего используется / Пример |
+| :--- | :--- | :--- |
+| `WriteString(s)` | `string` | Добавление обычной строки: `builder.WriteString("Привет")` |
+| `WriteByte(c)` | `byte` (`uint8`) | Быстрая запись 1 ASCII-символа без аллокаций: `builder.WriteByte(' ')` или `'\n'` |
+| `WriteRune(r)` | `rune` (`int32`) | Запись Unicode-символа (кириллица, иероглифы, эмодзи) с автокодированием в UTF-8: `builder.WriteRune('🚀')` |
+| `Write(p)` | `[]byte` | Добавление среза байтов: `builder.Write([]byte{65, 66})` |
+
+##### Пример работы с разными типами символов:
+```go
+var bld strings.Builder
+
+bld.WriteString("Hi")
+bld.WriteByte(' ')        // ASCII-пробел
+bld.WriteRune('世')       // Китайский иероглиф
+bld.WriteRune('界')       // "Мир"
+bld.WriteByte('!')
+
+fmt.Println(bld.String()) // => Hi 世界!
+```
+
+---
+
+#### 4. Практический пример: объединение элементов с разделителем в цикле
+
+Классическая задача — обойти строку или срез и собрать результат, вставляя разделитель (например, запятую) между элементами, но **не добавляя** его в самом конце:
+
+```go
+package main
+
+import (
+    "fmt"
+    "strings"
+)
+
+func main() {
+    text := "hexlet"
+    var bld strings.Builder
+
+    // Предварительно резервируем память под буквы и запятые:
+    bld.Grow(len(text) * 2)
+
+    for i, r := range text {
+        bld.WriteRune(r)
+        // Добавляем запятую только между символами (кроме последнего)
+        if i < len(text)-1 {
+            bld.WriteString(",")
+        }
+    }
+
+    result := bld.String()
+    fmt.Println(result) // => h,e,x,l,e,t
+}
+```
+
+---
+
+#### 5. Почему `strings.Builder` настолько быстрее
+
+1. **Амортизированная сложность $O(N)$ вместо $O(N^2)$:**  
+   Вместо пересоздания строки на каждом шаге `Builder` растёт ступенчато (подобно срезам в Go с удвоением емкости), что сводит число выделений памяти к минимуму.
+2. **Предварительное резервирование через `.Grow(n)`:**  
+   Если вам известен примерный или точный размер итогового текста, вызов `builder.Grow(n)` резервирует всю память **за 1 единственную аллокацию**.
+3. **Zero-copy получение строки через `.String()`:**  
+   В отличие от `bytes.Buffer`, где метод `.String()` делает полное копирование байтов в новую строку, `strings.Builder` использует низкоуровневый `unsafe.Pointer` и возвращает строку прямо поверх накопленного буфера без копирования!
+
+> [!WARNING]
+> ⚠️ **Важное правило безопасности: `strings.Builder` НЕЛЬЗЯ копировать по значению!**  
+> После первой операции записи `strings.Builder` запоминает свой собственный адрес памяти. Если скопировать его как обычную переменную (`b2 := b1`) или передать в функцию по значению (`func foo(b strings.Builder)`), программа аварийно завершится:  
+> `panic: strings: illegal use of non-zero Builder copied by value`  
+> 
+> **Как правильно передавать в функции:** только по указателю — `func foo(b *strings.Builder)`.
+
+---
+
+#### 6. Полезные методы управления `strings.Builder`
+* `bld.Len()` — возвращает текущую длину накопленной строки в байтах.
+* `bld.Cap()` — возвращает текущую вместимость внутреннего буфера.
+* `bld.Reset()` — очищает буфер, позволяя повторно использовать тот же `Builder` без выделения новой памяти.
+
+🔗 **Дополнительные материалы:**
+- Официальная спецификация языка Go: [String concatenation](https://go.dev/ref/spec#String_concatenation)
+- Документация пакета: [strings.Builder](https://pkg.go.dev/strings#Builder)
 
 ---
 
 ### 4.3. Полезные функции пакета `strings`
 
-```go
-import "strings"
+Пакет `strings` из стандартной библиотеки Go предоставляет богатый набор оптимизированных функций для работы с неизменяемыми строками без необходимости ручной побайтовой обработки.
 
-strings.ToUpper("go")                 // "GO" — верхний регистр
-strings.ToLower("GO")                 // "go" — нижний регистр
-strings.Contains("привет", "ив")      // true — проверка наличия подстроки
-strings.HasPrefix("golang", "go")     // true — проверка начала строки
-strings.HasSuffix("main.go", ".go")   // true — проверка окончания строки
-strings.Split("a,b,c", ",")           // []string{"a", "b", "c"} — разбиение строки в срез
-strings.Join([]string{"a","b"}, "-")  // "a-b" — объединение среза строк разделителем
-strings.TrimSpace("  go  ")           // "go" — удаление пробелов по краям
-strings.ReplaceAll("aaa", "a", "b")   // "bbb" — замена всех вхождений
+---
+
+#### 1. Изменение регистра символов
+```go
+strings.ToLower("HeLLo, Мир!") // "hello, мир!" — приведение к нижнему регистру
+strings.ToUpper("HeLLo, Мир!") // "HELLO, МИР!" — приведение к верхнему регистру
+strings.ToTitle("hello")       // "HELLO" — регистр заголовков Unicode
 ```
 
-- **Сравнение без учета регистра:** Используйте `strings.EqualFold(s1, s2)` вместо `strings.ToLower(s1) == strings.ToLower(s2)` для предотвращения лишних выделений памяти.
+---
+
+#### 2. Проверка префиксов, суффиксов и поиск вхождений
+```go
+// Проверка начала и окончания строки:
+strings.HasPrefix("golang_app", "go")     // true — начинается ли строка с префикса
+strings.HasSuffix("archive.tar.gz", ".gz") // true — заканчивается ли строка суффиксом
+
+// Проверка наличия подстроки:
+strings.Contains("hello world", "world") // true — содержит ли подстроку
+strings.ContainsAny("team", "aeiou")    // true — содержит ли хотя бы один символ из набора
+strings.ContainsRune("golang", 'g')     // true — содержит ли указанную руну
+
+// Поиск индекса первого/последнего вхождения (возвращает байтовый индекс или -1):
+strings.Index("hello world", "lo")       // 3  — индекс первого вхождения
+strings.Index("hello world", "go")       // -1 — подстрока не найдена
+strings.LastIndex("archive.tar.gz", ".") // 11 — индекс последнего вхождения с конца
+strings.IndexByte("hello", 'e')          // 1  — быстрый поиск одного ASCII-байта
+strings.IndexRune("привет", 'и')         // 4  — байтовый индекс руны в UTF-8
+
+// Подсчет количества непересекающихся вхождений:
+strings.Count("cheese", "e") // 3
+strings.Count("five", "")   // 5 (кол-во рун + 1)
+```
+
+---
+
+#### 3. Разбиение строки (Splitting & Tokenization)
+```go
+// strings.Fields — разбиение по любым пробельным символам (пробелы, табы, \n):
+// Лишние пробелы в начале, конце и между словами автоматически отбрасываются!
+words := strings.Fields("  go   is\tfun \n") 
+// words: []string{"go", "is", "fun"}
+
+// strings.Split — строгое разбиение по разделителю:
+parts := strings.Split("a,b,c", ",") // []string{"a", "b", "c"}
+strings.Split("a,,b", ",")           // []string{"a", "", "b"} — пустые элементы сохраняются!
+
+// strings.SplitN — разбиение с ограничением на число частей:
+// n > 0: не более n элементов; последний элемент содержит неразобранный остаток
+strings.SplitN("key=value=extra", "=", 2) // []string{"key", "value=extra"}
+
+// strings.SplitAfter — разделяет с сохранением разделителя в конце каждого элемента:
+strings.SplitAfter("a,b,c", ",") // []string{"a,", "b,", "c"}
+```
+
+---
+
+#### 4. Эффективное разделение без аллокаций: `strings.Cut` (Go 1.18+)
+```go
+// Cut разделяет строку по первому вхождению разделителя sep.
+// Возвращает (before, after, found). Если sep не найден: (s, "", false).
+// ⚡ Намного быстрее strings.SplitN, так как не выделяет срез в куче!
+if before, after, found := strings.Cut("user@domain.com", "@"); found {
+    fmt.Println("Пользователь:", before) // "user"
+    fmt.Println("Домен:", after)         // "domain.com"
+}
+
+// strings.CutPrefix и strings.CutSuffix (Go 1.20+):
+// Отрезают префикс/суффикс, если он есть, возвращая флаг успеха
+clean, ok := strings.CutPrefix("v1.23.0", "v") // "1.23.0", true
+```
+
+---
+
+#### 5. Очистка и удаление символов по краям (Trimming)
+```go
+// Удаление пробелов, табуляций (\t) и переносов строк (\n, \r) с обоих концов:
+strings.TrimSpace(" \t hello world \n") // "hello world"
+
+// strings.Trim удаляет ЛЮБОЙ символ из переданного набора (cutset) с обоих концов:
+strings.Trim("¡¡¡Hello World!!!", "!¡") // "Hello World"
+strings.Trim("123hello321", "123")      // "hello"
+
+// Очистка только слева или только справа:
+strings.TrimLeft("00042", "0")   // "42"
+strings.TrimRight("file.txt.", ".") // "file.txt"
+
+// Точное удаление префикса или суффикса (удаляет всю подстроку целиком, а не набор символов):
+strings.TrimPrefix("https://site.ru", "https://") // "site.ru"
+strings.TrimSuffix("document.pdf", ".pdf")        // "document"
+```
+
+> [!WARNING]
+> ⚠️ **Частая ошибка новичков:** Разница между `strings.TrimSuffix` и `strings.TrimRight`!  
+> - `strings.TrimSuffix("hello.go", ".go")` удалит ровно окончание `".go"` $\to$ `"hello"`.  
+> - `strings.TrimRight("hello.go", ".go")` удалит **любые** символы из набора `'.'`, `'g'`, `'o'` с конца! Поэтому `strings.TrimRight("gogo.go", ".go")` вернет пустую строку `""`!
+
+---
+
+#### 6. Замена подстрок и шаблонов (Replacing)
+```go
+// strings.Replace(s, old, new, n):
+// n — максимальное количество замен. Если n < 0 — заменяются ВСЕ вхождения.
+strings.Replace("foo bar foo", "foo", "baz", 1)  // "baz bar foo" (только 1 замена)
+strings.Replace("foo bar foo", "foo", "baz", -1) // "baz bar baz" (все вхождения)
+
+// strings.ReplaceAll — читаемый алиас для strings.Replace(s, old, new, -1):
+strings.ReplaceAll("banana", "a", "o") // "bonono"
+
+// strings.Replacer — предварительно скомпилированный мульти-шаблон замены:
+// Выполняет множественную замену за один проход алгоритмом O(N):
+r := strings.NewReplacer("<", "&lt;", ">", "&gt;", "&", "&amp;")
+safeHTML := r.Replace("<script>alert(1)&</script>")
+// safeHTML: "&lt;script&gt;alert(1)&amp;&lt;/script&gt;"
+```
+
+---
+
+#### 7. Склейка и повторение строк (Joining & Repeating)
+```go
+// strings.Join склеивает срез строк через разделитель.
+// ⚡ Выполняет предварительный расчет необходимой памяти и делает ровно 1 аллокацию!
+fruits := []string{"яблоко", "банан", "груша"}
+result := strings.Join(fruits, ", ") // "яблоко, банан, груша"
+
+// strings.Repeat — повторение строки n раз (при 0 возвращает пустую строку):
+border := strings.Repeat("-", 20) // "--------------------"
+```
+
+---
+
+#### 8. Нюансы производительности и Memory Management
+
+##### 1. Сравнение строк без учета регистра: `strings.EqualFold`
+```go
+// ❌ ПЛОХО: 2 лишние аллокации строк в куче при каждом сравнении!
+if strings.ToLower(s1) == strings.ToLower(s2) { ... }
+
+// ✅ ПРАВИЛЬНО: Zero-allocation сравнение по правилам Unicode Case-folding
+if strings.EqualFold(s1, s2) { ... }
+```
+
+##### 2. Предотвращение утечек памяти: `strings.Clone` (Go 1.18+)
+Если взять маленькую подстроку `sub := hugeString[:10]`, то `sub` продолжит удерживать в памяти весь базовый массив `hugeString` (даже если он весит 100 МБ), не давая Garbage Collector его освободить.
+```go
+// ✅ strings.Clone копирует байты в отдельный новый компактный блок памяти:
+sub := strings.Clone(hugeString[:10]) // hugeString теперь может быть безопасно удален GC
+```
+
+##### 3. `strings.Reader` для интерфейсов ввода-вывода
+Если нужно передать строку в функцию, принимающую `io.Reader` (например, `http.Post` или `json.NewDecoder`), используйте `strings.NewReader(s)` вместо `bytes.NewReader([]byte(s))` — это полностью исключает аллокацию и копирование среза байт:
+```go
+reader := strings.NewReader("данные для парсинга")
+// reader реализует: io.Reader, io.ReaderAt, io.Seeker, io.WriterTo, io.ByteScanner
+```
+
+---
+
+### 4.4. Пакет `unicode/utf8`: профессиональная работа с кодировкой UTF-8
+
+Пакет `unicode/utf8` реализует функции и константы для поддержки текстового формата UTF-8. В отличие от наивных конвертаций `[]rune(s)`, функции пакета `utf8` работают напрямую с байтами строки или среза `[]byte` без промежуточных аллокаций памяти.
+
+---
+
+#### 1. Подсчёт символов (рун): `utf8.RuneCountInString` и `utf8.RuneCount`
+```go
+import "unicode/utf8"
+
+// Подсчёт количества рун в строке (string) без аллокации памяти:
+text := "Привет, мир! 🚀"
+bytesLen := len(text)                  // 25 байт (кириллица по 2 байта, ракета 4 байта, знаки и пробелы 1 байт)
+runesCount := utf8.RuneCountInString(text) // 14 рун (символов)
+
+// Аналог для среза байтов ([]byte):
+rawBytes := []byte(text)
+count := utf8.RuneCount(rawBytes) // 14
+```
+
+> [!TIP]
+> 🚀 **Benchmark & Performance:**  
+> `utf8.RuneCountInString(s)` работает на порядки быстрее и потребляет **0 B/op** (0 аллокаций), в то время как `len([]rune(s))` выделяет память в куче пропорционально длине строки ($O(N)$ heap allocations: по 4 байта на каждый символ).
+
+---
+
+#### 2. Проверка валидности кодировки: `utf8.ValidString` и `utf8.Valid`
+Поскольку строки в Go могут содержать произвольный бинарный мусор, перед обработкой пользовательского ввода полезно проверить, является ли строка корректным UTF-8:
+
+```go
+valid := utf8.ValidString("Привет") // true
+
+corrupted := string([]byte{0xff, 0xfe, 0xfd})
+validCorrupted := utf8.ValidString(corrupted) // false
+
+// Проверка среза байт ([]byte):
+b := []byte("Привет")
+utf8.Valid(b) // true
+```
+
+---
+
+#### 3. Пошаговое декодирование рун: `utf8.DecodeRuneInString`
+Позволяет извлечь первую руну и её длину в байтах из начала строки без преобразования всей строки в `[]rune`:
+
+```go
+s := "Привет"
+r, size := utf8.DecodeRuneInString(s)
+
+fmt.Printf("Руна: %c, Unicode-код: %U, Размер в байтах: %d\n", r, r, size)
+// Руна: П, Unicode-код: U+041F, Размер в байтах: 2
+
+// Итерация по всей строке вручную (zero-alloc обход):
+for len(s) > 0 {
+    r, size := utf8.DecodeRuneInString(s)
+    fmt.Printf("%c ", r)
+    s = s[size:] // Продвигаем срез строки на размер декодированной руны
+}
+// Выведет: П р и в е т 
+```
+
+Аналогично для чтения рун с конца строки:
+```go
+r, size := utf8.DecodeLastRuneInString("Привет!")
+fmt.Printf("Последняя руна: %c (размер: %d)\n", r, size) // !, 1
+```
+
+---
+
+#### 4. Кодирование руны в байты: `utf8.EncodeRune` и `utf8.RuneLen`
+```go
+// Определение необходимого количества байт для руны:
+size := utf8.RuneLen('П')        // 2 (если руна невалидна — вернет -1)
+rocketSize := utf8.RuneLen('🚀') // 4
+
+// Кодирование руны в срез байт:
+buf := make([]byte, utf8.UTFMax) // utf8.UTFMax == 4 (максимальный размер одной руны)
+n := utf8.EncodeRune(buf, '🚀')
+fmt.Printf("Записано байт: %d, Байты: %x, Строка: %s\n", n, buf[:n], string(buf[:n]))
+// Записано байт: 4, Байты: f09f9a80, Строка: 🚀
+```
+
+---
+
+#### 5. Ключевые константы пакета `unicode/utf8`
+| Константа | Значение | Описание |
+| :--- | :--- | :--- |
+| `utf8.RuneError` | `'\uFFFD'` (символ замены «») | Возвращается при обнаружении невалидного UTF-8 байта. |
+| `utf8.UTFMax` | `4` | Максимальное количество байт, которое может занимать одна руна в UTF-8. |
+| `utf8.MaxRune` | `'\U0010FFFF'` | Максимально возможное значение кодовой точки Unicode. |
+| `utf8.RuneSelf` | `0x80` (`128`) | Граница ASCII-символов. Коды меньше 128 занимают ровно 1 байт. |
 
 ---
 
@@ -2667,6 +3035,255 @@ sessions = sessions[:0] // теперь и len=0, и объекты в куче 
 
 > В Ruby метод `array.clear` **мутирует массив на месте, удаляя все элементы и сбрасывая длину в 0** (`arr = [1, 2]; arr.clear; arr.length # => 0`).  
 > В Go функция `clear(slice)` работает иначе: **она не меняет `len` слайса**, а лишь заполняет существующие элементы нулевыми значениями (`0`, `""`, `nil`). Чтобы получить аналог Ruby `array.clear`, в Go пишут связку: `clear(s); s = s[:0]`.
+
+---
+
+### 5.13. Современная функциональная обработка слайсов: библиотека `samber/lo` (Go Lodash)
+
+Хотя стандартный пакет `slices` (Go 1.21+) покрывает базовые операции (`slices.Contains`, `slices.Index`, `slices.Sort`), на практике в production-коде часто требуются функциональные трансформации: `Map`, `Filter`, `Reduce`, `GroupBy`, `Uniq`, поиск по условию (`Find`), разбиение на батчи (`Chunk`) и параллельная обработка.
+
+До появления дженериков (Go 1.18) программистам приходилось вручную писать однотипные циклы `for` с `append` или генерировать код кодогенератором. Сегодня де-факто стандартом таких утилит в Go-сообществе стала библиотека [**`github.com/samber/lo`**](https://github.com/samber/lo) — легковесный, типобезопасный аналог Lodash (из JavaScript/TypeScript) и Enumerable (из Ruby).
+
+#### 📦 Установка библиотеки:
+```bash
+go get github.com/samber/lo@v1
+```
+
+```go
+import "github.com/samber/lo"
+```
+
+```mermaid
+graph TD
+    A["<b>samber/lo</b><br/>(Функциональные утилиты для срезов)"] --> B["<b>Трансформация & Фильтрация</b><br/>Map, Filter, FlatMap, Compact"]
+    A --> C["<b>Агрегация & Поиск</b><br/>Reduce, Find, Some, Every, CountBy"]
+    A --> D["<b>Манипуляция структурой</b><br/>Chunk, Flatten, Uniq, Shuffle"]
+    A --> E["<b>Группировка & Преобразование в Map</b><br/>GroupBy, KeyBy, SliceToMap"]
+    A --> F["<b>Параллельная обработка</b><br/>lo.Async, lop.Map, lop.Filter"]
+
+    style A fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
+    style B fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff
+    style C fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
+    style D fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff
+    style E fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff
+    style F fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+```
+
+---
+
+#### 1. Базовые функциональные преобразования: `Map` и `Filter`
+
+##### `lo.Map` — преобразование элементов среза одного типа в другой:
+Сигнатура колбэка принимает элемент и индекс `func(item T, index int) R`:
+
+```go
+numbers := []int{1, 2, 3, 4, 5}
+
+// Преобразование []int в []string:
+strings := lo.Map(numbers, func(x int, _ int) string {
+    return strconv.Itoa(x * 10)
+})
+// strings: ["10", "20", "30", "40", "50"]
+```
+
+##### `lo.Filter` — выборка элементов по предикату:
+```go
+// Оставляем только четные числа:
+evens := lo.Filter(numbers, func(x int, _ int) bool {
+    return x%2 == 0
+})
+// evens: [2, 4]
+
+// lo.Reject — обратная фильтрация (отсеивание элементов, подходящих под условие):
+odds := lo.Reject(numbers, func(x int, _ int) bool {
+    return x%2 == 0
+})
+// odds: [1, 3, 5]
+```
+
+##### `lo.Compact` — удаление всех Zero Values (`0`, `""`, `false`, `nil`):
+```go
+dirtyList := []string{"Alice", "", "Bob", "", "Charlie"}
+cleanList := lo.Compact(dirtyList)
+// cleanList: ["Alice", "Bob", "Charlie"]
+```
+
+---
+
+#### 2. Поиск и предикаты: `Find`, `Contains`, `Some`, `Every`
+
+##### Поиск первого совпадения: `lo.Find` и `lo.FindIndexOf`
+```go
+type User struct {
+    ID   int
+    Name string
+    Role string
+}
+
+users := []User{
+    {ID: 1, Name: "Алексей", Role: "dev"},
+    {ID: 2, Name: "Иван", Role: "admin"},
+    {ID: 3, Name: "Ольга", Role: "dev"},
+}
+
+// Поиск первого администратора:
+admin, found := lo.Find(users, func(u User) bool {
+    return u.Role == "admin"
+})
+if found {
+    fmt.Printf("Найден админ: %+v\n", admin) // {ID: 2, Name: "Иван", Role: "admin"}
+}
+```
+
+##### Булевы проверки всей коллекции: `lo.Some` и `lo.Every`
+```go
+// Содержит ли хотя бы одного админа?
+hasAdmin := lo.SomeBy(users, func(u User) bool {
+    return u.Role == "admin"
+}) // true
+
+// Все ли пользователи являются разработчиками?
+allDevs := lo.EveryBy(users, func(u User) bool {
+    return u.Role == "dev"
+}) // false
+```
+
+---
+
+#### 3. Агрегация: `Reduce` и `CountBy`
+
+##### `lo.Reduce` — свёртка слайса в единое значение:
+```go
+costs := []float64{120.50, 45.0, 310.20, 89.90}
+
+// Подсчет суммы с начальным аккумулятором 0.0:
+total := lo.Reduce(costs, func(agg float64, item float64, _ int) float64 {
+    return agg + item
+}, 0.0)
+// total: 565.6
+```
+
+##### `lo.CountBy` — подсчет элементов, удовлетворяющих критерию:
+```go
+devCount := lo.CountBy(users, func(u User) bool {
+    return u.Role == "dev"
+})
+// devCount: 2
+```
+
+---
+
+#### 4. Реорганизация срезов: `Uniq`, `Chunk`, `Flatten`, `Shuffle`
+
+##### `lo.Uniq` и `lo.UniqBy` — устранение дубликатов с сохранением порядка:
+```go
+tags := []string{"go", "docker", "k8s", "go", "ci", "docker"}
+uniqueTags := lo.Uniq(tags)
+// uniqueTags: ["go", "docker", "k8s", "ci"]
+
+// Удаление дублей по кастомному ключу:
+uniqueUsers := lo.UniqBy(users, func(u User) string {
+    return u.Role
+}) // Вернет первого 'dev' и первого 'admin'
+```
+
+##### `lo.Chunk` — разбиение среза на пакеты (батчи) фиксированного размера:
+Незаменимо при отправке пачек данных в БД (`INSERT ... VALUES`) или batching HTTP-запросов:
+```go
+ids := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+batches := lo.Chunk(ids, 3)
+// batches: [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10]]
+```
+
+##### `lo.Flatten` — уплощение вложенного среза:
+```go
+flat := lo.Flatten(batches)
+// flat: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+
+##### `lo.Shuffle` — случайное перемешивание среза (создает новый срез):
+```go
+cards := []int{1, 2, 3, 4, 5}
+shuffled := lo.Shuffle(cards)
+// shuffled: [3, 1, 5, 2, 4]
+```
+
+---
+
+#### 5. Преобразование срезов в мапы (Slice-to-Map conversion)
+
+Одна из самых частых задач бэкенда — индексация среза структур в `map` для быстрого доступа $O(1)$ по первичному ключу.
+
+##### `lo.KeyBy` — трансформация в `map[Key]Struct`:
+```go
+// Индексация пользователей по их ID:
+usersByID := lo.KeyBy(users, func(u User) int {
+    return u.ID
+})
+// map[1:{ID:1 Name:Алексей Role:dev} 2:{ID:2 Name:Иван Role:admin} 3:{ID:3 Name:Ольга Role:dev}]
+```
+
+##### `lo.GroupBy` — группировка элементов по общему признаку в `map[Key][]Struct`:
+```go
+// Группировка пользователей по роли:
+usersByRole := lo.GroupBy(users, func(u User) string {
+    return u.Role
+})
+// map[
+//   "admin": [{ID: 2, Name: "Иван", Role: "admin"}],
+//   "dev":   [{ID: 1, Name: "Алексей", ...}, {ID: 3, Name: "Ольга", ...}],
+// ]
+```
+
+---
+
+#### 6. Конкурентная обработка срезов: пакет `samber/lo/parallel` (`lop`)
+
+Когда элементов много, а операция над каждым элементом тяжелая (например, поход по сети или шифрование), `lo/parallel` запускает горутины под капотом, соблюдая исходный порядок результата:
+
+```go
+import "github.com/samber/lo/parallel"
+
+urls := []string{
+    "https://api.github.com",
+    "https://golang.org",
+    "https://google.com",
+}
+
+// Параллельный опрос статусов с сохранением порядка в срезе:
+statuses := parallel.Map(urls, func(url string, _ int) int {
+    resp, err := http.Get(url)
+    if err != nil {
+        return 0
+    }
+    defer resp.Body.Close()
+    return resp.StatusCode
+})
+// statuses: [200, 200, 200]
+```
+
+> [!NOTE]
+> Пакет `lop` (`lo/parallel`) использует пул воркеров (`GOMAXPROCS`), предотвращая бесконтрольный спавн миллионов горутин.
+
+---
+
+#### 7. Сравнительный анализ: стандартный `slices` vs `samber/lo`
+
+| Задача | Стандартный пакет `slices` (Go 1.21+) | Библиотека `samber/lo` |
+| :--- | :--- | :--- |
+| **Философия** | Минимализм, максимальная скорость, in-place мутации | Функциональный стиль, иммутабельность, читаемость |
+| **`Map` (трансформация типов)** | ❌ Отсутствует (приходится писать цикл `for`) | ✅ `lo.Map(slice, iteratee)` |
+| **`Filter`** | ❌ Отсутствует (только `slices.DeleteFunc` in-place) | ✅ `lo.Filter(slice, predicate)` |
+| **`Contains` / `Index`** | ✅ `slices.Contains(s, v)` | ✅ `lo.Contains(s, v)` |
+| **`Sort`** | ✅ `slices.Sort(s)` (zero-alloc in-place pdqsort) | ✅ `lo.Reverse`, `lo.Shuffle` (создают копию) |
+| **Группировка (`GroupBy`, `KeyBy`)** | ❌ Отсутствует | ✅ Встроено |
+| **Батчинг (`Chunk`)** | ❌ Отсутствует (только `slices.Chunk` в Go 1.23+ с итераторами) | ✅ `lo.Chunk(s, size)` возвращает готовый `[][]T` |
+| **Параллелизм** | ❌ Нет | ✅ `lo/parallel` (`lop.Map`, `lop.Filter`) |
+
+> [!TIP]
+> 🚀 **Рекомендация по применению:**  
+> - Для критичных к производительности участков кода (High-load, сетевые драйверы, горячие циклы) предпочитайте стандартный `slices` и явные циклы `for` с предварительным выделением емкости `make([]T, 0, cap)`.  
+> - Для прикладной бизнес-логики, микросервисов, парсинга DTO и интеграций используйте `samber/lo` — это сокращает бойлерплейт-код в разы и делает код декларативным и чистым.
 
 ---
 
