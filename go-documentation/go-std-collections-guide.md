@@ -274,6 +274,31 @@ maps.DeleteFunc(balances, func(user string, balance int) bool {
 // balances: map["user1": 150]
 ```
 
+#### 4. Сбор значений и несортированных ключей через `slices.Collect` (Go 1.23+)
+```go
+users := map[string]int{"alice": 25, "bob": 30}
+
+// Сбор несортированных ключей в срез:
+allKeys := slices.Collect(maps.Keys(users)) // [alice bob]
+
+// Сбор значений в срез:
+allValues := slices.Collect(maps.Values(users)) // [25 30]
+```
+
+#### 5. Вложенные карты и паттерн «инициализация на лету» (Nested Maps)
+```go
+settings := map[string]map[string]string{}
+
+// ❌ ОПАСНО: settings["alice"]["theme"] = "dark" вызовет panic: assignment to entry in nil map!
+
+// ✅ ПРАВИЛЬНО: инициализируем вложенную мапу перед записью:
+user := "alice"
+if settings[user] == nil {
+    settings[user] = make(map[string]string)
+}
+settings[user]["theme"] = "dark" // безопасно!
+```
+
 ---
 
 ## 4. Пакет `errors` и `fmt.Errorf`: Современная обработка ошибок
