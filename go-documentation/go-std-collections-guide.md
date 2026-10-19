@@ -1,9 +1,9 @@
-# Практический справочник по стандартным пакетам Go: `strings`, `slices`, `maps` и `errors`
+# Практический справочник по стандартным пакетам Go: `strings`, `slices`, `maps`, `errors`, `strconv`, `cmp` и `utf8`
 
 > [!TIP]
 > 📚 **Навигация:** [📖 Главное оглавление](README.md) | [Том 1: Основы языка, типы и срезы](01-go-core-basics.md) | [Шпаргалка по Go](go-core-cheatsheet.md)
 >
-> Этот документ — **быстрый справочник (Cheat Sheet / Cookbook)** по самым часто используемым функциям стандартной библиотеки Go для работы с фундаментальными типами и механизмами: **строками (`strings`)**, **срезами (`slices`)**, **картами (`maps`)** и **обработкой ошибок (`errors` + `fmt.Errorf`)**.
+> Этот документ — **быстрый настольный справочник (Cheat Sheet / Cookbook)** по самым часто используемым функциям стандартной библиотеки Go: **строкам (`strings`)**, **срезам (`slices`)**, **картам (`maps`)**, **обработке ошибок (`errors`)**, **конвертации типов (`strconv`)**, **компараторам (`cmp`)** и **символам (`unicode/utf8`)**.
 
 ---
 
@@ -13,12 +13,16 @@ graph TD
     A --> C["<b>slices (Go 1.21+)</b><br/>Поиск, сортировка, клонирование, удаление, вставка, минимумы"]
     A --> D["<b>maps (Go 1.21+)</b><br/>Клонирование, сравнение, фильтрация, итераторы (Go 1.23+)"]
     A --> E["<b>errors & fmt</b><br/>Создание, цепочки обертывания %w, Is, As, Join"]
+    A --> F["<b>strconv</b><br/>Конвертация string &lt;-&gt; int, float, bool"]
+    A --> G["<b>cmp & utf8</b><br/>cmp.Compare, cmp.Or, подсчет рун, unicode-предикаты"]
 
     style A fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
     style B fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff
     style C fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
     style D fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff
     style E fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff
+    style F fill:#1abc9c,stroke:#16a085,stroke-width:2px,color:#fff
+    style G fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
 ```
 
 ---
@@ -373,10 +377,116 @@ if errors.Is(allErr, os.ErrClosed) { ... }
 
 ---
 
-## 5. Главные ловушки и частые ошибки
+## 5. Пакет `strconv`: Парсинг и конвертация типов
+
+Преобразование строк в числа/булевы типы и обратно — одна из самых частых задач при работе с HTTP, JSON, БД и пользовательским вводом.
+
+```go
+import "strconv"
+```
+
+### Сводная таблица функций `strconv`
+
+| Функция | Направление | Пример | Результат / Возврат |
+| :--- | :--- | :--- | :--- |
+| `strconv.Itoa(n)` | `int -> string` | `strconv.Itoa(42)` | `"42"` (быстрее, чем `fmt.Sprintf`) |
+| `strconv.Atoi(s)` | `string -> int` | `n, err := strconv.Atoi("42")` | `42, nil` |
+| `strconv.FormatInt(n, base)` | `int64 -> string` в любой СС | `strconv.FormatInt(255, 16)` | `"ff"` (шестнадцатеричная строка) |
+| `strconv.ParseInt(s, base, bitSize)` | `string -> int64` | `strconv.ParseInt("ff", 16, 64)` | `255, nil` |
+| `strconv.FormatFloat(f, fmt, prec, bitSize)` | `float64 -> string` | `strconv.FormatFloat(3.1415, 'f', 2, 64)` | `"3.14"` |
+| `strconv.ParseFloat(s, bitSize)` | `string -> float64` | `f, err := strconv.ParseFloat("3.14", 64)`| `3.14, nil` |
+| `strconv.FormatBool(b)` | `bool -> string` | `strconv.FormatBool(true)` | `"true"` |
+| `strconv.ParseBool(s)` | `string -> bool` | `b, err := strconv.ParseBool("1")` | `true, nil` (понимает `1`, `t`, `true`, `0`, `f`, `false`) |
+
+> [!WARNING]
+> 🚨 **Частая ловушка новичков: `string(65)` vs `strconv.Itoa(65)`**  
+> В Go явное приведение `string(65)` возвращает **символ по коду Unicode (руну)**, то есть букву `"A"`, а не строку `"65"`!  
+> Для получения цифры в виде строки всегда используйте `strconv.Itoa(65)`.
+
+---
+
+## 6. Пакет `cmp` (Go 1.21+): Универсальные компараторы и дефолты
+
+Пакет `cmp` стандартизирует операции упорядочивания для всех сопоставимых (`ordered`) типов (числа, строки).
+
+```go
+import "cmp"
+```
+
+### Ключевые возможности:
+
+#### 1. `cmp.Compare` — идеальный компаратор для `slices.SortFunc`
+Возвращает `-1` если $x < y$, `0` если $x == y$, `+1` если $x > y$:
+
+```go
+type User struct {
+    Age  int
+    Name string
+}
+
+// Надежная сортировка без ручных a.Age - b.Age (защищает от int overflow!):
+slices.SortFunc(users, func(a, b User) int {
+    if n := cmp.Compare(a.Age, b.Age); n != 0 {
+        return n // сначала по возрасту
+    }
+    return cmp.Compare(a.Name, b.Name) // затем по имени
+})
+```
+
+#### 2. `cmp.Or` (Go 1.22+) — выбор первого непустого значения (Default / Fallback)
+Работает как оператор `??` (Nullish Coalescing) или `||` в других языках:
+
+```go
+// Берем порт из переменной окружения, а если она пустая — "8080":
+port := cmp.Or(os.Getenv("PORT"), os.Getenv("APP_PORT"), "8080")
+
+// Выбор таймаута:
+timeout := cmp.Or(customTimeout, defaultTimeout, 5*time.Second)
+```
+
+---
+
+## 7. Пакеты `unicode` и `unicode/utf8`: Работа с символами и кодировкой
+
+Поскольку тип `string` в Go — это срез байт (`[]byte`), для корректной работы с кириллицей, эмодзи и спецсимволами используются пакеты `unicode/utf8` и `unicode`.
+
+```go
+import (
+    "unicode"
+    "unicode/utf8"
+)
+```
+
+### 1. Подсчёт реальных символов: `utf8.RuneCountInString`
+```go
+word := "Привет 🚀"
+bytesLen := len(word)                  // 17 байт!
+runesLen := utf8.RuneCountInString(word) // 8 реальных символов (рун)
+```
+
+### 2. Проверка свойств символа (`rune`)
+```go
+ch := '7'
+unicode.IsDigit(ch) // true
+unicode.IsLetter(ch) // false
+
+r := 'я'
+unicode.IsLetter(r) // true
+unicode.ToUpper(r)  // 'Я'
+
+sp := '\t'
+unicode.IsSpace(sp) // true
+```
+
+---
+
+## 8. Главные ловушки и частые ошибки
 
 | Ошибка | В чем проблема | Как правильно |
 | :--- | :--- | :--- |
+| `string(65)` | Вернет символ `"A"`, а не строку `"65"`! | `strconv.Itoa(65)` |
+| `a.Price - b.Price` в компараторе | При больших числах или разнице знаков возможно целочисленное переполнение (`overflow`) | `cmp.Compare(a.Price, b.Price)` |
+| `len("Привет")` | Вернет `12` (количество байт в UTF-8), а не `6` символов | `utf8.RuneCountInString("Привет")` |
 | `if err == ErrNotFound` | Прямое равенство ломается, если ошибку обернули через `fmt.Errorf("...: %w", err)` | Всегда используйте `errors.Is(err, ErrNotFound)` |
 | `errors.As(err, target)` | Если передать `target` вместо указателя `&target`, будет паника в runtime | Всегда передавайте указатель на указатель: `errors.As(err, &valErr)` |
 | `fmt.Errorf("...: %v", err)` | Спецификатор `%v` или `%s` стирает цепочку типов, превращая ошибку в строку | Используйте `%w` для сохранения цепочки ошибок |
@@ -386,4 +496,5 @@ if errors.Is(allErr, os.ErrClosed) { ... }
 | `for _, char := range str` | Переменная `char` имеет тип `rune` (`int32`), а не `string`! | Для сборки в строку: `string(char)` или `strings.Fields` для слов |
 | `slices.Min(emptySlice)` | Вызов `slices.Min` или `slices.Max` на пустом срезе вызовет **panic** | Всегда проверяйте `len(s) > 0` перед вызовом |
 | `m["unknown"]` | Если ключа нет, вернется Zero Value (`0`, `""`, `nil`), паники не будет | Проверяйте флаг наличия: `val, ok := m["unknown"]` |
+
 
