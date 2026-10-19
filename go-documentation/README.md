@@ -14,6 +14,7 @@
 > [!TIP]
 > 🎯 **Практические задачники и гайды курса:**
 > - 🚀 **[go-modern-features-guide.md (Гайд по Modern Go 1.21–1.24)](go-modern-features-guide.md)** — разбор `log/slog`, `iter.Seq` (Range over func), ServeMux `{id}`, `testing.F`, `slices`, `maps`, `cmp`.
+> - ⚡ **[go-std-collections-guide.md (Справочник по strings, slices, maps и errors)](go-std-collections-guide.md)** — шпаргалка и cookbook по самым частым операциям, методам и ловушкам стандартных пакетов Go.
 > - 💡 **[go-secrets-and-traps-guide.md (Секреты, подводные камни и Best Practices Go)](go-secrets-and-traps-guide.md)** — глубокие знания из Uber Go Style Guide и 100 Go Mistakes: struct padding, утечки памяти срезов и map, time.After leak, CFS CPU Throttling в k8s, typed nil.
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex & GoSearch)](homework-tasks.md)**
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)**
