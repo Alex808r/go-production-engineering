@@ -1,22 +1,24 @@
-# Практический справочник по пакетам `strings`, `slices` и `maps` в Go
+# Практический справочник по стандартным пакетам Go: `strings`, `slices`, `maps` и `errors`
 
 > [!TIP]
 > 📚 **Навигация:** [📖 Главное оглавление](README.md) | [Том 1: Основы языка, типы и срезы](01-go-core-basics.md) | [Шпаргалка по Go](go-core-cheatsheet.md)
 >
-> Этот документ — **быстрый справочник (Cheat Sheet / Cookbook)** по самым часто используемым функциям стандартной библиотеки Go для работы с тремя главными типами данных: **строками (`strings`)**, **срезами (`slices`)** и **картами (`maps`)**.
+> Этот документ — **быстрый справочник (Cheat Sheet / Cookbook)** по самым часто используемым функциям стандартной библиотеки Go для работы с фундаментальными типами и механизмами: **строками (`strings`)**, **срезами (`slices`)**, **картами (`maps`)** и **обработкой ошибок (`errors` + `fmt.Errorf`)**.
 
 ---
 
 ```mermaid
 graph TD
-    A["<b>Стандартные коллекции и строки в Go</b>"] --> B["<b>strings</b><br/>Поиск, разбиение, тримминг, трансформация, склейка"]
+    A["<b>Фундаментальные пакеты Go</b>"] --> B["<b>strings</b><br/>Поиск, разбиение, тримминг, трансформация, склейка"]
     A --> C["<b>slices (Go 1.21+)</b><br/>Поиск, сортировка, клонирование, удаление, вставка, минимумы"]
     A --> D["<b>maps (Go 1.21+)</b><br/>Клонирование, сравнение, фильтрация, итераторы (Go 1.23+)"]
+    A --> E["<b>errors & fmt</b><br/>Создание, цепочки обертывания %w, Is, As, Join"]
 
     style A fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
     style B fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff
     style C fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
     style D fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff
+    style E fill:#9b59b6,stroke:#8e44ad,stroke-width:2px,color:#fff
 ```
 
 ---
@@ -270,13 +272,118 @@ maps.DeleteFunc(balances, func(user string, balance int) bool {
 
 ---
 
-## 4. Главные ловушки и частые ошибки
+## 4. Пакет `errors` и `fmt.Errorf`: Современная обработка ошибок
+
+В Go ошибки — это обычные значения (`values`), реализующие интерфейс `error`:
+```go
+type error interface {
+    Error() string
+}
+```
+
+```go
+import (
+    "errors"
+    "fmt"
+)
+```
+
+### Сводная таблица функций `errors` и `fmt`
+
+| Функция / Механизм | Назначение | Пример вызова | Поведение |
+| :--- | :--- | :--- | :--- |
+| `errors.New(text)` | Создание статической (sentinel) ошибки | `var ErrNotFound = errors.New("not found")` | Создает константную ошибку для сравнения |
+| `fmt.Errorf("...: %w", err)`| **Обертывание ошибки (Wrapping)** с сохранением цепочки | `fmt.Errorf("read file %s: %w", path, err)` | Добавляет контекст, сохраняя исходную ошибку для `errors.Is`/`As` |
+| `fmt.Errorf("...: %v", err)`| Маскирование ошибки (без обертывания) | `fmt.Errorf("internal db error: %v", err)` | Превращает в текст; `errors.Is` не сможет найти оригинал |
+| `errors.Is(err, target)` | Проверка наличия ошибки `target` в цепочке | `if errors.Is(err, sql.ErrNoRows)` | Разворачивает дерево ошибок, работает сквозь `%w` и `Join` |
+| `errors.As(err, &target)`| Извлечение ошибки конкретного типа | `var pathErr *fs.PathError; if errors.As(err, &pathErr)` | Безопасное приведение типов (type assertion) сквозь обертки |
+| `errors.Join(errs...)` *(Go 1.20+)* | Объединение нескольких независимых ошибок в одну | `errors.Join(err1, err2)` | Форматирует через `\n`, сохраняет поиск для `Is` и `As` |
+| `errors.Unwrap(err)` | Извлечение вложенной ошибки (один шаг назад) | `underlying := errors.Unwrap(err)` | Возвращает вложенный `error` или `nil` |
+
+---
+
+### Примеры и рецепты (`errors`)
+
+#### 1. Создание Sentinel Errors и паттерн обертывания `%w`
+```go
+// 1. Объявляем статическую ошибку пакета (Sentinel Error):
+var ErrUserNotFound = errors.New("user not found")
+
+func FetchUser(id int) (*User, error) {
+    user, err := db.Find(id)
+    if err != nil {
+        if errors.Is(err, sql.ErrNoRows) {
+            // Оборачиваем нашу sentinel-ошибку:
+            return nil, fmt.Errorf("fetch user id %d: %w", id, ErrUserNotFound)
+        }
+        // Оборачиваем низкоуровневую техническую ошибку:
+        return nil, fmt.Errorf("fetch user id %d from db: %w", id, err)
+    }
+    return user, nil
+}
+
+// 2. В вызывающем коде проверяем через errors.Is (прямое сравнение == НЕ сработает!):
+user, err := FetchUser(42)
+if errors.Is(err, ErrUserNotFound) {
+    // 404 Not Found
+}
+```
+
+#### 2. Извлечение кастомной структуры ошибки через `errors.As`
+```go
+type ValidationError struct {
+    Field   string
+    Problem string
+}
+
+func (e *ValidationError) Error() string {
+    return fmt.Sprintf("field '%s': %s", e.Field, e.Problem)
+}
+
+// Обработка ошибки:
+var valErr *ValidationError
+// ВАЖНО: в errors.As передается указатель на переменную-приемник (&valErr)!
+if errors.As(err, &valErr) {
+    fmt.Printf("Ошибка в поле %s: %s\n", valErr.Field, valErr.Problem)
+}
+```
+
+#### 3. Агрегация нескольких ошибок через `errors.Join` (Go 1.20+)
+Идеально подходит для валидаторов форм или освобождения нескольких ресурсов в `defer`:
+
+```go
+func CloseResources(f *os.File, db *sql.DB) error {
+    var errs []error
+
+    if err := f.Close(); err != nil {
+        errs = append(errs, fmt.Errorf("close file: %w", err))
+    }
+    if err := db.Close(); err != nil {
+        errs = append(errs, fmt.Errorf("close db: %w", err))
+    }
+
+    // Если список пуст — вернет nil, если есть ошибки — объединит их:
+    return errors.Join(errs...)
+}
+
+// Проверка: errors.Is находит ошибки внутри объединенного списка!
+allErr := CloseResources(file, db)
+if errors.Is(allErr, os.ErrClosed) { ... }
+```
+
+---
+
+## 5. Главные ловушки и частые ошибки
 
 | Ошибка | В чем проблема | Как правильно |
 | :--- | :--- | :--- |
+| `if err == ErrNotFound` | Прямое равенство ломается, если ошибку обернули через `fmt.Errorf("...: %w", err)` | Всегда используйте `errors.Is(err, ErrNotFound)` |
+| `errors.As(err, target)` | Если передать `target` вместо указателя `&target`, будет паника в runtime | Всегда передавайте указатель на указатель: `errors.As(err, &valErr)` |
+| `fmt.Errorf("...: %v", err)` | Спецификатор `%v` или `%s` стирает цепочку типов, превращая ошибку в строку | Используйте `%w` для сохранения цепочки ошибок |
 | `res = copy(res, src)` | `copy` возвращает число скопированных элементов `int`, а не срез! | Просто `copy(res, src)` отдельной строкой |
 | `make([]int, maxLen)` + `copy` когда `len(src) < maxLen` | В конце среза появятся лишние нули `[1, 2, 0, 0, 0]` | Размер нового среза: `min(len(src), maxLen)` |
 | `strings.Trim(s, "abc")` вместо `TrimPrefix` | `Trim` срезает символы поштучно с краев в любом порядке | Для точного префикса используйте `strings.TrimPrefix` |
 | `for _, char := range str` | Переменная `char` имеет тип `rune` (`int32`), а не `string`! | Для сборки в строку: `string(char)` или `strings.Fields` для слов |
 | `slices.Min(emptySlice)` | Вызов `slices.Min` или `slices.Max` на пустом срезе вызовет **panic** | Всегда проверяйте `len(s) > 0` перед вызовом |
 | `m["unknown"]` | Если ключа нет, вернется Zero Value (`0`, `""`, `nil`), паники не будет | Проверяйте флаг наличия: `val, ok := m["unknown"]` |
+
