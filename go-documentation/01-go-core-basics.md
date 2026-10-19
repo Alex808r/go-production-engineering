@@ -3944,6 +3944,113 @@ flowchart TD
 
 ---
 
+### 6.8. Практические паттерны использования карт (Map Idioms & Best Practices)
+
+На собеседованиях и в реальном production-коде карты часто применяются для решения типовых задач: агрегации, группировки, хранения пользовательских настроек и дедупликации.
+
+#### 1. Инкремент счётчиков (`m[key]++`) без проверок
+Благодаря концепции **Zero Value** чтение отсутствующего ключа возвращает нулевое значение типа (`0` для чисел). Поэтому при подсчёте частотности элементов нет необходимости писать проверку `comma ok`:
+
+```go
+words := map[string]int{}
+words["go"]++
+words["go"]++
+
+fmt.Println(words["go"]) // => 2 (при первом обращении взялся 0, увеличился до 1; затем 1 -> 2)
+```
+
+---
+
+#### 2. Установка значений по умолчанию (Default / Fallback)
+
+##### Классический способ через «comma ok»:
+```go
+defaults := map[string]string{
+    "theme": "light",
+}
+
+lang, ok := defaults["lang"]
+if !ok {
+    lang = "en"
+}
+fmt.Println(lang) // => en
+```
+
+##### ⚡ Современный идиоматичный способ через `cmp.Or` (Go 1.22+):
+Если отсутствие ключа возвращает `""` (Zero Value), выбор значения по умолчанию сводится к одной строке:
+```go
+import "cmp"
+
+lang := cmp.Or(defaults["lang"], "en") // если в мапе пусто — подставит "en"
+```
+
+---
+
+#### 3. Сбор ключей и значений: `slices.Collect` vs `slices.Sorted` (Go 1.23+)
+
+Начиная с Go 1.23 в стандартной библиотеке появились итераторы (`iter.Seq`), связывающие пакеты `maps` и `slices`:
+
+##### Сбор всех ключей в срез (порядок случайный):
+```go
+import (
+    "maps"
+    "slices"
+)
+
+users := map[string]int{"alice": 25, "bob": 30}
+keys := slices.Collect(maps.Keys(users))
+fmt.Println(keys) // [alice bob] или [bob alice] (случайный порядок обхода мапы)
+```
+
+##### Сбор всех значений в срез:
+```go
+values := slices.Collect(maps.Values(users))
+fmt.Println(values) // [25 30] или [30 25]
+```
+
+##### Сбор ключей с автоматической сортировкой:
+```go
+sortedKeys := slices.Sorted(maps.Keys(users))
+fmt.Println(sortedKeys) // [alice bob] (гарантированный алфавитный порядок)
+```
+
+---
+
+#### 4. Вложенные карты и паттерн «инициализация на лету» (Nested Maps)
+
+Когда значением карты является другая карта (например, настройки пользователей `map[string]map[string]string`), возникает критическая ловушка рантайма:
+
+```mermaid
+flowchart TD
+    A["<b>Обращение к settings['alice']['theme']</b>"] --> B{"Инициализирована ли<br/>вложенная карта?"}
+    B -- "Чтение (get)" --> C["<b>Безопасно:</b><br/>settings['alice'] вернёт nil,<br/>чтение из nil вернёт '' (zero value)"]
+    B -- "Запись (set)" --> D["<b>ОПАСНО:</b><br/>Попытка записи в nil-мапу<br/>вызовет <b>panic</b>!"]
+
+    style A fill:#2c3e50,stroke:#34495e,stroke-width:2px,color:#fff
+    style C fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
+    style D fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+```
+
+```go
+settings := map[string]map[string]string{}
+
+// ❌ ОШИБКА И ПАНИКА:
+// settings["alice"]["theme"] = "dark"
+// panic: assignment to entry in nil map!
+
+// ✅ ПРАВИЛЬНО: Паттерн «инициализация на лету»:
+user := "alice"
+if settings[user] == nil {
+    settings[user] = make(map[string]string)
+}
+settings[user]["theme"] = "dark" // теперь абсолютно безопасно!
+```
+
+> [!CAUTION]
+> Чтение из неинициализированной внутренней мапы `v := settings["alice"]["theme"]` вернёт Zero Value (`""`) без паники. Однако **запись** в неинициализированную внутреннюю карту немедленно завершит приложение паникой.
+
+---
+
 ## 7. Указатели в деталях (Pointers)
 
 > 🔗 **Практика и примеры кода:** [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/4-pointers) | 🎯 **Задачи:** [homework-tasks.md (Урок 8: Указатели и структуры)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex)
