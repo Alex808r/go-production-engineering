@@ -1234,7 +1234,7 @@ func (h *ConfigHolder) Reload(newCfg *AppConfig) {
 
 ---
 
-### 15.3. Паттерны: Fan-Out / Fan-In, Pipeline и ErrGroup
+### 15.3. Паттерны: Fan-Out / Fan-In, Pipeline, ErrGroup и Rate Limiter
 
 #### 1. `errgroup.Group` (`golang.org/x/sync/errgroup`)
 
@@ -1337,6 +1337,76 @@ func merge(channels ...<-chan int) <-chan int {
     return merged
 }
 ```
+
+#### 4. Паттерн Rate Limiter / Throttling (Ограничение частоты вызовов)
+
+Паттерн используется для регулирования частоты выполнения операций (например, ограничение обращений к внешнему REST API до $N$ запросов в секунду).
+
+```mermaid
+graph LR
+    Calls["Поток вызовов handle()"] --> Ticker{"time.NewTicker<br/>(1/RPS)"}
+    Ticker -->|"Интервал выдержан"| Run["go fn()<br/>(не блокирует handle)"]
+    Cancel["cancel()"] -.->|"Остановка тикера + ErrCanceled"| Ticker
+```
+
+```go
+package limiter
+
+import (
+	"errors"
+	"time"
+)
+
+var ErrCanceled = errors.New("canceled")
+
+// withRateLimit гарантирует, что fn будет запускаться не чаще limit раз в секунду.
+// Возвращает функцию handle() для вызова и cancel() для остановки и освобождения ресурсов.
+func withRateLimit(limit int, fn func()) (handle func() error, cancel func()) {
+	if limit <= 0 {
+		limit = 1
+	}
+
+	interval := time.Second / time.Duration(limit)
+	ticker := time.NewTicker(interval)
+
+	stop := make(chan struct{})
+	var canceled bool
+
+	cancel = func() {
+		if canceled {
+			return // Идемпотентность: повторные вызовы ничего не делают
+		}
+		canceled = true
+		ticker.Stop() // Обязательно освобождаем ресурс тикера
+		close(stop)
+	}
+
+	handle = func() error {
+		if canceled {
+			return ErrCanceled
+		}
+
+		select {
+		case <-stop:
+			return ErrCanceled
+		case <-ticker.C:
+		}
+
+		// Запускаем fn асинхронно, чтобы время её работы
+		// не задерживало интервал между следующими запусками
+		go fn()
+
+		return nil
+	}
+
+	return handle, cancel
+}
+```
+
+> [!TIP]
+> **Два важных архитектурных правила:**
+> 1. **`go fn()` вместо `fn()`:** Если вызывать `fn()` синхронно, а её выполнение займёт 5 секунд, лимитер пропустит следующие тики и частота упадёт. Запуск в отдельной горутине изолирует частоту от продолжительности самой работы.
+> 2. **Обязательный `ticker.Stop()`:** Тикер регистрируется в глобальной таблице таймеров рантайма Go. Если не вызвать `Stop()`, сборщик мусора не сможет освободить его до завершения всей программы (утечка памяти/ресурсов рантайма).
 
 ---
 
