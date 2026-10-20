@@ -1,4 +1,4 @@
-# 💻 Задачник по Live-Coding на Go (Топ-43 задачи с реальных собеседований: Junior, Middle, Senior)
+# 💻 Задачник по Live-Coding на Go (Топ-45 задач с реальных собеседований: Junior, Middle, Senior)
 
 Практическое руководство для подготовки к секции живого программирования (Live-Coding / Coding Interview) на позиции Junior, Middle и Senior Go Developer.
 
@@ -75,6 +75,8 @@
    - [Задача 41: Самый длинный общий префикс (Longest Common Prefix, LeetCode #14)](#задача-41-самый-длинный-общий-префикс-longest-common-prefix-leetcode-14)
    - [Задача 42: Потокобезопасный In-Memory TTL-кэш с фоновой очисткой (TTL Cache with Background Cleaner)](#задача-42-потокобезопасный-in-memory-ttl-кэш-с-фоновой-очисткой-ttl-cache-with-background-cleaner)
    - [Задача 43: Поиск пропущенного числа — Трюк с XOR и сумма Гаусса (LeetCode #268)](#задача-43-поиск-пропущенного-числа--трюк-с-xor-и-сумма-гаусса-leetcode-268)
+   - [Задача 44: Генератор простых чисел с отменой через context.Context (Prime Generator)](#задача-44-генератор-простых-чисел-с-отменой-через-contextcontext-prime-generator)
+   - [Задача 45: Конвейерный параллельный подсчёт цифр в словах с отменой (DigitsCounter Pipeline)](#задача-45-конвейерный-параллельный-подсчёт-цифр-в-словах-с-отменой-digitscounter-pipeline)
 7. [Стратегия Live-Coding и Топ-10 каверзных вопросов с подвохом](#7-стратегия-live-coding-и-топ-10-каверзных-вопросов-с-подвохом)
    - [7.1. Пошаговый 5-шаговый фреймворк поведения на лайвкодинге](#71-пошаговый-5-шаговый-фреймворк-поведения-на-лайвкодинге)
    - [7.2. Шаблон табличных тестов (Table-Driven Tests) прямо на интервью](#72-шаблон-табличных-тестов-table-driven-tests-прямо-на-интервью)
@@ -2856,6 +2858,183 @@ func MissingNumberGauss(nums []int) int {
 ```
 
 - **Сложность:** Time $O(N)$, Space $O(1)$.
+
+---
+
+### Задача 44: Генератор простых чисел с отменой через context.Context (Prime Generator)
+
+#### 🎯 Условие:
+
+Реализуйте функцию `GeneratePrimes(ctx context.Context, primes chan<- int)`, которая непрерывно находит простые числа (начиная с 2) и отправляет их в выходной канал. Функция обязана слушать отмену контекста `ctx`: при получении сигнала отмены она должна немедленно прекратить вычисления, **закрыть выходной канал** и завершить горутину.
+
+#### ⚠️ Ловушки и подводные камни:
+1. **Утечка горутины при зависании на отправке:** Если писать `primes <- number` без `select` с `<-ctx.Done()`, горутина зависнет навечно, когда принимающая сторона перестанет читать из канала.
+2. **Паника при закрытии канала:** Закрывать канал `close(primes)` должен только сам генератор (отправитель данных), удобнее всего через `defer close(primes)`.
+
+#### 💻 Эталонное решение:
+
+```go
+package livecoding
+
+import (
+	"context"
+)
+
+// GeneratePrimes бесконечно генерирует простые числа в канал primes, пока не отменен ctx.
+func GeneratePrimes(ctx context.Context, primes chan<- int) {
+	defer close(primes)
+
+	number := 2
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		default:
+			if isPrime(number) {
+				// Защита от зависания, если потребитель прекратил чтение
+				select {
+				case <-ctx.Done():
+					return
+				case primes <- number:
+				}
+			}
+			number++
+		}
+	}
+}
+
+// isPrime проверяет простоту числа за O(sqrt(N))
+func isPrime(n int) bool {
+	if n <= 1 {
+		return false
+	}
+	for i := 2; i*i <= n; i++ {
+		if n%i == 0 {
+			return false
+		}
+	}
+	return true
+}
+```
+
+- **Сложность:** Time $O(K \sqrt{N})$ для генерации $K$ простых чисел, Space $O(1)$.
+
+---
+
+### Задача 45: Конвейерный параллельный подсчёт цифр в словах с отменой (DigitsCounter Pipeline)
+
+#### 🎯 Условие:
+
+Реализуйте многоэтапный параллельный конвейер `CountDigitsInWords(ctx context.Context, words []string) map[string]int`, который подсчитывает количество цифр в каждом слове. Конвейер состоит из трёх этапов:
+1. `SubmitWords(ctx, words) <-chan string` — отдаёт каждое слово в канал в отдельной горутине.
+2. `CountWords(ctx, in) <-chan WordStat` — параллельно подсчитывает количество цифр в каждом слове.
+3. `FillStats(ctx, in) map[string]int` — считывает пары `{слово, количество}` и формирует итоговую карту.
+
+При получении сигнала отмены `ctx.Done()` конвейер обязан корректно завершить работу и вернуть накопленные результаты без утечки горутин.
+
+#### 💻 Эталонное решение:
+
+```go
+package livecoding
+
+import (
+	"context"
+	"sync"
+)
+
+type WordStat struct {
+	Word  string
+	Count int
+}
+
+// 1. Этап отправки слов в канал
+func SubmitWords(ctx context.Context, words []string) <-chan string {
+	out := make(chan string)
+	var wg sync.WaitGroup
+
+	for _, w := range words {
+		wg.Add(1)
+		go func(word string) {
+			defer wg.Done()
+			select {
+			case <-ctx.Done():
+				return
+			case out <- word:
+			}
+		}(w)
+	}
+
+	// Закрывающая горутина
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	return out
+}
+
+// 2. Этап параллельного подсчёта цифр
+func CountWords(ctx context.Context, in <-chan string) <-chan WordStat {
+	out := make(chan WordStat)
+	var wg sync.WaitGroup
+
+	go func() {
+		for word := range in {
+			wg.Add(1)
+			go func(w string) {
+				defer wg.Done()
+				digits := countDigits(w)
+				select {
+				case <-ctx.Done():
+					return
+				case out <- WordStat{Word: w, Count: digits}:
+				}
+			}(word)
+		}
+		wg.Wait()
+		close(out)
+	}()
+
+	return out
+}
+
+// 3. Этап агрегации результатов в map
+func FillStats(ctx context.Context, in <-chan WordStat) map[string]int {
+	stats := make(map[string]int)
+	for stat := range in {
+		select {
+		case <-ctx.Done():
+			return stats
+		default:
+			stats[stat.Word] = stat.Count
+		}
+	}
+	return stats
+}
+
+// CountDigitsInWords связывает все стадии конвейера
+func CountDigitsInWords(ctx context.Context, words []string) map[string]int {
+	if len(words) == 0 {
+		return map[string]int{}
+	}
+
+	wordsChan := SubmitWords(ctx, words)
+	statsChan := CountWords(ctx, wordsChan)
+	return FillStats(ctx, statsChan)
+}
+
+func countDigits(word string) int {
+	count := 0
+	for _, r := range word {
+		if r >= '0' && r <= '9' {
+			count++
+		}
+	}
+	return count
+}
+```
+
+- **Сложность:** Time $O(N \cdot L)$ параллельно по ядрам CPU (где $N$ — количество слов, $L$ — длина слова), Space $O(N)$ для каналов и мапы.
 
 ---
 
