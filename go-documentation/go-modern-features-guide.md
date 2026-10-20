@@ -1,7 +1,7 @@
 # Modern Go Features Guide (Go 1.21–1.24)
 
 > **Назначение документа:** Комплексное руководство по ключевым нововведениям, архитектурным паттернам и библиотекам современных релизов Go (1.21, 1.22, 1.23 и 1.24).  
-> **Практические примеры с тестами и бенчмарками:** см. модуль [`22-modern-go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/22-modern-go/22-modern-go.md).
+> **Практические примеры с тестами и бенчмарками:** см. модуль [`22-modern-go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/22-modern-go.md).
 
 ---
 
@@ -178,7 +178,7 @@ func RunServer(addr string) error {
 ---
 
 ## 🔗 Связанные материалы
-- [Практический модуль 22-modern-go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/22-modern-go/22-modern-go.md)
+- [Практический модуль 22-modern-go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/22-modern-go.md)
 - [Том 1: Основы и синтаксис Go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md)
 - [Том 3: Конкурентность и рантайм](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md)
 - [Том 5: Тестирование и архитектура](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)

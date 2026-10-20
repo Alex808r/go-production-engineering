@@ -5,14 +5,14 @@
 
 > [!IMPORTANT]
 > 💻 **Практика, примеры кода и домашние задания к этому тому:**
-> - 📂 **Код лекций:** [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network) (TCP/UDP, сокеты, дедлайны), [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps) (HTTP-сервер, роутинг, middleware), [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api) (REST API, CRUD, JSON), [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql) (DDL/DML, индексы), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps) (PostgreSQL `pgxpool`, транзакции, репозиторий).
+> - 📂 **Код лекций:** [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network) (TCP/UDP, сокеты, дедлайны), [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps) (HTTP-сервер, роутинг, middleware), [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api) (REST API, CRUD, JSON), [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql) (DDL/DML, индексы), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps) (PostgreSQL `pgxpool`, транзакции, репозиторий).
 > - 🎯 **Задачник:** [homework-tasks.md (Уроки 11–12, ДЗ 11–13, 15–16)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-11-web-http-rest-api-и-middleware).
 > - 🛠️ **Решения домашних заданий:**
->   - [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network/homework-11) — Сетевая служба TCP для поисковика GoSearch.
->   - [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps/homework-12) — Веб-служба GoSearch на `net/http`.
->   - [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api/homework-13) — REST API с CRUD-эндпоинтами для поисковых документов.
->   - [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15) — Схема базы данных PostgreSQL для онлайн-кинотеатра.
->   - [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16) — Пакет репозитория PostgreSQL с пулом `pgxpool`.
+>   - [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network/homework-11) — Сетевая служба TCP для поисковика GoSearch.
+>   - [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps/homework-12) — Веб-служба GoSearch на `net/http`.
+>   - [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api/homework-13) — REST API с CRUD-эндпоинтами для поисковых документов.
+>   - [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15) — Схема базы данных PostgreSQL для онлайн-кинотеатра.
+>   - [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16) — Пакет репозитория PostgreSQL с пулом `pgxpool`.
 > - 🗄️ **Справочники:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md) (Полный гайд по БД), [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md) (28 SQL-задач).
 > - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 3: Middle+ Developer)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#этап-3-middle-go-developer--production-инженерия-базы-данных-и-микросервисы).
 
@@ -20,7 +20,7 @@
 
 ## 12. Backend: Web-разработка и HTTP (`net/http`)
 
-> 🔗 **Практика и примеры кода:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps), [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api) | 🛠️ **Домашние задания:** [homework-12 (Web)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/12-web-apps/homework-12), [homework-13 (REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/13-api/homework-13) | 🎯 **Задачи:** [homework-tasks.md (Урок 11: Web REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-11-web-http-rest-api-и-middleware), [homework-tasks.md (ДЗ 12–13)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-12-веб-приложения-на-go-веб-служба-gosearch)
+> 🔗 **Практика и примеры кода:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps), [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api) | 🛠️ **Домашние задания:** [homework-12 (Web)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps/homework-12), [homework-13 (REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api/homework-13) | 🎯 **Задачи:** [homework-tasks.md (Урок 11: Web REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-11-web-http-rest-api-и-middleware), [homework-tasks.md (ДЗ 12–13)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-12-веб-приложения-на-go-веб-служба-gosearch)
 
 ### 12.1. Базовый HTTP-сервер и `http.ServeMux`
 
@@ -1599,7 +1599,7 @@ func main() {
 
 ## 13. Работа с Базами Данных (PostgreSQL & `pgxpool`)
 
-> 🔗 **Практика и примеры кода:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps) | 🛠️ **Домашние задания:** [homework-15 (Схема SQL)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15), [homework-16 (Пакет БД фильмов)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16) | 🎯 **Задачи:** [homework-tasks.md (Урок 12: PostgreSQL)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-12-postgresql-pgxpool-acid-транзакции-и-миграции), [homework-tasks.md (ДЗ 15–16)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-15-реляционные-базы-данных-схема-бд-онлайн-кинотеатра)
+> 🔗 **Практика и примеры кода:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps) | 🛠️ **Домашние задания:** [homework-15 (Схема SQL)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15), [homework-16 (Пакет БД фильмов)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16) | 🎯 **Задачи:** [homework-tasks.md (Урок 12: PostgreSQL)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-12-postgresql-pgxpool-acid-транзакции-и-миграции), [homework-tasks.md (ДЗ 15–16)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-15-реляционные-базы-данных-схема-бд-онлайн-кинотеатра)
 
 > [!TIP]
 > 🚀 **Полный справочник по БД для подготовки к собеседованиям:**  
@@ -1831,7 +1831,7 @@ WHERE rank <= 3;
 
 ## 28. Сетевое Программирование: TCP и UDP сокеты (Пакет `net`)
 
-> 🔗 **Практика и примеры кода:** [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network) | 🛠️ **Домашнее задание:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/11-network/homework-11) (Сетевая служба GoSearch) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 11)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-11-сетевое-программирование-сетевая-служба-gosearch)
+> 🔗 **Практика и примеры кода:** [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network) | 🛠️ **Домашнее задание:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network/homework-11) (Сетевая служба GoSearch) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 11)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-11-сетевое-программирование-сетевая-служба-gosearch)
 
 
 
