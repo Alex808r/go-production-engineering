@@ -99,6 +99,6 @@ go run ./GoSearch/cmd/gosearch/gosearh.go -s Go
 ---
 
 ## 🔗 Связанные материалы курса
-- [03-algorithms — Поиск и сортировка](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/03-algorithms.md)
-- [04-datastructs — Структуры данных и деревья поиска](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/04-datastructs/04-datastructs.md)
-- [05-io — Потоковый ввод-вывод и чтение](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/05-io/05-io.md)
+- [03-algorithms — Поиск и сортировка](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/03-algorithms.md)
+- [04-datastructs — Структуры данных и деревья поиска](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/04-datastructs.md)
+- [05-io — Потоковый ввод-вывод и чтение](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/05-io.md)

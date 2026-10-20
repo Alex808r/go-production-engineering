@@ -143,6 +143,6 @@ curl http://localhost:8080/metrics | grep shortener_cache
 ---
 
 ## 🔗 Связанные материалы курса
-- [16-db-apps — Работа с PostgreSQL и пулом соединений pgxpool](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/16-db-apps.md)
-- [18-microservices — Контейнеризация и 12-Factor App](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices/18-microservices.md)
-- [20-NoSQL — Хранилища данных Redis и кэширование](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/20-NoSQL.md)
+- [16-db-apps — Работа с PostgreSQL и пулом соединений pgxpool](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/16-db-apps.md)
+- [18-microservices — Контейнеризация и 12-Factor App](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/18-microservices.md)
+- [20-NoSQL — Хранилища данных Redis и кэширование](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/20-NoSQL.md)

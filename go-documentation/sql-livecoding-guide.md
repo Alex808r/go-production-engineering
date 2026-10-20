@@ -17,8 +17,8 @@
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)** — 4-шаговый фреймворк, расчеты и 4 кейса архитектуры.  
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и разбор всех 32 домашних заданий.  
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).  
-> - 💻 **Код лекций:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql) (схемы DDL и аналитические запросы SQL), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps) (интерфейсы БД и репозитории).  
-> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/15-sql/homework-15) (схема БД кинотеатра, данные и запросы), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов).
+> - 💻 **Код лекций:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql) (схемы DDL и аналитические запросы SQL), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps) (интерфейсы БД и репозитории).  
+> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15) (схема БД кинотеатра, данные и запросы), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов).
 
 ---
 

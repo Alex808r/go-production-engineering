@@ -5,16 +5,16 @@
 
 > [!IMPORTANT]
 > 💻 **Практика, примеры кода и домашние задания к этому тому:**
-> - 📂 **Код лекций:** [07-testing](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing) (Unit-тесты, TestMain, моки), [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug) (pprof, bench, trace), [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC) (RPC, gRPC), [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design) (Clean Architecture), [18-microservices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices) (Docker, URL Shortener), [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue) (Kafka), [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL) (Redis, проект Lynks).
+> - 📂 **Код лекций:** [07-testing](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing) (Unit-тесты, TestMain, моки), [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug) (pprof, bench, trace), [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC) (RPC, gRPC), [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design) (Clean Architecture), [18-microservices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices) (Docker, URL Shortener), [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue) (Kafka), [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL) (Redis, проект Lynks).
 > - 🎯 **Задачник:** [homework-tasks.md (Занятие 7, ДЗ 8, 14, 17–20)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-7-тестирование-в-go--unit-тесты-табличные-тесты-бенчмарки-и-имитация-зависимостей).
 > - 🛠️ **Решения домашних заданий:**
->   - [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07) — Табличные unit-тесты и бенчмарки алгоритмов сортировки.
->   - [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08) — Профилирование pprof, выявление узких мест и оптимизация CPU/RAM.
->   - [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC/homework-14) — Реализация службы RPC-сообщений для GoSearch.
->   - [homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design/homework-17) — Чистая слоистая архитектура (Clean Architecture, SOLID).
->   - [homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/18-microservices/homework-18) — Микросервис URL Shortener в Docker-контейнере.
->   - [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue/homework-19) — Асинхронная очередь событий (Kafka / Event Sourcing).
->   - [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20) — Полнофункциональный сервис «Lynks» (Redis + PostgreSQL).
+>   - [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07) — Табличные unit-тесты и бенчмарки алгоритмов сортировки.
+>   - [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08) — Профилирование pprof, выявление узких мест и оптимизация CPU/RAM.
+>   - [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14) — Реализация службы RPC-сообщений для GoSearch.
+>   - [homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17) — Чистая слоистая архитектура (Clean Architecture, SOLID).
+>   - [homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18) — Микросервис URL Shortener в Docker-контейнере.
+>   - [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19) — Асинхронная очередь событий (Kafka / Event Sourcing).
+>   - [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20) — Полнофункциональный сервис «Lynks» (Redis + PostgreSQL).
 > - 🏛️ **Архитектурный гайд:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md).
 > - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 3 & 4)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#этап-3-middle-go-developer--production-инженерия-базы-данных-и-микросервисы).
 
@@ -22,7 +22,7 @@
 
 ## 17. Тестирование, Бенчмарки и Профилирование (Testing & pprof)
 
-> 🔗 **Практика и примеры кода:** [07-testing](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing), [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug) | 🛠️ **Домашние задания:** [homework-07 (TDD)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/07-testing/homework-07), [homework-08 (pprof)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/08-prof_debug/homework-08) | 🎯 **Задачи:** [homework-tasks.md (Занятие 7: Тестирование)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-7-тестирование-в-go--unit-тесты-табличные-тесты-бенчмарки-и-имитация-зависимостей), [homework-tasks.md (ДЗ 8: Профилирование)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-8-профилирование-отладка-и-трассировка-в-go)
+> 🔗 **Практика и примеры кода:** [07-testing](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing), [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug) | 🛠️ **Домашние задания:** [homework-07 (TDD)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07), [homework-08 (pprof)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08) | 🎯 **Задачи:** [homework-tasks.md (Занятие 7: Тестирование)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-7-тестирование-в-go--unit-тесты-табличные-тесты-бенчмарки-и-имитация-зависимостей), [homework-tasks.md (ДЗ 8: Профилирование)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-8-профилирование-отладка-и-трассировка-в-go)
 
 ### 17.1. Философия и фундаментальные цели тестирования
 
@@ -983,7 +983,7 @@ func TestTimeoutWorker_Deterministic(t *testing.T) {
 
 ## 18. Архитектура сервисов и Структурированное логирование
 
-> 🔗 **Практика и примеры кода:** [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design) | 🛠️ **Домашнее задание:** [homework-17 (Clean Arch)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/17-system-design/homework-17) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 17: Архитектура)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-17-архитектура-go-приложения-clean-architecture-и-solid) | 🏛️ **Гайд:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)
+> 🔗 **Практика и примеры кода:** [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design) | 🛠️ **Домашнее задание:** [homework-17 (Clean Arch)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 17: Архитектура)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-17-архитектура-go-приложения-clean-architecture-и-solid) | 🏛️ **Гайд:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)
 
 ### 18.1. Clean Architecture и Standard Go Project Layout
 
@@ -1251,7 +1251,7 @@ go generate ./...
 
 ## 20. Удаленный вызов процедур (RPC, `net/rpc`) и gRPC
 
-> 🔗 **Практика и примеры кода:** [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC) | 🛠️ **Домашнее задание:** [homework-14 (RPC)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/14-RPC/homework-14) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 14: RPC-служба)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-14-удалённый-вызов-процедур-rpc-служба-сообщений)
+> 🔗 **Практика и примеры кода:** [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC) | 🛠️ **Домашнее задание:** [homework-14 (RPC)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 14: RPC-служба)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-14-удалённый-вызов-процедур-rpc-служба-сообщений)
 
 ### 20.1. Концепция RPC (Remote Procedure Call) и сравнение с REST API
 
@@ -1687,7 +1687,7 @@ func runHTTPGateway(grpcEndpoint string, httpPort string) error {
 
 ## 21. Очереди сообщений и Кэширование (RabbitMQ / Kafka & Redis)
 
-> 🔗 **Практика и примеры кода:** [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue), [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL) | 🛠️ **Домашние задания:** [homework-19 (Kafka)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/19-queue/homework-19), [homework-20 (Lynks)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/20-NoSQL/homework-20) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 19–20)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-19-очереди-сообщений-и-асинхронная-аналитика-kafka--event-sourcing)
+> 🔗 **Практика и примеры кода:** [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue), [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL) | 🛠️ **Домашние задания:** [homework-19 (Kafka)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19), [homework-20 (Lynks)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20) | 🎯 **Задачи:** [homework-tasks.md (ДЗ 19–20)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-19-очереди-сообщений-и-асинхронная-аналитика-kafka--event-sourcing)
 
 ### 21.1. Асинхронные очереди (Producer-Consumer Pattern)
 

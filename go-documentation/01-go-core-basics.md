@@ -6,16 +6,16 @@
 > [!IMPORTANT]
 > 💻 **Практика, примеры кода и домашние задания к этому тому:**
 >
-> - 📂 **Код лекций:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/00-docs) (Тулчейн, Go Modules), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/01-intro) (Hello World, CLI-приложения), [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax) (Фундаментальный синтаксис, срезы, мапы, указатели, структуры, ошибки).
+> - 📂 **Код лекций:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/00-docs) (Тулчейн, Go Modules), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/01-intro) (Hello World, CLI-приложения), [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax) (Фундаментальный синтаксис, срезы, мапы, указатели, структуры, ошибки).
 > - 🎯 **Задачник:** [homework-tasks.md (Уроки 1–8)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt) (Бизнес-логика Goflex: переменные, условия, циклы, срезы, мапы, структуры).
-> - 🛠️ **Решение домашнего задания:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02) (Краулер и поиск документов GoSearch с обходом слайсов).
+> - 🛠️ **Решение домашнего задания:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02) (Краулер и поиск документов GoSearch с обходом слайсов).
 > - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 1: Junior Go Developer)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#этап-1-junior-go-developer--фундамент-языка-и-структуры-данных).
 
 ---
 
 ## 0. Основы языка Go: старт с нуля
 
-> 🔗 **Практика и примеры кода:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/00-docs), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/01-intro) |
+> 🔗 **Практика и примеры кода:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/00-docs), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/01-intro) |
 
 > 🎯 **Задачи:** [homework-tasks.md (Уроки 1–3: Hello World, переменные, типы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt) |
 
@@ -284,7 +284,7 @@ func main() {
 
 ## 1. Управление потоком (Control Flow)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/1-basic) | 🎯 **Задачи:** [homework-tasks.md (Уроки 4–5: if, switch, for)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-4-условия-if-с-областью-видимости-и-switch), [Упражнение Tour of Go (Метод Ньютона)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#упражнение-a-tour-of-go-квадратный-корень-методом-ньютона-циклы-и-функции)
+> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic) | 🎯 **Задачи:** [homework-tasks.md (Уроки 4–5: if, switch, for)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-4-условия-if-с-областью-видимости-и-switch), [Упражнение Tour of Go (Метод Ньютона)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#упражнение-a-tour-of-go-квадратный-корень-методом-ньютона-циклы-и-функции)
 
 В Go минималистичный набор управляющих конструкций: единственный цикл `for`, ветвления `if` и `switch`, механизм отложенных вызовов `defer` и функция инициализации пакета `init()`.
 
@@ -781,7 +781,7 @@ func init() {
 
 ## 2. Функции и модель передачи аргументов (Functions & Pass by Value)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/1-basic), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/4-pointers) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/4-pointers) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 > [!IMPORTANT]
 > **Фундаментальный закон языка Go:**  
@@ -2169,7 +2169,7 @@ fmt.Printf("Записано байт: %d, Байты: %x, Строка: %s\n", 
 
 ## 5. Массивы и Слайсы (Arrays & Slices)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-02 (GoSearch)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/homework-02) | 🎯 **Задачи:** [homework-tasks.md (Урок 6: Слайсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-6-слайсы-slices-и-управление-каталогом)
+> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-02 (GoSearch)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02) | 🎯 **Задачи:** [homework-tasks.md (Урок 6: Слайсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-6-слайсы-slices-и-управление-каталогом)
 
 Слайс — фундаментальная динамическая структура данных в Go, представляющая собой легковесный 24-байтный заголовок поверх фиксированного базового массива в памяти.
 
@@ -3289,7 +3289,7 @@ statuses := parallel.Map(urls, func(url string, _ int) int {
 
 ## 6. Карты (Maps)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/03-algorithms/homework-03) | 🎯 **Задачи:** [homework-tasks.md (Урок 7: Словари maps)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-7-словари-maps-и-быстрый-поиск-тайтлов)
+> 🔗 **Практика и примеры кода:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/3-array_slice_map) | 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03) | 🎯 **Задачи:** [homework-tasks.md (Урок 7: Словари maps)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-7-словари-maps-и-быстрый-поиск-тайтлов)
 
 Встроенная хэш-таблица Go со сложностью поиска $O(1)$. Понимание её устройства — обязательное требование на технических собеседованиях.
 
@@ -4053,7 +4053,7 @@ settings[user]["theme"] = "dark" // теперь абсолютно безопа
 
 ## 7. Указатели в деталях (Pointers)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/4-pointers) | 🎯 **Задачи:** [homework-tasks.md (Урок 8: Указатели и структуры)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex)
+> 🔗 **Практика и примеры кода:** [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/4-pointers) | 🎯 **Задачи:** [homework-tasks.md (Урок 8: Указатели и структуры)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex)
 
 Указатель хранит адрес ячейки памяти, в которой находится значение другой переменной. На 64-битной архитектуре любой указатель занимает ровно 8 байт.
 
@@ -4230,7 +4230,7 @@ ch := make(chan int, 10) // буферизованный канал на 10 эл
 
 ## 8. Пользовательские типы и Структуры (Structs)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/02-syntax/2-structures) | 🎯 **Задачи:** [homework-tasks.md (Урок 8: Бизнес-модель Goflex)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex)
+> 🔗 **Практика и примеры кода:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/2-structures) | 🎯 **Задачи:** [homework-tasks.md (Урок 8: Бизнес-модель Goflex)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex)
 
 В Go нет классов. Структура (`struct`) — единственный способ создания сложных композитных типов данных для моделирования предметной области.
 
