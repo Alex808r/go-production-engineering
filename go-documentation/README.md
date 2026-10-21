@@ -24,7 +24,7 @@
 > - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник: 29 задач)](sql-livecoding-guide.md)** — практические задачи с собеседований (Junior/Middle/Senior): оконные функции, JOIN, пагинация, блокировки, UPSERT, EXPLAIN ANALYZE.
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)**
 > - 📊 **[mermaid-diagrams (Стандарты визуализации архитектуры Mermaid)](mermaid-diagrams/README.md)** — скилл и палитра для построения диаграмм C4, Sequence, State Machine и Flowchart.
-> - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и примерам курса)](course-codebase-guide.md)** — сквозная карта курса Thinknetica: 22 лекционных модуля (00–22), проекты GoSearch и Lynks, навигатор по домашним заданиям.
+> - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и примерам курса)](course-codebase-guide.md)** — сквозная карта курса: 22 лекционных модуля (00–22), проекты GoSearch, Lynks и Wallet (1000+ RPS), навигатор по домашним заданиям.
 
 ---
 

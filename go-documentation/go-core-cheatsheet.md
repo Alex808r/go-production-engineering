@@ -25,6 +25,7 @@
 | `go doc fmt.Printf` | Документация из терминала |
 | `go generate ./...` | Выполнить директивы `//go:generate` |
 | `go tool pprof`, `go tool trace` | Профилирование и трассировка |
+| `govulncheck ./...` | Сканирование уязвимостей в коде и зависимостях (Vulnerability Scanner) |
 
 ---
 

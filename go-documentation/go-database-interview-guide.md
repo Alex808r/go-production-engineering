@@ -4,12 +4,12 @@
 > 📚 **Связанные материалы базы знаний и практический код:**
 > - 📖 **[README.md (Главное оглавление базы знаний по Go)](README.md)** — 6 томов: типы данных, конкурентность, память, рантайм и архитектура; краткая справка — [go-core-cheatsheet.md](go-core-cheatsheet.md).
 > - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 47 задач по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).
-> - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник)](sql-livecoding-guide.md)** — 28 практических задач на SQL-запросы, JOINs, EXPLAIN ANALYZE и оконные функции.
+> - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник: 29 задач)](sql-livecoding-guide.md)** — 29 практических задач на SQL-запросы, JOINs, EXPLAIN ANALYZE, Consecutive Seats и оконные функции.
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)** — 4-шаговый фреймворк, расчеты и 4 кейса архитектуры.
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и детальный разбор всех 32 домашних заданий.
-> - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).
+> - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–22), проекты GoSearch, Lynks и Wallet (1000+ RPS), ДЗ (homework-02–20).
 > - 💻 **Код лекций:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql) (проектирование реляционных схем), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps) (драйверы pgx/sql, репозитории), [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL) (Redis, кэширование).
-> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15) (схема БД кинотеатра), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов), [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20) (проект Lynks: Postgres + Redis Cache-Aside).
+> - 📁 **Решения ДЗ и проекты:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15) (схема БД кинотеатра), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов), [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20) (проект Lynks: Postgres + Redis Cache-Aside), [wallet](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/wallet) (High-Load сервис кошелька: pgxpool, транзакции, KeyLocker).
 
 ---
 

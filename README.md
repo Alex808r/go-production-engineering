@@ -10,19 +10,20 @@
 > Репозиторий изначально брал за основу программу и базовые учебные заготовки курса **«Современная разработка на Go»** (онлайн-школа [Thinknetica](https://thinknetica.com/), оригинальный репозиторий курса: [thinknetica/go_course_4](https://github.com/thinknetica/go_course_4), автор курса — Дмитрий Титов).  
 > 
 > Однако в процессе обучения и глубокого погружения проект перерос в **масштабную самостоятельную работу и полноценную базу инженерных знаний**:
-> - Все решения практических задач и домашних заданий (`homework-02` — `homework-20`), а также сквозные проекты **GoSearch** и **lynks** полностью спроектированы, написаны, отлажены и покрыты тестами **самостоятельно**.
+> - Все решения практических задач и домашних заданий (`homework-02` — `homework-20`), а также сквозные проекты **GoSearch**, **lynks** и высоконагруженный финансовый сервис **wallet** полностью спроектированы, написаны, отлажены и покрыты тестами **самостоятельно**.
 > - Исходные лекционные примеры были существенно переработаны, дополнены подробными комментариями к механизмам рантайма и стандартам production-кода.
-> - Создана фундаментальная авторская энциклопедия **[go-documentation](go-documentation)** (6 томов глубокой теории Go Core, руководства по Modern Go 1.21–1.25, лайвкодингу, базам данных, System Design и архитектуре), выходящая далеко за рамки исходной программы курса.
+> - Создана фундаментальная авторская энциклопедия **[go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation)** (6 томов глубокой теории Go Core, руководства по Modern Go 1.21–1.24+, Docker & Compose, лайвкодингу, базам данных, System Design, архитектурным паттернам Enterprise и разборам рантайм-ловушек), выходящая далеко за рамки исходной программы курса.
 
 Комплексный репозиторий для изучения языка Go с нуля до уверенного Production-уровня и подготовки к техническим собеседованиям (Middle/Senior Go Developer).
 
 Репозиторий включает:
 - **22 тематических модуля** с примерами кода от базового синтаксиса до распределенных систем в каталоге [lessons](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons) (`00-docs` — `22-modern-go`);
 - **19 практических домашних заданий** с полным тестовым покрытием (`homework-02` — `homework-20`), реализованных самостоятельно с нуля;
-- **2 сквозных продакшн-проекта**:
+- **3 сквозных продакшн-проекта**:
   - [GoSearch](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch) — многопоточный поисковый движок (краулер, инвертированный индекс, бинарный поиск, TCP и REST API, веб-интерфейс);
   - [lynks](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks) — распределенный микросервис сокращения ссылок (Clean Architecture, PostgreSQL, Redis/Memcached, Kafka/Event-Driven, Prometheus метрики, Docker Compose);
-- **Фундаментальную базу знаний** в каталоге [go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation): 6 подробных томов теории, шпаргалки, настольный справочник по стандартным пакетам, гайды по базам данных, System Design, Enterprise-стандартам и лайвкодингу.
+  - [wallet](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/wallet) — высоконагруженный финансовый REST-сервис управления балансом (1000+ RPS на кошелек, шардированный `KeyLocker`, пул соединений `pgxpool`, строгая изоляция транзакций, идемпотентность, Docker Compose, e2e стресс-тесты под нагрузкой);
+- **Фундаментальную базу знаний** в каталоге [go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation): 6 подробных томов теории, шпаргалки, настольный справочник по стандартным пакетам и коллекциям, гайды по Docker & Compose, базам данных, System Design, Enterprise-стандартам (Kafka Outbox/DLQ, gRPC, CI/CD, AppSec), лайвкодингу (29 задач по SQL и алгоритмы Go) и 14 ловушкам рантайма.
 
 ---
 
@@ -42,7 +43,8 @@ go-course-4/
 │   └── ...
 ├── GoSearch/                   # Сквозной проект: поисковая система
 ├── lynks/                      # Сквозной проект: микросервисный URL Shortener
-├── go-documentation/           # Энциклопедия Go: 6 томов теории и гайды
+├── wallet/                     # Сквозной проект: High-Load Wallet REST API (1000+ RPS)
+├── go-documentation/           # Энциклопедия Go: 6 томов теории и прикладные гайды
 │   ├── 01-go-core-basics.md                # Том 1: Базовый синтаксис, типы, память
 │   ├── 02-go-core-oop-methods.md           # Том 2: ООП, интерфейсы, io
 │   ├── 03-go-core-concurrency.md           # Том 3: Конкурентность, каналы, sync
@@ -50,19 +52,32 @@ go-course-4/
 │   ├── 05-go-core-testing-arch.md          # Том 5: Тестирование, pprof, Clean Arch, gRPC, очереди
 │   ├── 06-go-core-algorithms-interview.md  # Том 6: Алгоритмы, структуры данных, интервью
 │   ├── course-codebase-guide.md            # Путеводитель по кодовой базе репозитория
+│   ├── docker-and-compose-starter-guide.md # Практическое руководство по Docker и Docker Compose
 │   ├── go-core-cheatsheet.md               # Быстрая шпаргалка по Go
-│   ├── go-livecoding-guide.md              # Задачи для лайвкодинга с разбором
 │   ├── go-database-interview-guide.md      # Вопросы и практика по SQL и NoSQL
-│   ├── go-system-design-guide.md           # Проектирование распределенных систем
+│   ├── go-livecoding-guide.md              # Задачи для лайвкодинга с разбором (47 задач)
 │   ├── go-modern-features-guide.md         # Руководство по фичам Go 1.21–1.24 (slog, iter, routing)
-│   ├── go-secrets-and-traps-guide.md       # Секреты и ловушки Go (Uber Style & 100 Mistakes)
-│   ├── go-production-backend-guide.md      # Промышленный backend на Go (Enterprise-стандарты)
+│   ├── go-production-backend-guide.md      # Промышленный backend: CI/CD, Kafka Outbox/DLQ, gRPC, AppSec
+│   ├── go-secrets-and-traps-guide.md       # 14 ловушек и секретов Go (память, утечки горутин, typed nil)
+│   ├── go-std-collections-guide.md         # Справочник по стандартным коллекциям и пакетам Go
+│   ├── go-system-design-guide.md           # Проектирование распределенных систем
 │   ├── homework-tasks.md                   # Формулировки домашних заданий
-│   ├── sql-livecoding-guide.md             # Практика SQL запросов
+│   ├── sql-livecoding-guide.md             # Практика SQL запросов (29 задач от базовых до LeetCode Hard)
 │   └── mermaid-diagrams/                  # Стандарты визуализации архитектуры Mermaid
 └── README.md                   # Главный путеводитель (этот файл)
 ```
 
+---
+
+## 🚀 Сквозные продакшн-проекты
+
+В репозитории реализованы 3 полноценных продакшн-сервиса, демонстрирующих реальные сценарии проектирования:
+
+| Проект | Архитектура и стек | Ключевые инженерные решения |
+|---|---|---|
+| **[GoSearch](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch)** | Стандартная библиотека Go (`net/http`, `net`, `sync`), Gorilla Mux, HTML templates | Параллельный веб-краулер, инвертированный индекс документов, быстрый бинарный поиск, строковое ранжирование, файловое хранение (JSON), TCP-сервер и веб-интерфейс. |
+| **[lynks](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks)** | Clean Architecture, PostgreSQL (`pgx`), Redis / Memcached, Apache Kafka, Prometheus, Docker Compose | Распределенный сервис сокращения URL: Cache-Aside кэширование, асинхронный стриминг событий переходов в Kafka, консьюмер аналитики, метрики попаданий в кэш для Prometheus, Docker Compose окружение. |
+| **[wallet](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/wallet)** | Clean Architecture, PostgreSQL (`pgxpool`), шардированный `KeyLocker`, Docker Compose, e2e тесты | Высоконагруженный финансовый REST API кошелька: поддержка **1000+ RPS на один кошелек**, сериализация операций через шардированный in-memory `KeyLocker` (4096 шардов), атомарный SQL UPDATE, защита пула соединений PostgreSQL от истощения, автоматический retry с бэкоффом, e2e тесты на состояние гонки (`-race`). |
 
 ---
 
@@ -122,6 +137,16 @@ go test -race ./lessons/10-concurrency/homework-10/...
 go test -race ./lessons/21-interview/...
 ```
 
+### 5. Запуск тестов сервиса Wallet (включая стресс-тесты конкурентности)
+```bash
+go test -v -race ./wallet/...
+```
+
+### 6. Проверка уязвимостей сторонних зависимостей (govulncheck)
+```bash
+govulncheck ./...
+```
+
 ---
 
 ## 📖 Рекомендуемый план самостоятельного обучения
@@ -130,14 +155,19 @@ go test -race ./lessons/21-interview/...
    - Прочитайте [Том 1: Основы и синтаксис](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md).
    - Освойте каталоги [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/01-intro), [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax), [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms), [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs), [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io).
    - Выполните задания [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02) — [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/homework-05).
+   - Пользуйтесь настольным справочником [go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-std-collections-guide.md).
 
 2. **Продвинутый уровень (Middle Go Developer):**
    - Изучите [Том 2: ООП и методы](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md) и [Том 3: Конкурентность](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md).
    - Освойте профилирование [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug), интерфейсы [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces) и конкурентность [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/10-concurrency).
    - Изучите сетевое программирование [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network), REST API [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api), базы данных [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps).
+   - Освойте контейнеризацию в [docker-and-compose-starter-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/docker-and-compose-starter-guide.md).
 
 3. **Senior / Архитектура / Собеседования:**
    - Освойте [Том 5: Тестирование, архитектура и микросервисы](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md).
    - Разберите Clean Architecture в [homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17).
    - Изучите распределенные очереди Kafka в [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19) и кэширование с метриками в [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20).
+   - Изучите высоконагруженные сценарии в [wallet](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/wallet): шардированные мьютексы `KeyLocker`, изоляция транзакций в `pgxpool`, предотвращение deadlocks и гонок при 1000+ RPS на кошелек.
+   - Освойте промышленные паттерны в [go-production-backend-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-production-backend-guide.md) (Kafka Transactional Outbox, DLQ, gRPC Interceptors, AppSec).
+   - Отработайте 29 практических задач по базам данных в [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md) и проверьте себя на 14 коварных ловушках рантайма в [go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md).
    - Отработайте лайвкодинг по гайдам [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md) и [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview).
