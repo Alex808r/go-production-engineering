@@ -397,7 +397,39 @@ func main() {
 >
 > - ❌ **Запрещено для встроенных типов:** `func (i int) Double() int` $\rightarrow$ Ошибка компиляции: `cannot define new methods on non-local type int`.
 > - ❌ **Запрещено для типов из чужих пакетов:** `func (t time.Time) IsWeekend() bool` $\rightarrow$ Ошибка компиляции: `cannot define new methods on non-local type time.Time`.
-> - ✅ **Идиоматичное решение:** Объявить в своём пакете собственный именованный тип (`type MyInt int`) или структуру с встраиванием (`type CustomTime struct { time.Time }`) и привязывать методы уже к ней.
+> - ✅ **Идиоматичное решение:** Объявить в своём пакете собственный именованный тип (`type MyInt int`) или структуру со встраиванием (`type CustomTime struct { time.Time }`) и привязывать методы уже к ней:
+>
+>   **Вариант 1: Собственный именованный тип (Defined Type) для примитива:**
+>   ```go
+>   type MyInt int
+>
+>   func (n MyInt) IsEven() bool  { return n%2 == 0 }
+>   func (n MyInt) Square() MyInt { return n * n }
+>
+>   // Использование:
+>   num := MyInt(4)
+>   fmt.Println(num.IsEven()) // true
+>   fmt.Println(num.Square()) // 16
+>   ```
+>
+>   **Вариант 2: Встраивание (Embedding) для расширения сторонней структуры:**
+>   ```go
+>   // Встраиваем time.Time — все стандартные методы time.Time всплывают (Method Promotion):
+>   type CustomTime struct {
+>       time.Time
+>   }
+>
+>   // Добавляем кастомный метод, недоступный в time.Time напрямую:
+>   func (ct CustomTime) IsWeekend() bool {
+>       w := ct.Weekday()
+>       return w == time.Saturday || w == time.Sunday
+>   }
+>
+>   // Использование:
+>   now := CustomTime{Time: time.Now()}
+>   fmt.Println(now.IsWeekend()) // наш метод
+>   fmt.Println(now.Year())      // метод встроенного time.Time (Method Promotion)
+>   ```
 
 ---
 
