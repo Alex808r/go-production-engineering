@@ -344,7 +344,7 @@ flowchart TD
 
 ## 🔎 Сквозные проекты курса
 
-В курсе реализованы 2 сквозных проекта, которые объединяют полученные знания в единую систему:
+В курсе реализованы 3 сквозных проекта, которые объединяют полученные знания в единую систему:
 
 ```mermaid
 graph LR
@@ -363,12 +363,21 @@ graph LR
         B4 --> B5["Analytics (Консьюмер)"]
         B1 --> B6["Prometheus (Метрики)"]
     end
+
+    subgraph P3["Проект 3: High-Load сервис Wallet (1000+ RPS)"]
+        C1["HTTP Handlers"] --> C2["KeyLocker (Шардированный мьютекс)"]
+        C2 --> C3["Service Layer"]
+        C3 --> C4["pgxpool (PostgreSQL пул)"]
+        C4 --> C5["Атомарный SQL UPDATE"]
+    end
 ```
 
 1. **[GoSearch](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch)**:
    - Проходит эволюцию от простого консольного скрипта до распределенной поисковой службы с инвертированным индексом, бинарным поиском, TCP-сокетами, веб-интерфейсом и REST API.
 2. **[lynks](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks)**:
    - Комплексный микросервисный сервис сокращения ссылок: архитектура Cache-Aside с Redis и PostgreSQL, асинхронный сбор аналитики через Kafka, сбор метрик хитов/промахов для Prometheus и E2E тесты в Docker Compose.
+3. **[wallet](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/wallet)**:
+   - Высоконагруженный финансовый REST-сервис управления балансом (1000+ RPS на кошелек): сериализация через шардированный `KeyLocker` (4096 шардов), атомарный SQL UPDATE, пул `pgxpool`, строгая изоляция транзакций, Docker Compose и e2e тесты на состояние гонки (`-race`).
 
 ---
 
