@@ -160,7 +160,7 @@
    - [Конструкция select и Таймауты](03-go-core-concurrency.md#113-конструкция-select-и-таймауты)
    - [Синхронизация: sync.WaitGroup](03-go-core-concurrency.md#114-синхронизация-syncwaitgroup)
    - [Паттерн Worker Pool (Пул воркеров)](03-go-core-concurrency.md#115-паттерн-worker-pool-пул-воркеров)
-   - [Пакет context: Отмена операций и таймауты (Context)](03-go-core-concurrency.md#116-пакет-context-отмена-операций-и-таймауты-context)
+   - [Пакет context: Отмена операций, таймауты и метаданные (context.Context)](03-go-core-concurrency.md#116-пакет-context-отмена-операций-таймауты-и-метаданные-contextcontext)
    - [Анатомия каналов: структура hchan, очереди sudog, прямой стек-в-стек copy и матрица состояний](03-go-core-concurrency.md#117-анатомия-каналов-структура-hchan-очереди-sudog-прямой-стек-в-стек-copy-и-матрица-состояний)
    - [Типовые ошибки конкурентного программирования (Common Concurrency Pitfalls)](03-go-core-concurrency.md#118-типовые-ошибки-конкурентного-программирования-common-concurrency-pitfalls)
 
@@ -205,7 +205,7 @@
 
 15. [**Продвинутая Синхронизация и Паттерны Конкурентности**](03-go-core-concurrency.md#15-продвинутая-синхронизация-и-паттерны-конкурентности)
 
-   - [sync.RWMutex, sync.Once и sync.Pool](03-go-core-concurrency.md#151-syncrwmutex-synconce-и-syncpool)
+   - [sync.Mutex, sync.RWMutex, sync.Once и sync.Pool](03-go-core-concurrency.md#151-syncmutex-syncrwmutex-synconce-и-syncpool)
    - [sync.Map (Потокобезопасная карта: Two-Map Architecture, vs RWMutex)](03-go-core-concurrency.md#4-syncmap-потокобезопасная-карта-без-внешнего-мьютекса)
    - [Пакет sync/atomic и Lock-Free счетчики](03-go-core-concurrency.md#152-пакет-syncatomic-и-lock-free-счетчики)
    - [Паттерны: Fan-Out / Fan-In, Pipeline и ErrGroup](03-go-core-concurrency.md#153-паттерны-fan-out--fan-in-pipeline-и-errgroup)
