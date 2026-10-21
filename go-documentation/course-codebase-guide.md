@@ -18,7 +18,7 @@ flowchart TD
     E1["Этап 1: Фундамент Go<br/>Уроки 00–05"]
     E2["Этап 2: Concurrency<br/>Уроки 06–10"]
     E3["Этап 3: Web, API и БД<br/>Уроки 11–16"]
-    E4["Этап 4: Микросервисы<br/>Уроки 17–21"]
+    E4["Этап 4: Микросервисы & Modern Go<br/>Уроки 17–22"]
 
     E1 --> E2 --> E3 --> E4
 ```
@@ -28,7 +28,7 @@ flowchart TD
 | **[🟢 Этап 1](#-этап-1-фундамент-go-синтаксис-память-и-структуры-данных-уроки-0005)** | 00 — 05 | **Junior** | Владение синтаксисом, памятью срезов/мап, алгоритмами поиска, списками и потоковым I/O. |
 | **[🟡 Этап 2](#-этап-2-проектирование-качество-кода-и-конкурентность-уроки-0610)** | 06 — 10 | **Middle** | Идиоматичное ООП (композиция/DIP), Table-driven тесты, профилирование `pprof` и конкурентность без гонок (`-race`). |
 | **[🟠 Этап 3](#-этап-3-сети-web-разработка-api-и-базы-данных-уроки-1116)** | 11 — 16 | **Middle+** | Разработка клиент-серверных веб-приложений, RESTful API, gRPC сервисов и работа с PostgreSQL через пул соединений. |
-| **[🔴 Этап 4](#-этап-4-распределенные-системы-микросервисы-и-интервью-уроки-1721)** | 17 — 21 | **Senior** | Проектирование Clean Architecture, упаковка в Docker/K8s, шина Kafka, кэширование в Redis, решение задач на собеседованиях. |
+| **[🔴 Этап 4](#-этап-4-распределенные-системы-микросервисы-modern-go-и-интервью-уроки-1722)** | 17 — 22 | **Senior** | Проектирование Clean Architecture, упаковка в Docker/Compose, шина Kafka, кэширование в Redis, Modern Go (1.21–1.24+), решение задач на собеседованиях. |
 
 ---
 
@@ -277,9 +277,9 @@ flowchart TD
 
 ---
 
-## 🔴 Этап 4. Распределенные системы, микросервисы и интервью (Уроки 17–21)
+## 🔴 Этап 4. Распределенные системы, микросервисы, Modern Go и интервью (Уроки 17–22)
 
-Финальный этап обучения, формирующий квалификацию Senior-разработчика: проектирование по принципам Чистой Архитектуры, микросервисы в Docker и Kubernetes, шины событий Apache Kafka, кэширование в Redis/Memcached (итоговый проект **lynks**) и подготовка к собеседованиям.
+Финальный этап обучения, формирующий квалификацию Senior-разработчика: проектирование по принципам Чистой Архитектуры, микросервисы в Docker и Kubernetes, шины событий Apache Kafka, кэширование в Redis/Memcached (проект **lynks**), высоконагруженные финансовые сервисы (**wallet** 1000+ RPS), возможности современного Go 1.21–1.24+ (`log/slog`, `iter.Seq`, enhanced routing) и всесторонняя подготовка к собеседованиям.
 
 ---
 
@@ -335,10 +335,34 @@ flowchart TD
 * 💻 **Код лекции:** Директория [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview):
   * [01-basics.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/01-basics.go) — мутации и реалокация срезов при `append`, кодирование строк UTF-8, захват переменных цикла горутинами.
   * [02-channels.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/02-channels.go) — неблокирующий `select`, паттерн «Поставщик-Потребитель» (закрытие канала), обобщенный мультиплексор `FanIn`.
-* 🎯 **Практические гайды для подготовки:**
-  * 💻 **[go-livecoding-guide.md (47 задач с разбором)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)** — топ livecoding-задач с собеседований.
-  * 🏛️ **[go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)** — архитектурные вопросы масштабирования.
+* 🎯 **Практические гайды для подготовки к собеседованиям:**
+  * 💻 **[go-livecoding-guide.md (47 задач с разбором)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)** — топ livecoding-задач с реальных собеседований (каналы, срезы, деревья, LeetCode).
+  * 🗄️ **[sql-livecoding-guide.md (29 задач)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)** — практические задачи по SQL (JOIN, оконные функции, Consecutive Seats, EXPLAIN).
+  * 🗄️ **[go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)** — глубокая теория PostgreSQL, `pgxpool`, транзакций, MVCC и индексов.
+  * 🏛️ **[go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)** — архитектурные вопросы масштабирования и расчет нагрузок.
+  * 💡 **[go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md)** — 14 рантайм-ловушек Go (Uber Style Guide & 100 Go Mistakes).
+  * ⚡ **[go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-std-collections-guide.md)** — справочник по стандартным коллекциям и пакетам Go.
   * ⚡ **[go-core-cheatsheet.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-core-cheatsheet.md)** — экспресс-шпаргалка по синтаксису и командам.
+
+---
+
+### [Урок 22: Современный Go 1.21–1.24+ и Best Practices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go)
+* 📖 **Теория:** [go-modern-features-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-modern-features-guide.md) (Гайд по Modern Go 1.21–1.24+), [go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-std-collections-guide.md) и [go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md).
+* 💻 **Код лекции:** Директория [22-modern-go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go):
+  * `01-slog/` — структурированное логирование `log/slog` (JSONHandler, текстовый логгер, сокрытие конфиденциальных данных через `slog.LogValuer`).
+  * `02-fuzzing/` — фаззинг-тестирование (`testing.F`) для выявления скрытых паник и уязвимостей рантайма.
+  * `03-std-generics/` — стандартные пакеты `slices`, `maps`, `cmp` (сортировка, бинарный поиск, клонирование).
+  * `04-enhanced-routing/` — расширенный роутер `net/http.ServeMux` (паттерны методов `GET /api/v1/items/{id}`).
+  * `05-iterators/` — Range-over-func (`iter.Seq`, `iter.Seq2`), кастомные итераторы деревьев и коллекций.
+  * `06-graceful-shutdown/` — корректная остановка HTTP-сервера с контекстом и перехватом сигналов `os.Interrupt`, `SIGTERM`.
+  * `07-secrets-and-traps/` — выравнивание полей структур (memory padding), утечки срезов и циклических ссылок.
+* 🚀 **Команды запуска:**
+  ```bash
+  go test -v ./lessons/22-modern-go/...
+  ```
+* 🎯 **Связанные практические гайды:**
+  * 🏭 **[go-production-backend-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-production-backend-guide.md)** — промышленный backend: CI/CD (GitHub Actions), Kafka Transactional Outbox, DLQ, gRPC Interceptors, AppSec.
+  * 🐳 **[docker-and-compose-starter-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/docker-and-compose-starter-guide.md)** — практическое руководство по Docker и Docker Compose с нуля.
 
 ---
 
@@ -391,9 +415,15 @@ go test ./...
 # Прогон статического анализатора кода
 go vet ./...
 
+# Проверка известных уязвимостей сторонних зависимостей (Vulnerability Scanner)
+govulncheck ./...
+
 # Прогон тестов конкретного этапа или ДЗ с проверкой гонок данных
 go test -v -race ./lessons/10-concurrency/homework-10/...
 go test -v -race ./lessons/20-NoSQL/homework-20/...
+
+# Прогон тестов высоконагруженного сервиса Wallet (включая стресс-тест на 1000+ RPS)
+go test -v -race ./wallet/...
 ```
 
 ### 2. Бенчмарки и профилирование (pprof)
@@ -410,12 +440,13 @@ go tool pprof -http=:8080 cpu.out
 
 ### 3. Запуск инфраструктуры (Docker Compose)
 ```bash
-# Запуск итогового микросервисного проекта (PostgreSQL, Redis, Memcache, Shortener)
-cd homework-20 && docker compose up -d --build
+# 1. Запуск микросервисного проекта Lynks (PostgreSQL, Redis, Memcache, Shortener)
+cd lessons/20-NoSQL/homework-20 && docker compose up -d --build
+go test -v ./e2e_test.go
+docker compose down -v
 
-# Запуск E2E интеграционных тестов
-go test -v ./lessons/20-NoSQL/homework-20/e2e_test.go
-
-# Остановка контейнеров
+# 2. Запуск высоконагруженного сервиса Wallet (PostgreSQL + автомиграции + REST API)
+cd wallet && docker compose up -d --build
+go test -v -race ./...
 docker compose down -v
 ```
