@@ -7,24 +7,36 @@ import (
 	"github.com/google/uuid"
 )
 
+// defaultStripeCount определяет число независимых полос (мьютексов) по умолчанию.
+// 4096 шардов обеспечивают вероятность коллизии для разных кошельков всего ~0.024%.
 const defaultStripeCount = 4096
 
-// KeyLocker provides striped locking by UUID to eliminate lock contention
-// across different wallets while strictly serializing concurrent operations on the same wallet.
-// Zero heap allocations per Lock/Unlock call.
+// KeyLocker реализует паттерн Striped Locking (шардированная блокировка по ключу).
+// -----------------------------------------------------------------------------
+// Зачем это нужно для решения проблемы 1000 RPS по одному кошельку:
+// 1. Если 1000 запросов одновременно пойдут в базу данных, они займут все соединения
+//    пула pgxpool и создадут критическую очередь блокировок строк (tuple lock) в ядре Postgres.
+//    Это приведет к таймаутам и каскадным ошибкам 500.
+// 2. KeyLocker сериализует запросы к ОДНОМУ кошельку в оперативной памяти рантайма Go.
+//    Ожидающие горутины паркуются планировщиком Go в userspace (не тратя системных потоков ОС
+//    и не занимая соединений с БД).
+// 3. Запросы к РАЗНЫМ кошелькам попадают на разные шарды и выполняются абсолютно параллельно.
+// 4. Доступ к мьютексу работает за O(1) с нулевыми аллокациями памяти (Zero Allocations).
+// -----------------------------------------------------------------------------
 type KeyLocker struct {
-	stripes []sync.Mutex
-	mask    uint32
+	stripes []sync.Mutex // Массив независимых мьютексов
+	mask    uint32       // Битовая маска для быстрой замены дорогого деления с остатком (%) на побитовое И (&)
 }
 
-// NewKeyLocker creates a new KeyLocker with the specified number of stripes (rounded to power of 2).
+// NewKeyLocker инициализирует локер с количеством полос, округленным до степени двойки.
 func NewKeyLocker(stripes ...int) *KeyLocker {
 	count := defaultStripeCount
 	if len(stripes) > 0 && stripes[0] > 0 {
 		count = stripes[0]
 	}
 
-	// Round up to nearest power of 2 for bitwise AND masking
+	// Округляем до ближайшей степени двойки (например, 4096)
+	// Это необходимо, чтобы применять операцию битового маскирования: (hash & (power - 1))
 	power := 1
 	for power < count {
 		power <<= 1
@@ -36,20 +48,21 @@ func NewKeyLocker(stripes ...int) *KeyLocker {
 	}
 }
 
-// Lock acquires the lock associated with the given UUID.
+// Lock захватывает мьютекс, соответствующий конкретному UUID кошелька.
 func (kl *KeyLocker) Lock(id uuid.UUID) {
 	idx := kl.hash(id) & kl.mask
 	kl.stripes[idx].Lock()
 }
 
-// Unlock releases the lock associated with the given UUID.
+// Unlock освобождает мьютекс, соответствующий конкретному UUID кошелька.
 func (kl *KeyLocker) Unlock(id uuid.UUID) {
 	idx := kl.hash(id) & kl.mask
 	kl.stripes[idx].Unlock()
 }
 
+// hash вычисляет 32-битный хеш FNV-1a от байтового среза UUID без аллокаций памяти.
 func (kl *KeyLocker) hash(id uuid.UUID) uint32 {
 	h := fnv.New32a()
-	_, _ = h.Write(id[:])
+	_, _ = h.Write(id[:]) // Прямая запись 16 байт UUID в хешер
 	return h.Sum32()
 }

@@ -10,15 +10,20 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// OperationType represents the type of transaction (DEPOSIT or WITHDRAW).
+// OperationType задает допустимые типы финансовых транзакций.
 type OperationType string
 
 const (
-	OperationDeposit  OperationType = "DEPOSIT"
-	OperationWithdraw OperationType = "WITHDRAW"
+	OperationDeposit  OperationType = "DEPOSIT"  // Операция пополнения баланса
+	OperationWithdraw OperationType = "WITHDRAW" // Операция списания средств
 )
 
-// Wallet represents a customer wallet account.
+// Wallet представляет доменную модель учетной записи кошелька.
+// -----------------------------------------------------------------------------
+// Внимание: для финансового баланса используется decimal.Decimal вместо float64.
+// Числа с плавающей точкой в стандарте IEEE 754 не способны точно представлять
+// десятичные дроби (например, 0.1 + 0.2 != 0.3), что в банках приводит к потерям денег.
+// -----------------------------------------------------------------------------
 type Wallet struct {
 	ID        uuid.UUID       `json:"walletId"`
 	Balance   decimal.Decimal `json:"balance"`
@@ -26,19 +31,26 @@ type Wallet struct {
 	UpdatedAt time.Time       `json:"updatedAt,omitempty"`
 }
 
-// WalletOperationRequest represents the incoming request payload.
-// Supports both "valletId" (from spec typo) and "walletId" seamlessly.
+// WalletOperationRequest структура входящего запроса на изменение баланса.
+// -----------------------------------------------------------------------------
+// Поддерживает как опечатку из технического задания ("valletId"),
+// так и общепринятый стандарт ("walletId") через кастомный десериализатор UnmarshalJSON.
+// -----------------------------------------------------------------------------
 type WalletOperationRequest struct {
 	WalletID      uuid.UUID       `json:"walletId"`
 	OperationType OperationType   `json:"operationType"`
 	Amount        decimal.Decimal `json:"amount"`
 }
 
-// UnmarshalJSON implements custom JSON unmarshaling to handle both "valletId" and "walletId".
+// UnmarshalJSON реализует гибкую и безопасную валидацию JSON на входе:
+// 1. Извлекает walletId либо valletId.
+// 2. Проверяет, что UUID валиден и не является нулевым (uuid.Nil).
+// 3. Проверяет тип операции (только DEPOSIT или WITHDRAW без учета регистра и пробелов).
+// 4. Проверяет, что сумма строго больше нуля (> 0).
 func (r *WalletOperationRequest) UnmarshalJSON(data []byte) error {
 	type rawRequest struct {
 		WalletID      *uuid.UUID       `json:"walletId"`
-		ValletID      *uuid.UUID       `json:"valletId"`
+		ValletID      *uuid.UUID       `json:"valletId"` // поддержка опечатки из текста ТЗ
 		OperationType string           `json:"operationType"`
 		Amount        *decimal.Decimal `json:"amount"`
 	}
@@ -48,6 +60,7 @@ func (r *WalletOperationRequest) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("invalid json payload: %w", err)
 	}
 
+	// Проверяем оба варианта имени поля
 	if raw.WalletID != nil {
 		r.WalletID = *raw.WalletID
 	} else if raw.ValletID != nil {
@@ -56,10 +69,12 @@ func (r *WalletOperationRequest) UnmarshalJSON(data []byte) error {
 		return ErrInvalidWalletID
 	}
 
+	// UUID не должен быть нулевым (00000000-0000-0000-0000-000000000000)
 	if r.WalletID == uuid.Nil {
 		return ErrInvalidWalletID
 	}
 
+	// Нормализация и валидация типа операции
 	op := strings.ToUpper(strings.TrimSpace(raw.OperationType))
 	switch OperationType(op) {
 	case OperationDeposit:
@@ -70,6 +85,7 @@ func (r *WalletOperationRequest) UnmarshalJSON(data []byte) error {
 		return ErrInvalidOperation
 	}
 
+	// Сумма должна быть передана и быть строго положительной
 	if raw.Amount == nil || raw.Amount.LessThanOrEqual(decimal.Zero) {
 		return ErrInvalidAmount
 	}
@@ -78,7 +94,7 @@ func (r *WalletOperationRequest) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// WalletResponse represents the response containing wallet information.
+// WalletResponse представляет формат ответа API с балансом кошелька.
 type WalletResponse struct {
 	WalletID uuid.UUID       `json:"walletId"`
 	Balance  decimal.Decimal `json:"balance"`
