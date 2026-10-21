@@ -22,7 +22,7 @@
    - [1.4. Типичные утечки соединений и памяти (Resource Leaks)](#14-типичные-утечки-соединений-и-памяти-resource-leaks)
 2. [ACID, Транзакции и Конкурентность](#2-acid-транзакции-и-конкурентность)
    - [2.1. Анатомия транзакции в Go: Безопасный паттерн с defer Rollback](#21-анатомия-транзакции-в-go-безопасный-паттерн-с-defer-rollback)
-   - [2.2. Уровни изоляции транзакций и 4 Аномалии данных](#22-уровни-изоляции-транзакций-и-4-аномалии-данных)
+   - [2.2. Уровни изоляции транзакций, аномалии данных и механика PostgreSQL](#22-уровни-изоляции-транзакций-аномалии-данных-и-механика-postgresql)
    - [2.3. Механизм MVCC в PostgreSQL: xmin, xmax, VACUUM и Bloat](#23-механизм-mvcc-в-postgresql-xmin-xmax-vacuum-и-bloat)
    - [2.4. Пессимистические блокировки: SELECT FOR UPDATE, SKIP LOCKED, NOWAIT](#24-пессимистические-блокировки-select-for-update-skip-locked-nowait)
    - [2.5. Оптимистические блокировки (Optimistic Concurrency Control)](#25-оптимистические-блокировки-optimistic-concurrency-control)
@@ -280,35 +280,309 @@ func TransferMoney(ctx context.Context, pool *pgxpool.Pool, fromID, toID int64, 
 
 ---
 
-### 2.2. Уровни изоляции транзакций и 4 Аномалии данных
-
-Стандарт SQL-92 определяет 4 уровня изоляции и защищенность от аномалий:
-
-| Уровень изоляции | Грязное чтение (*Dirty Read*) | Неповторяемое чтение (*Non-Repeatable Read*) | Фантомное чтение (*Phantom Read*) | Аномалия сериализации (*Serialization Anomaly*) |
-| :--- | :---: | :---: | :---: | :---: |
-| **Read Uncommitted** *(в PostgreSQL ведёт себя как Read Committed — грязное чтение невозможно)* | ❌ Возможен | ❌ Возможен | ❌ Возможен | ❌ Возможен |
-| **Read Committed** *(дефолт в PostgreSQL)* | ✅ Защищен | ❌ Возможен | ❌ Возможен | ❌ Возможен |
-| **Repeatable Read** | ✅ Защищен | ✅ Защищен | ✅ Защищен *(в PG)* | ❌ Возможен *(Write Skew)* |
-| **Serializable** | ✅ Защищен | ✅ Защищен | ✅ Защищен | ✅ Защищен *(SSI)* |
-
-#### Что означают эти аномалии:
-1. **Грязное чтение (Dirty Read):** Транзакция $A$ прочитала данные, которые изменила транзакция $B$, но $B$ затем сделала `ROLLBACK`. Транзакция $A$ работала с «галлюцинацией».
-2. **Неповторяемое чтение (Non-Repeatable Read):** Транзакция $A$ читает строку дважды. Между чтениями транзакция $B$ изменила строку и сделала `COMMIT`. Транзакция $A$ видит разные значения одной и той же строки.
-3. **Фантомное чтение (Phantom Read):** Транзакция $A$ делает `SELECT WHERE age > 18` и получает 10 строк. Транзакция $B$ вставляет новую запись с `age = 20` и делает `COMMIT`. При повторном `SELECT` в транзакции $A$ появляется 11-я «строка-фантом».
-4. **Перекос записи (Write Skew):** Две транзакции одновременно проверяют баланс ($A + B \ge 0$). Первая уменьшает $A$, вторая — $B$. По отдельности обе корректны, но вместе нарушают общее бизнес-правило. Решается только уровнем `Serializable` или `FOR UPDATE`.
+### 2.2. Уровни изоляции транзакций, аномалии данных и механика PostgreSQL
 
 > [!IMPORTANT]
-> **Ловушка собеседования — PostgreSQL vs Стандарт SQL-92 на уровне `Repeatable Read`:**
-> По стандарту SQL-92 уровень `Repeatable Read` **не обязан** защищать от Phantom Read — это гарантия только уровня `Serializable`. Однако PostgreSQL реализует `Repeatable Read` через **Snapshot Isolation (MVCC)**: транзакция видит только снимок данных на момент старта, поэтому новые строки, вставленные параллельной транзакцией, остаются невидимыми. Это **более строгая** гарантия, чем требует стандарт, поэтому в таблице выше стоит пометка *(в PG)*.
-> При этом `Repeatable Read` в PostgreSQL **не защищает** от **Write Skew** — эта аномалия устраняется только уровнем `Serializable` (SSI — Serializable Snapshot Isolation).
+> 🎓 **Топ-вопрос для Middle+/Senior собеседований:**  
+> *«Какие уровни изоляции транзакций определены стандартом SQL-92 и чем реализация в PostgreSQL отличается от стандарта? В какой момент создаётся Snapshot в Read Committed и Repeatable Read? Что такое Lost Update и Write Skew? Как правильно обрабатывать ошибку 40001 в Go?»*
 
-#### Как задать уровень изоляции в Go:
+---
+
+#### 1. Матрица уровней изоляции: Стандарт SQL-92 vs Реальность PostgreSQL
+
+Стандарт SQL-92 определил 4 классических уровня изоляции, ориентируясь на блокировочные СУБД (2PL — Two-Phase Locking). В современных СУБД на базе MVCC (PostgreSQL) гарантии существенно строже:
+
+| Уровень изоляции | Грязное чтение (*Dirty Read*) | Потерянное обновление (*Lost Update*) | Неповторяемое чтение (*Non-Repeatable Read*) | Фантомное чтение (*Phantom Read*) | Перекос записи (*Write Skew*) | Аномалия сериализации (*Serialization Failure*) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Read Uncommitted** | ❌ Возможен *(по стандарту)*<br/>✅ **Защищен в PG** | ❌ Возможен | ❌ Возможен | ❌ Возможен | ❌ Возможен | ❌ Возможен |
+| **Read Committed** *(дефолт в PostgreSQL)* | ✅ **Защищен** | ❌ **Возможен!** *(аномалия №1)* | ❌ **Возможен** | ❌ **Возможен** | ❌ **Возможен** | ❌ **Возможен** |
+| **Repeatable Read** *(Snapshot Isolation в PG)* | ✅ **Защищен** | ✅ **Защищен** *(first-committer-wins)* | ✅ **Защищен** | ✅ **Защищен в PG!** *(в стандарте нет)* | ❌ **Возможен!** *(Write Skew)* | ❌ **Возможен** |
+| **Serializable** *(SSI — Serializable Snapshot Isolation)* | ✅ **Защищен** | ✅ **Защищен** | ✅ **Защищен** | ✅ **Защищен** | ✅ **Защищен** | ✅ **Защищен** *(полная сериализуемость)* |
+
+##### 💡 Две главные архитектурные ловушки PostgreSQL:
+1. **`Read Uncommitted` в PostgreSQL физически работает как `Read Committed`:**  
+   В архитектуре MVCC PostgreSQL строки никогда не перезаписываются на месте (создаются версии строк с метаданными `xmin`/`xmax`). Транзакция в принципе не может прочитать незакоммиченную версию чужой строки. Поэтому объявление `SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED` в PostgreSQL молча повышается до `Read Committed`.
+2. **`Repeatable Read` в PostgreSQL строже стандарта SQL-92:**  
+   По стандарту SQL-92 уровень `Repeatable Read` допускает фантомные строки (*Phantom Read*). Однако PostgreSQL реализует этот уровень через **Snapshot Isolation (изоляцию снимков)**: транзакция «замораживает» весь снимок базы данных на момент первого запроса. Поэтому в PostgreSQL на `Repeatable Read` **фантомных чтений быть не может**! Но остаётся коварная аномалия — **Write Skew**.
+
+---
+
+#### 2. Анатомия 5 аномалий данных
+
+1. **Грязное чтение (Dirty Read / G1):**  
+   Транзакция $A$ прочитала строку, которую изменила незакоммиченная транзакция $B$. Затем транзакция $B$ откатилась (`ROLLBACK`). Транзакция $A$ оперирует данными, которых никогда не существовало в базе данных.
+2. **Неповторяемое чтение (Non-Repeatable Read / Fuzzy Read / G2a):**  
+   Транзакция $A$ читает баланс клиента `SELECT balance FROM accounts WHERE id = 1` и видит `100`. В этот момент транзакция $B$ переводит баланс в `200` и коммитится (`COMMIT`). Транзакция $A$ повторно выполняет тот же `SELECT` и видит уже `200`. В рамках одной транзакции повторное чтение одной и той же строки вернуло разные результаты.
+3. **Фантомное чтение (Phantom Read / G2b):**  
+   Транзакция $A$ выполняет диапазонный запрос: `SELECT count(*) FROM users WHERE age > 18` и получает `10`. В этот момент транзакция $B$ вставляет новую строку `(name: "John", age: 20)` и коммитится. Повторный `SELECT` в транзакции $A$ возвращает уже `11`. Появилась «строка-фантом».
+4. **Потерянное обновление (Lost Update / P4):**  
+   Две транзакции одновременно читают одно значение, модифицируют его в памяти приложения и записывают обратно. Вторая транзакция перезаписывает изменения первой, бесследно уничтожая результат её работы.
+5. **Перекос записи (Write Skew / G-skew):**  
+   Две транзакции читают перекрывающиеся наборы данных, но модифицируют **разные непересекающиеся строки**, тем самым взаимно нарушая общий бизнес-инвариант системы.
+
+---
+
+#### 3. Механика создания снимков (Snapshot): Statement-level vs Transaction-level
+
+Ключевой технический вопрос: *«Когда именно PostgreSQL фиксирует снимок видимости данных?»*
+
+```mermaid
+flowchart TD
+    subgraph RC ["<b>Read Committed: Statement-Level Snapshot</b>"]
+        direction TB
+        RC_START["BEGIN TRANSACTION"] --> RC_S1["<b>SELECT #1:</b> Создаётся Snapshot 1"]
+        RC_S1 --> RC_T2["<i>Транзакция B закоммитила изменения</i>"]
+        RC_T2 --> RC_S2["<b>SELECT #2:</b> Создаётся НОВЫЙ Snapshot 2<br/>(видит изменения Транзакции B!)"]
+    end
+
+    subgraph RR ["<b>Repeatable Read: Transaction-Level Snapshot</b>"]
+        direction TB
+        RR_START["BEGIN TRANSACTION"] --> RR_S1["<b>SELECT #1:</b> Создаётся ЕДИНЫЙ Snapshot"]
+        RR_S1 --> RR_T2["<i>Транзакция B закоммитила изменения</i>"]
+        RR_T2 --> RR_S2["<b>SELECT #2:</b> Используется исходный Snapshot 1<br/>(изменения Транзакции B НЕ видны!)"]
+    end
+
+    style RC fill:#2c3e50,stroke:#34495e,stroke-width:2px,color:#fff
+    style RR fill:#16a085,stroke:#1abc9c,stroke-width:2px,color:#fff
+    style RC_S2 fill:#e74c3c,stroke:#c0392b,stroke-width:2px,color:#fff
+    style RR_S2 fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
+```
+
+* **В `Read Committed`:** новый снимок видимости строк создаётся **перед началом выполнения КАЖДОГО отдельного SQL-запроса (`statement`)**. Если между двумя запросами внутри одной транзакции в базу закоммитились другие данные, второй запрос их увидит.
+* **В `Repeatable Read`:** снимок создаётся **один раз на первом запросе транзакции** (или при вызове `BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ`). Вся транзакция живёт в «замороженном» слепке времени.
+
+---
+
+#### 4. Аномалия Lost Update под микроскопом: Read Committed vs Repeatable Read
+
+##### Сценарий в `Read Committed` (Тихая потеря денег):
+```sql
+-- Начальное состояние: balance = 100
+
+-- Транзакция 1: начисление зарплаты +50
+Tx1: BEGIN;
+Tx1: SELECT balance FROM accounts WHERE id = 1; -- прочитал 100
+-- Приложение рассчитывает в коде: newBalance = 100 + 50 = 150
+
+-- В этот момент Транзакция 2 списывает абонентскую плату -30
+Tx2: BEGIN;
+Tx2: SELECT balance FROM accounts WHERE id = 1; -- прочитал 100
+-- Приложение рассчитывает в коде: newBalance = 100 - 30 = 70
+
+Tx1: UPDATE accounts SET balance = 150 WHERE id = 1;
+Tx1: COMMIT; -- Баланс стал 150
+
+Tx2: UPDATE accounts SET balance = 70 WHERE id = 1; -- Перетёр 150!
+Tx2: COMMIT; -- Баланс стал 70! Пополнение на 50 БЕССЛЕДНО ПОТЕРЯНО!
+```
+
+##### Как бороться с Lost Update:
+1. **Способ 1: Атомарный SQL без выноса логики в приложение (Best Practice для простых операций):**
+   ```sql
+   -- СУБД сама атомарно блокирует строку и обновляет актуальное значение:
+   UPDATE accounts SET balance = balance + 50 WHERE id = 1;
+   ```
+2. **Способ 2: Пессимистическая блокировка `SELECT ... FOR UPDATE` (в Read Committed):**
+   ```sql
+   SELECT balance FROM accounts WHERE id = 1 FOR UPDATE; -- Tx2 будет ждать завершения Tx1
+   ```
+3. **Способ 3: Переход на `Repeatable Read` (First-Committer-Wins):**
+   В PostgreSQL на уровне `Repeatable Read` при попытке второй транзакции обновить строку, изменённую параллельной транзакцией после старта снимка, PostgreSQL **мгновенно прерывает вторую транзакцию с ошибкой**:
+   ```text
+   ERROR: could not serialize access due to concurrent update (SQLSTATE 40001)
+   ```
+   Вторая транзакция не портит данные, а откатывается, позволяя приложению безопасно повторить операцию.
+
+---
+
+#### 5. Аномалия Write Skew под микроскопом (Задача «Дежурные врачи / Doctor on-call»)
+
+> [!WARNING]
+> ⚠️ **Главный парадокс Write Skew:**  
+> Почему `Repeatable Read` **НЕ спасает** от Write Skew, хотя защищает от Lost Update?  
+> Потому что транзакции изменяют **разные строки таблицы**! Блокировки строк не конфликтуют, но общее бизнес-ограничение (инвариант) нарушается.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Alice as Врач Алиса (Tx 1)
+    participant DB as PostgreSQL (Repeatable Read)
+    actor Bob as Врач Боб (Tx 2)
+
+    Note over DB: Инвариант больницы: хотя бы 1 врач на смене!<br/>Врачи: Алиса (on_call=true), Боб (on_call=true)
+
+    Alice->>DB: BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ
+    Bob->>DB: BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ
+
+    Alice->>DB: SELECT count(*) FROM doctors WHERE on_call = true;
+    DB-->>Alice: 2 (Алиса видит: дежурят двое, значит можно сняться)
+
+    Bob->>DB: SELECT count(*) FROM doctors WHERE on_call = true;
+    DB-->>Bob: 2 (Боб видит: дежурят двое, значит можно сняться)
+
+    Alice->>DB: UPDATE doctors SET on_call = false WHERE name = 'Alice';
+    DB-->>Alice: OK (строка Алисы обновлена)
+
+    Bob->>DB: UPDATE doctors SET on_call = false WHERE name = 'Bob';
+    DB-->>Bob: OK (строка Боба обновлена — конфликта строк нет!)
+
+    Alice->>DB: COMMIT;
+    DB-->>Alice: OK
+
+    Bob->>DB: COMMIT;
+    DB-->>Bob: OK (Repeatable Read успешно фиксирует обе транзакции!)
+
+    Note over DB: 🚨 КАТАСТРОФА: on_call = 0 врачей!<br/>В больнице не осталось ни одного врача!
+```
+
+##### Как решить Write Skew:
+1. **Решение через `Serializable` (SSI — Serializable Snapshot Isolation):**  
+   PostgreSQL использует предикатные блокировки памяти (**SIREAD locks**). База отслеживает зависимости чтения-записи ($rw$-antidependency). Когда Боб попытается сделать `COMMIT`, PostgreSQL обнаружит цикл зависимостей и прервёт транзакцию Боба:
+   ```text
+   ERROR: could not serialize access due to read/write dependencies among transactions (SQLSTATE 40001)
+   ```
+2. **Решение через явный `SELECT FOR UPDATE` в `Read Committed`:**
+   ```sql
+   -- Блокируем ВСЕХ дежурных врачей на время проверки:
+   SELECT * FROM doctors WHERE on_call = true FOR UPDATE;
+   ```
+
+---
+
+#### 6. Production Go Pattern: Transaction Retry Loop для ошибки `40001 (serialization_failure)`
+
+> [!CAUTION]
+> При использовании уровней `Repeatable Read` и `Serializable` отмена транзакций с ошибкой `40001 (serialization_failure)` — это **штатное поведение базы данных при конкуренции, а не аппаратный сбой**.  
+> Если приложение на Go не реализует механизм повторных попыток (**Retry Loop**), сервис будет регулярно отвечать пользователям ошибками HTTP 500!
+
+##### Идиоматичная реализация функции-обёртки на Go (`pgxpool`):
+
+```go
+package db
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"math/rand/v2"
+	"time"
+
+	"github.com/jackc/pgerrcode"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+// RunInTxWithRetry выполняет транзакцию с автоматическим повтором при ошибках сериализации (40001)
+// и дедлоках (40P01) с экспоненциальной задержкой и джиттером (Full Jitter).
+func RunInTxWithRetry(
+	ctx context.Context,
+	pool *pgxpool.Pool,
+	opts pgx.TxOptions,
+	maxRetries int,
+	baseDelay time.Duration,
+	fn func(tx pgx.Tx) error,
+) error {
+	var lastErr error
+
+	for attempt := 0; attempt < maxRetries; attempt++ {
+		// Проверяем контекст перед каждой попыткой:
+		if err := ctx.Err(); err != nil {
+			return fmt.Errorf("контекст отменён до завершения попытки: %w", err)
+		}
+
+		err := runSingleTx(ctx, pool, opts, fn)
+		if err == nil {
+			return nil // Успешное выполнение
+		}
+
+		// Проверяем, является ли ошибка конфликтом сериализации (40001) или дедлоком (40P01):
+		if isRetryableTxError(err) {
+			lastErr = err
+
+			// Экспоненциальная задержка: baseDelay * 2^attempt + jitter
+			backoff := baseDelay * (1 << attempt)
+			jitter := time.Duration(rand.Int64N(int64(backoff / 2)))
+			sleepDuration := backoff + jitter
+
+			select {
+			case <-time.After(sleepDuration):
+				continue // повторяем транзакцию
+			case <-ctx.Done():
+				return fmt.Errorf("контекст прерван во время ожидания retry: %w", ctx.Err())
+			}
+		}
+
+		// Любая другая бизнес-ошибка (например, недостаток средств) повтору не подлежит:
+		return err
+	}
+
+	return fmt.Errorf("превышено число попыток транзакции (%d): %w", maxRetries, lastErr)
+}
+
+func runSingleTx(ctx context.Context, pool *pgxpool.Pool, opts pgx.TxOptions, fn func(tx pgx.Tx) error) error {
+	tx, err := pool.BeginTx(ctx, opts)
+	if err != nil {
+		return fmt.Errorf("ошибка открытия транзакции: %w", err)
+	}
+	defer tx.Rollback(ctx) // Безопасный откат, если не было Commit
+
+	if err := fn(tx); err != nil {
+		return err
+	}
+
+	if err := tx.Commit(ctx); err != nil {
+		return fmt.Errorf("ошибка коммита транзакции: %w", err)
+	}
+
+	return nil
+}
+
+// isRetryableTxError проверяет SQLSTATE коды ошибок конкуренции PostgreSQL
+func isRetryableTxError(err error) bool {
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) {
+		switch pgErr.Code {
+		case pgerrcode.SerializationFailure: // "40001"
+			return true
+		case pgerrcode.DeadlockDetected: // "40P01"
+			return true
+		}
+	}
+	return false
+}
+```
+
+---
+
+#### 7. Тяжёлые аналитические отчёты: Режим `READ ONLY DEFERRABLE`
+
+На уровне изоляции `Serializable` даже чисто читающие транзакции (`SELECT`) могут неожиданно прерываться с ошибкой `40001 serialization_failure`, если пересеклись с пишущими процессами.
+
+Для длительных аналитических выгрузок (например, построение отчёта по миллиарду записей на 10 минут) в PostgreSQL предусмотрен специальный режим:
+
+```sql
+BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE READ ONLY DEFERRABLE;
+```
+
+##### Как работает `DEFERRABLE`:
+* Транзакция при старте **может подождать несколько миллисекунд** перед выполнением первого запроса, пока все конфликтующие пишущие транзакции зафиксируются.
+* Как только безопасный снимок получен, PostgreSQL гарантирует: **эта транзакция НИКОГДА не завершится ошибкой `serialization_failure` и не будет принудительно прервана!**
+* Она не мешает другим транзакциям и читает строго консистентный срез данных.
+
+##### Как задать в Go через `pgx`:
 ```go
 opts := pgx.TxOptions{
-    IsoLevel: pgx.RepeatableRead,
-    AccessMode: pgx.ReadWrite,
+    IsoLevel:       pgx.Serializable,
+    AccessMode:     pgx.ReadOnly,
+    DeferrableMode: pgx.Deferrable,
 }
+
 tx, err := pool.BeginTx(ctx, opts)
+if err != nil {
+    return fmt.Errorf("ошибка открытия deferrable транзакции: %w", err)
+}
+defer tx.Rollback(ctx)
 ```
 
 ---
