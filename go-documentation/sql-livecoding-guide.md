@@ -171,10 +171,14 @@ SELECT
     email, 
     COUNT(*) AS duplicates_count
 FROM users
+WHERE email IS NOT NULL -- Защита: незаполненные email не должны считаться «дубликатами»
 GROUP BY email
 HAVING COUNT(*) > 1
 ORDER BY duplicates_count DESC;
 ```
+
+> [!NOTE]
+> 💡 **Подводный камень с `NULL`:** По стандарту SQL в `GROUP BY` все значения `NULL` объединяются в **одну общую группу**. Если в таблице 10 пользователей без email (`email IS NULL`), запрос без фильтра `WHERE email IS NOT NULL` ошибочно выдаст строку `(NULL, 10)` как «дубликат». Всегда фильтруйте `IS NOT NULL`, если колонка допускает `NULL`.
 
 ---
 
@@ -349,6 +353,11 @@ SELECT user_id, MAX(streak_days) AS max_streak
 FROM StreakLengths
 GROUP BY user_id;
 ```
+
+> [!TIP]
+> 💡 **Что если поле времени — `TIMESTAMPTZ` / `TIMESTAMP`?**  
+> Если в таблице хранятся точные метки времени (например, `created_at TIMESTAMPTZ`), перед вычислением островков их обязательно нужно привести к чистой календарной дате в CTE `UniqueLogins`:  
+> `SELECT DISTINCT user_id, (login_time AT TIME ZONE 'UTC')::date AS login_date`. Иначе вычитание целого числа из `TIMESTAMPTZ` вычтет целые секунды или завершится ошибкой типов.
 
 ---
 
@@ -602,14 +611,17 @@ SELECT
     CASE 
         WHEN bs.tx_id IS NULL THEN 'MISSING_IN_BANK'
         WHEN ap.tx_id IS NULL THEN 'MISSING_IN_APP'
-        WHEN ap.amount <> bs.amount THEN 'AMOUNT_MISMATCH'
+        WHEN ap.amount IS DISTINCT FROM bs.amount THEN 'AMOUNT_MISMATCH'
     END AS mismatch_reason
 FROM app_payments ap
 FULL OUTER JOIN bank_statements bs ON ap.tx_id = bs.tx_id
 WHERE ap.tx_id IS NULL 
    OR bs.tx_id IS NULL 
-   OR ap.amount <> bs.amount;
+   OR ap.amount IS DISTINCT FROM bs.amount;
 ```
+
+> [!NOTE]
+> 💡 **Почему `IS DISTINCT FROM` вместо `<>`:** Если транзакция присутствует в обоих реестрах, но в одном из них сумма оказалась `NULL` (сбой валидации/незавершенный процессинг), стандартное сравнение `ap.amount <> bs.amount` вернет `UNKNOWN`, и расхождение **молча выпадет из отчета**! Оператор `IS DISTINCT FROM` трактует `NULL` как различимое значение и гарантирует 100% точность сверки.
 
 ---
 
@@ -889,6 +901,9 @@ CREATE INDEX idx_posts_keyset ON posts (created_at DESC, id DESC);
 
 * **Результат:** Запрос выполняет `Index Scan` сразу по нужной ветке дерева за константное время $O(\log N)$ и читает ровно **20 строк**, независимо от того, листает пользователь 1-ю страницу или миллионную.
 
+> [!IMPORTANT]
+> ⚠️ **Критическое требование к полям курсора:** Все столбцы, входящие в курсор (`created_at`, `id`), **обязаны иметь ограничение `NOT NULL`**. Если хотя бы в одной строке `created_at` окажется `NULL`, кортежное сравнение `(created_at, id) < (...)` вернёт `UNKNOWN`, и пагинация сломается.
+
 ---
 
 ### Задача 25: Конкурентная обработка и блокировки строк: SELECT FOR UPDATE и SKIP LOCKED
@@ -913,6 +928,10 @@ FROM accounts
 WHERE id IN (10, 20) 
 ORDER BY id 
 FOR UPDATE;
+
+-- ⚠️ На бэкенде в Go ОБЯЗАТЕЛЬНО проверить: len(rows) == 2!
+-- Если один из счетов не существует (неверный ID или удален), SELECT вернет 1 строку.
+-- Без этой проверки произойдет ошибочное списание без зачисления.
 
 -- Выполняем списание и зачисление (проверка balance >= 500 выполняется в Go):
 UPDATE accounts SET balance = balance - 500 WHERE id = 10;
@@ -1086,18 +1105,21 @@ FROM (
     SELECT 
         seat_id, 
         is_free,
-        -- Статус предыдущего места:
+        -- Статус и ID предыдущего места:
         LAG(is_free) OVER (ORDER BY seat_id) AS prev_free,
-        -- Статус следующего места:
-        LEAD(is_free) OVER (ORDER BY seat_id) AS next_free
+        LAG(seat_id) OVER (ORDER BY seat_id) AS prev_id,
+        -- Статус и ID следующего места:
+        LEAD(is_free) OVER (ORDER BY seat_id) AS next_free,
+        LEAD(seat_id) OVER (ORDER BY seat_id) AS next_id
     FROM cinema
 ) t
 WHERE is_free = 1 
-  AND (prev_free = 1 OR next_free = 1)
+  AND ((prev_free = 1 AND prev_id = seat_id - 1) 
+    OR (next_free = 1 AND next_id = seat_id + 1))
 ORDER BY seat_id ASC;
 ```
 
-* **Плюсы:** Работает за один проход по таблице/индексу $O(N)$ без соединений и без накладных расходов на дедупликацию.
+* **Плюсы:** Работает за один проход по таблице/индексу $O(N)$ без соединений и без накладных расходов на дедупликацию. Защищено даже в случае, если в нумерации мест есть пропуски (проходы между рядами).
 
 ---
 
