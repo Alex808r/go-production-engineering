@@ -77,24 +77,36 @@
 SELECT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1;
 ```
 
-#### ✅ Эталонное решение (через `DENSE_RANK`):
+#### ✅ Решение 1: Самое простое и быстрое (LeetCode Standard, $O(1)$ по индексу)
+```sql
+SELECT (
+    SELECT DISTINCT salary 
+    FROM employees 
+    ORDER BY salary DESC 
+    LIMIT 1 OFFSET 1 -- Для N-й максимальной зарплаты укажите: OFFSET (N - 1)
+) AS second_highest_salary;
+```
+
+* **Почему это самое оптимальное решение на live-coding:**
+  1. **Всего 5 строк кода:** пишется за 20 секунд без громоздких CTE.
+  2. **Мгновенная работа ($O(1)$):** при наличии индекса по `salary` планировщик выполняет `Index Scan` + `Limit` и читает ровно 2 кортежа индекса, не сканируя всю таблицу.
+  3. **Автоматический `NULL`:** внешний скалярный подзапрос `SELECT (...)` по стандарту SQL возвращает `NULL`, если второй зарплаты нет в базе (не нужны `COALESCE` или костыли).
+  4. **Легко масштабируется:** для 3-й зарплаты ставим `OFFSET 2`, для $N$-й — `OFFSET (N - 1)`.
+
+#### 💡 Решение 2: Через оконную функцию `DENSE_RANK()` (Для вывода строк сотрудников)
 ```sql
 WITH RankedSalaries AS (
     SELECT 
         salary,
-        DENSE_RANK() OVER (ORDER BY salary DESC) as rank_num
+        DENSE_RANK() OVER (ORDER BY salary DESC) AS rank_num
     FROM employees
 )
--- Скалярный подзапрос сам возвращает NULL, если строк нет — отдельный COALESCE не нужен:
 SELECT (
     SELECT salary FROM RankedSalaries WHERE rank_num = 2 LIMIT 1
 ) AS second_highest_salary;
--- Для N-й зарплаты замените 2 на N.
 ```
 
-> Более короткая альтернатива без оконных функций: `SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1;` — здесь `DISTINCT` как раз и решает проблему дубликатов. Но если второй зарплаты нет, этот запрос вернёт **пустой результат**, а не `NULL`; чтобы получить `NULL`, его оборачивают в скалярный подзапрос: `SELECT (SELECT DISTINCT salary ... OFFSET 1)`.
-
-* **Почему `DENSE_RANK()`:** В отличие от `ROW_NUMBER()` (который просто нумерует строки) и `RANK()` (который оставляет пропуски в нумерации `1, 1, 3`), `DENSE_RANK()` ранжирует без пропусков (`1, 1, 2`), корректно находя следующий уникальный уровень.
+* **Когда предпочесть `DENSE_RANK()`:** В отличие от `ROW_NUMBER()` (который просто нумерует строки) и `RANK()` (который оставляет пропуски `1, 1, 3`), `DENSE_RANK()` ранжирует без пропусков (`1, 1, 2`). Это решение незаменимо, если нужно вывести не только саму сумму, но и имя сотрудника или сгруппировать по отделам (как в Задаче 2).
 
 ---
 
@@ -156,6 +168,22 @@ ORDER BY category_id, sales_rank;
 
 > ⚠️ `ROW_NUMBER()` при равных продажах выберет «случайного» победителя. Если нужно, чтобы все товары с одинаковыми продажами попадали в топ вместе — используйте `RANK()`/`DENSE_RANK()`; если важен детерминизм — добавьте второй ключ сортировки (`, p.id`).
 
+> [!TIP]
+> 💡 **Супер-лайфхак для Топ-1 в каждой категории (PostgreSQL `DISTINCT ON`):**  
+> Если на собеседовании просят вывести **не Топ-3, а именно Топ-1** (самый продаваемый товар, последний заказ клиента, последнее сообщение в каждом чате), используйте идиоматичный для PostgreSQL синтаксис `DISTINCT ON` без CTE и без оконных функций:
+> ```sql
+> SELECT DISTINCT ON (p.category_id)
+>     p.category_id,
+>     p.id AS product_id,
+>     p.name AS product_name,
+>     COALESCE(SUM(oi.quantity), 0) AS total_sold
+> FROM products p
+> LEFT JOIN order_items oi ON p.id = oi.product_id
+> GROUP BY p.category_id, p.id, p.name
+> ORDER BY p.category_id, total_sold DESC;
+> ```
+> *Интервьюеры очень ценят знание `DISTINCT ON`: запрос пишется в несколько строк и выполняется оптимизатором за один единственный проход.*
+
 ---
 
 ## 2. Дедупликация и Фильтрация
@@ -171,10 +199,14 @@ SELECT
     email, 
     COUNT(*) AS duplicates_count
 FROM users
+WHERE email IS NOT NULL -- Защита: незаполненные email не должны считаться «дубликатами»
 GROUP BY email
 HAVING COUNT(*) > 1
 ORDER BY duplicates_count DESC;
 ```
+
+> [!NOTE]
+> 💡 **Подводный камень с `NULL`:** По стандарту SQL в `GROUP BY` все значения `NULL` объединяются в **одну общую группу**. Если в таблице 10 пользователей без email (`email IS NULL`), запрос без фильтра `WHERE email IS NOT NULL` ошибочно выдаст строку `(NULL, 10)` как «дубликат». Всегда фильтруйте `IS NOT NULL`, если колонка допускает `NULL`.
 
 ---
 
@@ -183,12 +215,28 @@ ORDER BY duplicates_count DESC;
 #### 🎯 Условие:
 В таблице `users (id, email)` есть дублирующиеся строки с одинаковым email. Удалите дубликаты, сохранив для каждого email только запись с наименьшим `id`.
 
-#### ✅ Эталонное решение:
+#### ✅ Решение 1: Самое простое и быстрое в PostgreSQL (`DELETE ... USING`)
+```sql
+DELETE FROM users a 
+USING users b 
+WHERE a.email = b.email 
+  AND a.id > b.id;
+```
+
+* **Почему это эталон в PostgreSQL:**
+  1. **Всего 4 строки:** без вложенных подзапросов, без тяжелых CTE и без оконных функций.
+  2. **Максимальная производительность:** движок выполняет быстрое соединение по индексу `(email)` и удаляет все строки с `id`, превышающим минимальный, за один проход.
+  3. **Если в таблице нет уникального столбца `id`:** для различения дубликатов используют скрытый физический адрес строки `ctid`:
+     ```sql
+     DELETE FROM users a USING users b WHERE a.email = b.email AND a.ctid > b.ctid;
+     ```
+
+#### 💡 Решение 2: Универсальный ANSI SQL (через CTE и `ROW_NUMBER`)
 ```sql
 WITH RankedUsers AS (
     SELECT 
         id,
-        ROW_NUMBER() OVER (PARTITION BY email ORDER BY id ASC) as rn
+        ROW_NUMBER() OVER (PARTITION BY email ORDER BY id ASC) AS rn
     FROM users
 )
 DELETE FROM users
@@ -197,10 +245,7 @@ WHERE id IN (
 );
 ```
 
-> [!NOTE]
-> В PostgreSQL популярен и более короткий синтаксис `DELETE ... USING` (самообъединение):  
-> `DELETE FROM users a USING users b WHERE a.email = b.email AND a.id > b.id;`  
-> Если в таблице нет уникального `id`, различать «одинаковые» строки можно по скрытому системному полю `ctid` (физический адрес строки): `... AND a.ctid > b.ctid`.
+* **Когда предпочесть:** В реляционных СУБД без поддержки конструкции `USING` (например, Oracle или стандартном ANSI SQL).
 
 ---
 
@@ -237,7 +282,23 @@ WHERE o.id IS NULL;
 #### 🎯 Условие:
 Таблица `payments (id, amount, paid_at DATE)`. Вывести дату, ежедневную выручку и накопительный итог выручки с начала периода по текущий день.
 
-#### ✅ Эталонное решение:
+#### ✅ Решение 1: Самое простое и быстрое (в один запрос без CTE)
+```sql
+SELECT 
+    paid_at,
+    SUM(amount) AS daily_amount,
+    SUM(SUM(amount)) OVER (ORDER BY paid_at) AS running_total
+FROM payments
+GROUP BY paid_at
+ORDER BY paid_at;
+```
+
+* **Почему это супер-решение на собеседовании:**
+  1. **Всего 7 строк:** пишется мгновенно без создания громоздких CTE.
+  2. **Вложенная оконная агрегация `SUM(SUM(...)) OVER (...)`:** стандарт SQL и PostgreSQL позволяют вызывать оконную функцию над результатом обычной групповой агрегации. СУБД сначала группирует строки по `paid_at`, а затем сразу считает кумулятивную сумму по полученным агрегатам за один проход.
+  3. **Рамка окна по умолчанию:** при указании `ORDER BY paid_at` окно по стандарту неявно принимает рамку `RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW`, корректно накапливая сумму от начала ряда до текущего дня.
+
+#### 💡 Решение 2: Пошагово через CTE (Классический подход)
 ```sql
 WITH DailyRevenue AS (
     SELECT 
@@ -249,7 +310,6 @@ WITH DailyRevenue AS (
 SELECT 
     paid_at,
     daily_amount,
-    -- Накопительный итог по возрастанию даты:
     SUM(daily_amount) OVER (
         ORDER BY paid_at 
         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
@@ -257,6 +317,7 @@ SELECT
 FROM DailyRevenue
 ORDER BY paid_at;
 ```
+* **Когда предпочесть:** Когда требуется явно разбить расчет на промежуточные шаги или переиспользовать `daily_amount` в других подзапросах.
 
 ---
 
@@ -265,7 +326,25 @@ ORDER BY paid_at;
 #### 🎯 Условие:
 Рассчитать 7-дневное скользящее среднее дневной выручки (включая текущий день и 6 предшествующих).
 
-#### ✅ Эталонное решение:
+#### ✅ Решение 1: Самое компактное и быстрое (в один запрос без CTE)
+```sql
+SELECT 
+    paid_at,
+    SUM(amount) AS daily_amount,
+    ROUND(
+        AVG(SUM(amount)) OVER (
+            ORDER BY paid_at
+            ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+        ), 2
+    ) AS moving_avg_7d
+FROM payments
+GROUP BY paid_at
+ORDER BY paid_at;
+```
+
+* **Почему так:** агрегат `SUM(amount)` рассчитывается на шаге `GROUP BY`, а внешняя оконная функция `AVG(...) OVER (...)` вычисляет скользящее среднее по уже сгруппированным дням в рамках единого плана запроса.
+
+#### 💡 Решение 2: Пошагово через CTE
 ```sql
 WITH DailyRevenue AS (
     SELECT paid_at, SUM(amount) AS daily_amount
@@ -292,7 +371,7 @@ ORDER BY paid_at;
 #### 🎯 Условие:
 Для каждого дня вывести сумму выручки и её изменение по сравнению со вчерашним днем (в процентах).
 
-#### ✅ Эталонное решение:
+#### ✅ Решение 1: Самое чистое и читаемое (через CTE)
 ```sql
 WITH DailySales AS (
     SELECT paid_at, SUM(amount) AS current_day_sales
@@ -302,13 +381,30 @@ WITH DailySales AS (
 SELECT 
     paid_at,
     current_day_sales,
-    LAG(current_day_sales, 1) OVER (ORDER BY paid_at) AS prev_day_sales,
+    LAG(current_day_sales) OVER (ORDER BY paid_at) AS prev_day_sales,
     ROUND(
-        (current_day_sales - LAG(current_day_sales, 1) OVER (ORDER BY paid_at)) * 100.0 / 
-        NULLIF(LAG(current_day_sales, 1) OVER (ORDER BY paid_at), 0), 
+        (current_day_sales - LAG(current_day_sales) OVER (ORDER BY paid_at)) * 100.0 / 
+        NULLIF(LAG(current_day_sales) OVER (ORDER BY paid_at), 0), 
         2
     ) AS growth_percentage
 FROM DailySales
+ORDER BY paid_at;
+```
+* **Почему через CTE:** вычисление процента прироста требует повторного обращения к вчерашней выручке. Использование CTE избавляет от дублирования громоздких выражений `SUM(amount)` и `LAG(SUM(amount))`.
+
+#### 💡 Решение 2: В один запрос без CTE (Компактный однопроходный SQL)
+```sql
+SELECT 
+    paid_at,
+    SUM(amount) AS current_day_sales,
+    LAG(SUM(amount)) OVER (ORDER BY paid_at) AS prev_day_sales,
+    ROUND(
+        (SUM(amount) - LAG(SUM(amount)) OVER (ORDER BY paid_at)) * 100.0 / 
+        NULLIF(LAG(SUM(amount)) OVER (ORDER BY paid_at), 0), 
+        2
+    ) AS growth_percentage
+FROM payments
+GROUP BY paid_at
 ORDER BY paid_at;
 ```
 
@@ -349,6 +445,11 @@ SELECT user_id, MAX(streak_days) AS max_streak
 FROM StreakLengths
 GROUP BY user_id;
 ```
+
+> [!TIP]
+> 💡 **Что если поле времени — `TIMESTAMPTZ` / `TIMESTAMP`?**  
+> Если в таблице хранятся точные метки времени (например, `created_at TIMESTAMPTZ`), перед вычислением островков их обязательно нужно привести к чистой календарной дате в CTE `UniqueLogins`:  
+> `SELECT DISTINCT user_id, (login_time AT TIME ZONE 'UTC')::date AS login_date`. Иначе вычитание целого числа из `TIMESTAMPTZ` вычтет целые секунды или завершится ошибкой типов.
 
 ---
 
@@ -602,14 +703,17 @@ SELECT
     CASE 
         WHEN bs.tx_id IS NULL THEN 'MISSING_IN_BANK'
         WHEN ap.tx_id IS NULL THEN 'MISSING_IN_APP'
-        WHEN ap.amount <> bs.amount THEN 'AMOUNT_MISMATCH'
+        WHEN ap.amount IS DISTINCT FROM bs.amount THEN 'AMOUNT_MISMATCH'
     END AS mismatch_reason
 FROM app_payments ap
 FULL OUTER JOIN bank_statements bs ON ap.tx_id = bs.tx_id
 WHERE ap.tx_id IS NULL 
    OR bs.tx_id IS NULL 
-   OR ap.amount <> bs.amount;
+   OR ap.amount IS DISTINCT FROM bs.amount;
 ```
+
+> [!NOTE]
+> 💡 **Почему `IS DISTINCT FROM` вместо `<>`:** Если транзакция присутствует в обоих реестрах, но в одном из них сумма оказалась `NULL` (сбой валидации/незавершенный процессинг), стандартное сравнение `ap.amount <> bs.amount` вернет `UNKNOWN`, и расхождение **молча выпадет из отчета**! Оператор `IS DISTINCT FROM` трактует `NULL` как различимое значение и гарантирует 100% точность сверки.
 
 ---
 
@@ -889,6 +993,9 @@ CREATE INDEX idx_posts_keyset ON posts (created_at DESC, id DESC);
 
 * **Результат:** Запрос выполняет `Index Scan` сразу по нужной ветке дерева за константное время $O(\log N)$ и читает ровно **20 строк**, независимо от того, листает пользователь 1-ю страницу или миллионную.
 
+> [!IMPORTANT]
+> ⚠️ **Критическое требование к полям курсора:** Все столбцы, входящие в курсор (`created_at`, `id`), **обязаны иметь ограничение `NOT NULL`**. Если хотя бы в одной строке `created_at` окажется `NULL`, кортежное сравнение `(created_at, id) < (...)` вернёт `UNKNOWN`, и пагинация сломается.
+
 ---
 
 ### Задача 25: Конкурентная обработка и блокировки строк: SELECT FOR UPDATE и SKIP LOCKED
@@ -913,6 +1020,10 @@ FROM accounts
 WHERE id IN (10, 20) 
 ORDER BY id 
 FOR UPDATE;
+
+-- ⚠️ На бэкенде в Go ОБЯЗАТЕЛЬНО проверить: len(rows) == 2!
+-- Если один из счетов не существует (неверный ID или удален), SELECT вернет 1 строку.
+-- Без этой проверки произойдет ошибочное списание без зачисления.
 
 -- Выполняем списание и зачисление (проверка balance >= 500 выполняется в Go):
 UPDATE accounts SET balance = balance - 500 WHERE id = 10;
@@ -1077,31 +1188,7 @@ WHERE created_at >= '2026-09-29 00:00:00+03'
 
 ---
 
-#### 💡 Решение 1: Оконные функции `LAG()` и `LEAD()` (Самое быстрое и читаемое)
-Для каждого свободного места смотрим статус предыдущего (`seat_id - 1`) и следующего (`seat_id + 1`) места:
-
-```sql
-SELECT seat_id
-FROM (
-    SELECT 
-        seat_id, 
-        is_free,
-        -- Статус предыдущего места:
-        LAG(is_free) OVER (ORDER BY seat_id) AS prev_free,
-        -- Статус следующего места:
-        LEAD(is_free) OVER (ORDER BY seat_id) AS next_free
-    FROM cinema
-) t
-WHERE is_free = 1 
-  AND (prev_free = 1 OR next_free = 1)
-ORDER BY seat_id ASC;
-```
-
-* **Плюсы:** Работает за один проход по таблице/индексу $O(N)$ без соединений и без накладных расходов на дедупликацию.
-
----
-
-#### 💡 Решение 2: Самообъединение `SELF JOIN` (Работает во всех версиях любых СУБД)
+#### ✅ Решение 1: Самое короткое (Классика LeetCode 603, всего 7 строк)
 Соединяем таблицу `cinema` саму с собой по условию соседства (`ABS(a.seat_id - b.seat_id) = 1`):
 
 ```sql
@@ -1114,10 +1201,36 @@ WHERE a.is_free = 1
 ORDER BY a.seat_id ASC;
 ```
 
+* **Почему это супер-решение на доске:** Пишется за 30 секунд в любой реляционной СУБД (PostgreSQL, MySQL, SQLite, Oracle).
+
 > [!WARNING]
-> **Ловушка дубликатов при `SELF JOIN` (Вопрос с собеседования!):**  
+> **Ловушка дубликатов при `SELF JOIN` (Любимый вопрос интервьюера!):**  
 > Если подряд идут 3 свободных места (например, 3, 4, 5), то у центрального места 4 **два свободных соседа** (3 и 5). При объединении строка 4 сдублируется дважды (`4-3` и `4-5`).  
 > Поэтому использование **`SELECT DISTINCT` здесь строго обязательно!**
+
+---
+
+#### 💡 Решение 2: Однопроходное через `LAG()` и `LEAD()` ($O(N)$ без соединений)
+Для каждого свободного места смотрим статус соседа слева (`LAG`) и справа (`LEAD`):
+
+```sql
+SELECT seat_id
+FROM (
+    SELECT 
+        seat_id, 
+        is_free,
+        LAG(is_free) OVER (ORDER BY seat_id) AS prev_free,
+        LEAD(is_free) OVER (ORDER BY seat_id) AS next_free
+    FROM cinema
+) t
+WHERE is_free = 1 
+  AND (prev_free = 1 OR next_free = 1)
+ORDER BY seat_id ASC;
+```
+
+* **Плюсы:** Работает за один проход по индексу $O(N)$ без джойнов и без необходимости в `DISTINCT`.
+* **Защита от пропусков в нумерации мест:** если между рядами есть пропуски в `seat_id` (например, места 10 и 21 разделены проходом), то дополнительно проверяют равенство соседних ID:  
+  `AND ((prev_free = 1 AND prev_id = seat_id - 1) OR (next_free = 1 AND next_id = seat_id + 1))`.
 
 ---
 
