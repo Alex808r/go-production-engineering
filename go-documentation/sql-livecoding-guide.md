@@ -13,7 +13,7 @@
 > 📚 **Связанные материалы и практический код:**  
 > - 📖 **[README.md (Главное оглавление базы знаний по Go)](README.md)** — язык Go, память и рантайм; краткая справка — [go-core-cheatsheet.md](go-core-cheatsheet.md).  
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)** — PostgreSQL, `pgxpool`, ACID, MVCC, индексы, EXPLAIN ANALYZE и 30 вопросов.  
-> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 43 задачи по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).  
+> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 47 задач по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).  
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)** — 4-шаговый фреймворк, расчеты и 4 кейса архитектуры.  
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и разбор всех 32 домашних заданий.  
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).  
