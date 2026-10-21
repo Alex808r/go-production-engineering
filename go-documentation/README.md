@@ -17,6 +17,7 @@
 > - ⚡ **[go-std-collections-guide.md (Справочник по strings, slices, maps и errors)](go-std-collections-guide.md)** — шпаргалка и cookbook по самым частым операциям, методам и ловушкам стандартных пакетов Go.
 > - 💡 **[go-secrets-and-traps-guide.md (Секреты, подводные камни и Best Practices Go)](go-secrets-and-traps-guide.md)** — глубокие знания из Uber Go Style Guide и 100 Go Mistakes: struct padding, утечки памяти срезов и map, time.After leak, CFS CPU Throttling в k8s, typed nil.
 > - 🏭 **[go-production-backend-guide.md (Гайд по Промышленной разработке на Go)](go-production-backend-guide.md)** — от учебного кода к боевому Enterprise-сервису: Cleanenv (12-Factor), Graceful Shutdown, `sqlc` + миграции, Prometheus + OpenTelemetry, Resilient HTTP-Client, валидация DTO, JWT и Multi-Stage Dockerfile.
+> - 🐳 **[docker-and-compose-starter-guide.md (Гайд по Docker и Docker Compose с нуля)](docker-and-compose-starter-guide.md)** — ментальная модель контейнеризации, шпаргалка по CLI, тома и сети, Multi-Stage Dockerfile (до 15 МБ), готовый compose-шаблон (Go + Postgres + Redis) и топ-10 ошибок новичков.
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex & GoSearch)](homework-tasks.md)**
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)**
 > - 💻 **[go-livecoding-guide.md (Live-Coding на Go: 47 задач + Гайд по интервью)](go-livecoding-guide.md)** — топ задач от Junior до Senior, 5-шаговый фреймворк решения, табличные тесты и топ-10 вопросов с подвохом.
