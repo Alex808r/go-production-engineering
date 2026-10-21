@@ -17,7 +17,7 @@
 >
 > - 📖 **[README.md (Главное оглавление базы знаний по Go)](README.md)** — глубокий разбор языка, рантайма, структур данных и конкурентности в 6 томах; краткая справка — [go-core-cheatsheet.md](go-core-cheatsheet.md).
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)** — PostgreSQL, `pgxpool`, транзакции ACID, Redis, миграции и 30 вопросов.
-> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 43 задачи по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).
+> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 47 задач по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).
 > - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник)](sql-livecoding-guide.md)** — 28 практических задач на SQL-запросы, JOINs, EXPLAIN ANALYZE и оконные функции.
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)** — 4-шаговый фреймворк, расчеты и 4 кейса архитектуры.
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и примерам курса)](course-codebase-guide.md)** — сквозная карта курса Thinknetica: 22 лекционных модуля (00–21), проекты GoSearch и Lynks, навигатор по домашним заданиям (homework-02–20).

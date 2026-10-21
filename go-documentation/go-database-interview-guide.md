@@ -3,7 +3,7 @@
 > [!TIP]
 > 📚 **Связанные материалы базы знаний и практический код:**
 > - 📖 **[README.md (Главное оглавление базы знаний по Go)](README.md)** — 6 томов: типы данных, конкурентность, память, рантайм и архитектура; краткая справка — [go-core-cheatsheet.md](go-core-cheatsheet.md).
-> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 43 задачи по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).
+> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 47 задач по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).
 > - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник)](sql-livecoding-guide.md)** — 28 практических задач на SQL-запросы, JOINs, EXPLAIN ANALYZE и оконные функции.
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)** — 4-шаговый фреймворк, расчеты и 4 кейса архитектуры.
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и детальный разбор всех 32 домашних заданий.

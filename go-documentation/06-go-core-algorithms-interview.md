@@ -12,7 +12,7 @@
 >   - [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/homework-04) — Циклический двусвязный список со сторожевым элементом Sentinel (`Pop`, `Reverse`).
 >   - [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07) — Реализация алгоритмов быстрой сортировки QuickSort и MergeSort с бенчмарками.
 > - 💡 **Специализированные гайды к интервью:**
->   - 💻 [go-livecoding-guide.md (Live-Coding: 43 задачи)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
+>   - 💻 [go-livecoding-guide.md (Live-Coding: 47 задач)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
 >   - 🗄️ [sql-livecoding-guide.md (Live SQL: 28 задач)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)
 >   - 🗄️ [go-database-interview-guide.md (Собеседование по БД)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)
 > - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Экспресс-подготовка к собеседованию)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#-экспресс-маршрут-подготовки-к-собеседованию-за-1-день-до-интервью).

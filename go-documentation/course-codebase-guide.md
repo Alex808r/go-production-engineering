@@ -336,7 +336,7 @@ flowchart TD
   * [01-basics.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/01-basics.go) — мутации и реалокация срезов при `append`, кодирование строк UTF-8, захват переменных цикла горутинами.
   * [02-channels.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/02-channels.go) — неблокирующий `select`, паттерн «Поставщик-Потребитель» (закрытие канала), обобщенный мультиплексор `FanIn`.
 * 🎯 **Практические гайды для подготовки:**
-  * 💻 **[go-livecoding-guide.md (43 задачи с разбором)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)** — топ livecoding-задач с собеседований.
+  * 💻 **[go-livecoding-guide.md (47 задач с разбором)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)** — топ livecoding-задач с собеседований.
   * 🏛️ **[go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)** — архитектурные вопросы масштабирования.
   * ⚡ **[go-core-cheatsheet.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-core-cheatsheet.md)** — экспресс-шпаргалка по синтаксису и командам.
 

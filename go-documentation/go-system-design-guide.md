@@ -6,7 +6,7 @@
 > 📚 **Полный комплект подготовки к собеседованиям и практический код:**  
 > - 📖 **[README.md (Главное оглавление базы знаний по Go)](README.md)** — 6 томов с глубоким разбором языка, рантайма GMP, памяти и GC; краткая справка — в [go-core-cheatsheet.md](go-core-cheatsheet.md).  
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)** — PostgreSQL, `pgxpool`, транзакции, индексы и Redis.  
-> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 43 задачи по многопоточности, структурам данных и алгоритмам (Junior, Middle, Senior).  
+> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 47 задач по многопоточности, структурам данных и алгоритмам (Junior, Middle, Senior).  
 > - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник)](sql-livecoding-guide.md)** — 28 практических задач на SQL-запросы, JOINs, EXPLAIN ANALYZE и оконные функции.  
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и разбор всех 32 домашних заданий.  
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).  

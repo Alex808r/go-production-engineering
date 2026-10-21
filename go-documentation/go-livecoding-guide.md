@@ -1,4 +1,4 @@
-# 💻 Задачник по Live-Coding на Go (Топ-45 задач с реальных собеседований: Junior, Middle, Senior)
+# 💻 Задачник по Live-Coding на Go (Топ-47 задач с реальных собеседований: Junior, Middle, Senior)
 
 Практическое руководство для подготовки к секции живого программирования (Live-Coding / Coding Interview) на позиции Junior, Middle и Senior Go Developer.
 
@@ -77,6 +77,8 @@
    - [Задача 43: Поиск пропущенного числа — Трюк с XOR и сумма Гаусса (LeetCode #268)](#задача-43-поиск-пропущенного-числа--трюк-с-xor-и-сумма-гаусса-leetcode-268)
    - [Задача 44: Генератор простых чисел с отменой через context.Context (Prime Generator)](#задача-44-генератор-простых-чисел-с-отменой-через-contextcontext-prime-generator)
    - [Задача 45: Конвейерный параллельный подсчёт цифр в словах с отменой (DigitsCounter Pipeline)](#задача-45-конвейерный-параллельный-подсчёт-цифр-в-словах-с-отменой-digitscounter-pipeline)
+   - [Задача 46: Сжатие плато точек временного ряда на графике (Point Plateau Filter)](#задача-46-сжатие-плато-точек-временного-ряда-на-графике-point-plateau-filter)
+   - [Задача 47: Реализация ErrGroup своими руками (Concurrency First-Error with Context Cancel)](#задача-47-реализация-errgroup-своими-руками-concurrency-first-error-with-context-cancel)
 7. [Стратегия Live-Coding и Топ-10 каверзных вопросов с подвохом](#7-стратегия-live-coding-и-топ-10-каверзных-вопросов-с-подвохом)
    - [7.1. Пошаговый 5-шаговый фреймворк поведения на лайвкодинге](#71-пошаговый-5-шаговый-фреймворк-поведения-на-лайвкодинге)
    - [7.2. Шаблон табличных тестов (Table-Driven Tests) прямо на интервью](#72-шаблон-табличных-тестов-table-driven-tests-прямо-на-интервью)
@@ -3035,6 +3037,346 @@ func countDigits(word string) int {
 ```
 
 - **Сложность:** Time $O(N \cdot L)$ параллельно по ядрам CPU (где $N$ — количество слов, $L$ — длина слова), Space $O(N)$ для каналов и мапы.
+
+---
+
+### Задача 46: Сжатие плато точек временного ряда на графике (Point Plateau Filter)
+
+#### 🎯 Условие:
+
+На фронтенд передаётся временной ряд точек графика метрики: `[]Point`, где каждая точка содержит время `Time int64` и числовое значение `Value float64`. Срез уже упорядочен по возрастанию времени (`Time`).
+
+```go
+type Point struct {
+	Time  int64
+	Value float64
+}
+```
+
+При длительном мониторинге метрика часто не меняется часами, образуя горизонтальное **плато** ($V_1 = V_2 = V_3 = \dots = V_k$). Передача миллионов одинаковых промежуточных точек перегружает сеть, парсер JSON и браузерный рендерер (Canvas/SVG).
+
+**Задача:** Напишите функцию фильтрации, которая сжимает горизонтальные плато без визуального искажения графика:
+- Точки **начала** и **конца** горизонтального плато **обязаны сохраняться** (чтобы отрезок графика отрисовался строго от начала изменения до конца).
+- Все **промежуточные** точки внутри плато удаляются.
+- Первая ($i = 0$) и последняя ($i = n - 1$) точки всего временного ряда **всегда сохраняются**.
+- Одиночные точки (перегибы, пилообразные скачки, когда $V_{i-1} \neq V_i \neq V_{i+1}$) **сохраняются**.
+
+Реализуйте эффективное решение:
+1. Вариант со сбором нового среза (`FilterPlateau`).
+2. Оптимизированный in-place вариант с нулевыми аллокациями памяти ($O(1)$ Space, два указателя), переиспользующий базовый массив (`FilterPlateauInPlace`).
+
+#### 💡 Ловушки и частые ошибки:
+
+1. **Краевые случаи $N \le 2$:** Если в срезе 0, 1 или 2 точки, плато не может иметь «внутренних» точек — необходимо сразу вернуть срез без изменений.
+2. **Удаление концов плато:** Частая ошибка — оставлять только одну точку из всей последовательности дубликатов (как в обычном `dedup`). В таком случае горизонтальная линия превращается в наклонную к следующему значению, искажая график! Конечная точка плато перед скачком **обязана остаться**.
+3. **Сравнение вещественных чисел (`float64`):** В задачах на точные дискретные значения используется прямое равенство `p1.Value == p2.Value`. На собеседовании обязательно упомяните, что если значения получаются в результате деления или вычислений с погрешностью IEEE 754, следует использовать сравнение с эпсилоном: `math.Abs(a - b) < 1e-9`.
+4. **Аллокация памяти:** Наивный `append` в цикле без предварительного `make([]Point, 0, cap)` приводит к многократным реаллокациям массива. In-place подход с двумя указателями (`src` и `dst`) работает за $O(1)$ по памяти и особенно ценится на интервью уровня Senior.
+
+#### 🚀 Эталонное решение (Идиоматичный Go):
+
+```go
+package livecoding
+
+type Point struct {
+	Time  int64
+	Value float64
+}
+
+// FilterPlateau сжимает горизонтальные участки графика, возвращая новый срез.
+// Сложность: Time O(N), Space O(N) в худшем случае (когда все точки разные).
+func FilterPlateau(points []Point) []Point {
+	n := len(points)
+	if n <= 2 {
+		return points
+	}
+
+	result := make([]Point, 0, n)
+	// Первая точка всегда сохраняется
+	result = append(result, points[0])
+
+	// Внутренние точки: точка i сохраняется, если она не является внутренней точкой плато
+	// (то есть если её значение отличается от предыдущей ИЛИ от следующей точки)
+	for i := 1; i < n-1; i++ {
+		if points[i].Value != points[i-1].Value || points[i].Value != points[i+1].Value {
+			result = append(result, points[i])
+		}
+	}
+
+	// Последняя точка всегда сохраняется
+	result = append(result, points[n-1])
+	return result
+}
+
+// FilterPlateauInPlace выполняет сжатие на месте без единой аллокации в куче.
+// Использует технику двух указателей (src и dst).
+// Сложность: Time O(N), Space O(1).
+func FilterPlateauInPlace(points []Point) []Point {
+	n := len(points)
+	if n <= 2 {
+		return points
+	}
+
+	// Первая точка остаётся на индексе 0
+	dst := 1
+
+	for src := 1; src < n-1; src++ {
+		if points[src].Value != points[src-1].Value || points[src].Value != points[src+1].Value {
+			points[dst] = points[src]
+			dst++
+		}
+	}
+
+	// Последняя точка графика
+	points[dst] = points[n-1]
+	dst++
+
+	return points[:dst]
+}
+```
+
+#### 🧪 Табличные тесты (Unit Tests):
+
+```go
+func TestFilterPlateau(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    []Point
+		expected []Point
+	}{
+		{
+			name:     "пустой срез",
+			input:    nil,
+			expected: nil,
+		},
+		{
+			name:     "одна точка",
+			input:    []Point{{Time: 1, Value: 10}},
+			expected: []Point{{Time: 1, Value: 10}},
+		},
+		{
+			name:     "две одинаковые точки (крайние сохраняются обе)",
+			input:    []Point{{Time: 1, Value: 10}, {Time: 2, Value: 10}},
+			expected: []Point{{Time: 1, Value: 10}, {Time: 2, Value: 10}},
+		},
+		{
+			name: "сплошное плато из 5 одинаковых точек",
+			input: []Point{
+				{Time: 1, Value: 42},
+				{Time: 2, Value: 42},
+				{Time: 3, Value: 42},
+				{Time: 4, Value: 42},
+				{Time: 5, Value: 42},
+			},
+			expected: []Point{
+				{Time: 1, Value: 42}, // начало плато
+				{Time: 5, Value: 42}, // конец плато
+			},
+		},
+		{
+			name: "пилообразный график (нет плато, все точки сохраняются)",
+			input: []Point{
+				{Time: 1, Value: 10},
+				{Time: 2, Value: 20},
+				{Time: 3, Value: 15},
+				{Time: 4, Value: 30},
+			},
+			expected: []Point{
+				{Time: 1, Value: 10},
+				{Time: 2, Value: 20},
+				{Time: 3, Value: 15},
+				{Time: 4, Value: 30},
+			},
+		},
+		{
+			name: "ступенька из двух плато подряд: [10, 10, 10, 20, 20, 20]",
+			input: []Point{
+				{Time: 1, Value: 10},
+				{Time: 2, Value: 10},
+				{Time: 3, Value: 10},
+				{Time: 4, Value: 20},
+				{Time: 5, Value: 20},
+				{Time: 6, Value: 20},
+			},
+			expected: []Point{
+				{Time: 1, Value: 10}, // начало плато 10
+				{Time: 3, Value: 10}, // конец плато 10
+				{Time: 4, Value: 20}, // начало плато 20
+				{Time: 6, Value: 20}, // конец плато 20
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := FilterPlateau(tt.input)
+			if !reflect.DeepEqual(got, tt.expected) {
+				t.Errorf("FilterPlateau() = %+v, expected %+v", got, tt.expected)
+			}
+
+			if tt.input != nil {
+				inputCopy := make([]Point, len(tt.input))
+				copy(inputCopy, tt.input)
+				gotInPlace := FilterPlateauInPlace(inputCopy)
+				if !reflect.DeepEqual(gotInPlace, tt.expected) {
+					t.Errorf("FilterPlateauInPlace() = %+v, expected %+v", gotInPlace, tt.expected)
+				}
+			}
+		})
+	}
+}
+```
+
+- **Сложность:** Time $O(N)$ (один линейный проход по срезу), Space $O(1)$ для In-Place реализации или $O(N)$ для отдельного результирующего среза.
+
+---
+
+### Задача 47: Реализация ErrGroup своими руками (Concurrency First-Error with Context Cancel)
+
+#### 🎯 Условие:
+
+Напишите собственный примитив синхронизации `Group` (упрощённый аналог `golang.org/x/sync/errgroup`), который координирует запуск параллельных задач, дожидается их завершения и:
+1. Запоминает **первую же** возникшую ошибку.
+2. При возникновении первой ошибки **немедленно отменяет общий контекст**, чтобы другие активные горутины прервали длительную работу и освободили ресурсы.
+3. Метод `Wait()` блокирует вызывающую сторону до завершения **всех** запущенных горутин и возвращает первую возникшую ошибку (или `nil`, если все задачи выполнились успешно).
+
+Сигнатура API:
+
+```go
+type Group struct { ... }
+
+func WithContext(ctx context.Context) (*Group, context.Context)
+func (g *Group) Go(f func() error)
+func (g *Group) Wait() error
+```
+
+#### 💡 Ловушки и частые ошибки:
+
+1. **Гонка данных (Data Race) на переменной `err`:** Запись `g.err = err` без синхронизации при одновременном завершении нескольких горутин с ошибкой немедленно приведёт к гонке (`go test -race`). Решение — атомарный захват первой ошибки через `sync.Once`.
+2. **Утечка горутин (Goroutine Leak) при попытке передать ошибку через канал:** Если использовать небуферизованный канал `errChan <- err`, а `Wait()` читает ошибку только один раз, последующие горутины навсегда зависнут в отправке в канал. `sync.Once` полностью устраняет необходимость в каналах.
+3. **Размещение `wg.Add(1)` внутри горутины:** Если написать `go func() { g.wg.Add(1); ... }()`, возникает состояние гонки: `Wait()` может выполниться раньше, чем планировщик запустит горутину, и функция преждевременно вернёт `nil`. `wg.Add(1)` **обязан вызываться до ключевого слова `go`**!
+4. **Утечка контекста (Context Leak):** Если вызывающий код создал группу через `WithContext(parentCtx)`, отменяемый контекст обязан быть освобождён вызовом функции `cancel()` при завершении `Wait()`, иначе связанные таймеры и структуры контекста не освободятся сборщиком мусора до завершения родительского контекста.
+5. **Повторный запуск горутин после вызова `Wait()`:** В идиоматичном коде `Go()` не должен вызываться параллельно с `Wait()`.
+
+#### 🚀 Эталонное решение (Идиоматичный Go):
+
+```go
+package livecoding
+
+import (
+	"context"
+	"sync"
+)
+
+// Group реализует синхронизацию параллельных горутин с перехватом первой ошибки
+// и отменой общего контекста.
+type Group struct {
+	cancel  context.CancelFunc
+	wg      sync.WaitGroup
+	errOnce sync.Once
+	err     error
+}
+
+// WithContext создаёт новую группу и дочерний контекст с отменой.
+func WithContext(ctx context.Context) (*Group, context.Context) {
+	ctx, cancel := context.WithCancel(ctx)
+	return &Group{cancel: cancel}, ctx
+}
+
+// Go запускает переданную функцию f в новой горутине.
+func (g *Group) Go(f func() error) {
+	g.wg.Add(1)
+
+	go func() {
+		defer g.wg.Done()
+
+		if err := f(); err != nil {
+			g.errOnce.Do(func() {
+				g.err = err
+				if g.cancel != nil {
+					g.cancel() // Немедленно отменяем контекст для остальных горутин
+				}
+			})
+		}
+	}()
+}
+
+// Wait ожидает завершения всех запущенных горутин и возвращает первую возникшую ошибку.
+func (g *Group) Wait() error {
+	g.wg.Wait()
+	if g.cancel != nil {
+		g.cancel() // Гарантированное освобождение ресурсов контекста
+	}
+	return g.err
+}
+```
+
+#### 🧪 Табличные тесты (Unit Tests):
+
+```go
+func TestErrGroup(t *testing.T) {
+	t.Run("все задачи завершились успешно", func(t *testing.T) {
+		g, _ := WithContext(context.Background())
+		for i := 0; i < 5; i++ {
+			g.Go(func() error {
+				return nil
+			})
+		}
+		if err := g.Wait(); err != nil {
+			t.Fatalf("ожидался nil, получено: %v", err)
+		}
+	})
+
+	t.Run("отмена контекста при первой ошибке", func(t *testing.T) {
+		g, ctx := WithContext(context.Background())
+		expectedErr := errors.New("ошибка первой задачи")
+
+		// Горутина 1: завершается с ошибкой
+		g.Go(func() error {
+			time.Sleep(10 * time.Millisecond)
+			return expectedErr
+		})
+
+		// Горутина 2: долгая задача, которая должна прерваться по отмене контекста
+		canceled := make(chan struct{})
+		g.Go(func() error {
+			select {
+			case <-time.After(2 * time.Second):
+				return nil
+			case <-ctx.Done():
+				close(canceled)
+				return ctx.Err()
+			}
+		})
+
+		err := g.Wait()
+		if !errors.Is(err, expectedErr) {
+			t.Fatalf("ожидалась ошибка %v, получено: %v", expectedErr, err)
+		}
+
+		select {
+		case <-canceled:
+			// Успешно прервано по ctx.Done()
+		case <-time.After(500 * time.Millisecond):
+			t.Fatal("горутина 2 не среагировала на отмену контекста")
+		}
+	})
+
+	t.Run("стресс-тест на отсутствие race condition при множественных ошибках", func(t *testing.T) {
+		g, _ := WithContext(context.Background())
+		for i := 0; i < 100; i++ {
+			idx := i
+			g.Go(func() error {
+				return fmt.Errorf("error from task %d", idx)
+			})
+		}
+		if err := g.Wait(); err == nil {
+			t.Fatal("ожидалась ошибка, получен nil")
+		}
+	})
+}
+```
+
+- **Сложность:** Time $O(\max(T_i))$ — время работы ограничено самой долгой задачей, Space $O(1)$ дополнительной памяти (не зависит от числа задач).
 
 ---
 
