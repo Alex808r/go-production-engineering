@@ -1,4 +1,4 @@
-# 🗄️ Задачник по Live SQL (Топ-28 практических задач с собеседований: Junior, Middle, Senior)
+# 🗄️ Задачник по Live SQL (Топ-29 практических задач с собеседований: Junior, Middle, Senior)
 
 Практическое руководство для подготовки к написанию SQL-запросов в реальном времени (Live SQL Coding) на позиции Junior, Middle и Senior Backend Go Developer.
 
@@ -18,7 +18,7 @@
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и разбор всех 32 домашних заданий.  
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–21), проекты GoSearch и Lynks, ДЗ (homework-02–20).  
 > - 💻 **Код лекций:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql) (схемы DDL и аналитические запросы SQL), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps) (интерфейсы БД и репозитории).  
-> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15) (схема БД кинотеатра, данные и запросы), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов).
+> - 📁 **Решения ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15) (схема БД кинотеатра, данные и запросы), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16) (PostgreSQL репозиторий фильмов).  
 
 ---
 
@@ -59,6 +59,7 @@
    - [Задача 26: Атомарный UPSERT (INSERT ... ON CONFLICT DO UPDATE)](#задача-26-атомарный-upsert-insert--on-conflict-do-update)
    - [Задача 27: Заполнение пропусков во временных рядах через GENERATE_SERIES](#задача-27-заполнение-пропусков-во-временных-рядах-через-generate_series)
    - [Задача 28: Индексируемые условия дат (SARGable запросы vs DATE_TRUNC)](#задача-28-индексируемые-условия-дат-sargable-запросы-vs-date_trunc)
+   - [Задача 29: Поиск смежных свободных мест (Consecutive Available Seats / Кинотеатр)](#задача-29-поиск-смежных-свободных-мест-consecutive-available-seats--кинотеатр)
 
 ---
 
@@ -1051,4 +1052,114 @@ WHERE created_at >= '2026-09-29 00:00:00+03'
 ```
 
 * **Результат в плане EXPLAIN:** Метод доступа меняется на `Index Scan` по индексу `idx_transactions_created_at` со сложностью $O(\log N + K)$, где $K$ — число транзакций за выбранный день. Время падает с сотен миллисекунд до десятых долей миллисекунды.
+
+---
+
+### Задача 29: Поиск смежных свободных мест (Consecutive Available Seats / Кинотеатр)
+
+#### 🎯 Условие:
+Таблица бронирования мест в кинотеатре `cinema (seat_id INT PRIMARY KEY, is_free INT)`.  
+Значение `is_free = 1` означает, что место свободно, `0` — занято. Поле `seat_id` непрерывно возрастает с шагом 1.
+
+Напишите SQL-запрос, который возвращает все **последовательно доступные места** (минимальная длина непрерывной цепочки свободных мест — 2 места). Одиночные свободные места без свободных соседей слева или справа выводиться **не должны**.  
+Результат отсортируйте по `seat_id` по возрастанию.
+
+**Пример данных:**
+| seat_id | is_free | Попадает в результат? | Причина |
+| :--- | :--- | :--- | :--- |
+| 1 | 1 | ❌ Нет | Одиночное место (сосед 2 занят) |
+| 2 | 0 | ❌ Нет | Занято |
+| 3 | 1 | ✅ Да | Имеет свободного соседа 4 |
+| 4 | 1 | ✅ Да | Имеет свободных соседей 3 и 5 |
+| 5 | 1 | ✅ Да | Имеет свободного соседа 4 |
+
+**Ожидаемый вывод:** `[3, 4, 5]`.
+
+---
+
+#### 💡 Решение 1: Оконные функции `LAG()` и `LEAD()` (Самое быстрое и читаемое)
+Для каждого свободного места смотрим статус предыдущего (`seat_id - 1`) и следующего (`seat_id + 1`) места:
+
+```sql
+SELECT seat_id
+FROM (
+    SELECT 
+        seat_id, 
+        is_free,
+        -- Статус предыдущего места:
+        LAG(is_free) OVER (ORDER BY seat_id) AS prev_free,
+        -- Статус следующего места:
+        LEAD(is_free) OVER (ORDER BY seat_id) AS next_free
+    FROM cinema
+) t
+WHERE is_free = 1 
+  AND (prev_free = 1 OR next_free = 1)
+ORDER BY seat_id ASC;
+```
+
+* **Плюсы:** Работает за один проход по таблице/индексу $O(N)$ без соединений и без накладных расходов на дедупликацию.
+
+---
+
+#### 💡 Решение 2: Самообъединение `SELF JOIN` (Работает во всех версиях любых СУБД)
+Соединяем таблицу `cinema` саму с собой по условию соседства (`ABS(a.seat_id - b.seat_id) = 1`):
+
+```sql
+SELECT DISTINCT a.seat_id
+FROM cinema a
+JOIN cinema b 
+    ON ABS(a.seat_id - b.seat_id) = 1
+WHERE a.is_free = 1 
+  AND b.is_free = 1
+ORDER BY a.seat_id ASC;
+```
+
+> [!WARNING]
+> **Ловушка дубликатов при `SELF JOIN` (Вопрос с собеседования!):**  
+> Если подряд идут 3 свободных места (например, 3, 4, 5), то у центрального места 4 **два свободных соседа** (3 и 5). При объединении строка 4 сдублируется дважды (`4-3` и `4-5`).  
+> Поэтому использование **`SELECT DISTINCT` здесь строго обязательно!**
+
+---
+
+#### 💡 Решение 3: Обобщение на произвольную длину $K \ge N$ (Паттерн Gaps and Islands)
+Если на собеседовании усложнят задачу: *«Найти места, входящие в непрерывную свободную цепочку длиной от 3 (или 5) мест подряд»*:
+
+```sql
+WITH NumberedFreeSeats AS (
+    -- Фильтруем свободные места и нумеруем их:
+    SELECT 
+        seat_id,
+        seat_id - ROW_NUMBER() OVER (ORDER BY seat_id) AS island_group
+    FROM cinema
+    WHERE is_free = 1
+),
+IslandSizes AS (
+    -- Считаем размер каждого непрерывного островка:
+    SELECT 
+        seat_id,
+        COUNT(*) OVER (PARTITION BY island_group) AS streak_len
+    FROM NumberedFreeSeats
+)
+SELECT seat_id
+FROM IslandSizes
+WHERE streak_len >= 3 -- Параметр минимальной длины цепочки
+ORDER BY seat_id ASC;
+```
+
+---
+
+#### 🎁 Бонус с собеседования: Замена `NULL` на дефолт (`COALESCE` vs `CASE WHEN`)
+Частый вопрос интервьюера: *«Как вывести имя человека и город (`LEFT JOIN address`), а если города нет — вывести вместо NULL строку 'Unknown'?»*
+
+```sql
+-- ✅ Идиоматично и лаконично (функция возвращает первый аргумент, не равный NULL):
+SELECT 
+    p.name, 
+    COALESCE(a.city, 'Unknown') AS city
+FROM person p
+LEFT JOIN address a ON p.id = a.person_id;
+
+-- Эквивалент через CASE WHEN (более громоздкий):
+-- CASE WHEN a.city IS NOT NULL THEN a.city ELSE 'Unknown' END AS city
+```
 
