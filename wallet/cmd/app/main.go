@@ -10,6 +10,12 @@ import (
 	"syscall"
 	"time"
 
+	// --------------------------------------------------------------------------
+	// Внутренние пакеты сервиса wallet:
+	// Префикс импорта "github.com/Alex808r/wallet" совпадает с именем модуля в go.mod.
+	// Компилятор Go разрешает эти импорты ЛОКАЛЬНО в каталоге проекта без сетевых обращений.
+	// Использование полного URL-пути — каноничный стандарт (Best Practice) экосистемы Go.
+	// --------------------------------------------------------------------------
 	"github.com/Alex808r/wallet/config"
 	httpdelivery "github.com/Alex808r/wallet/internal/delivery/http"
 	"github.com/Alex808r/wallet/internal/repository/postgres"

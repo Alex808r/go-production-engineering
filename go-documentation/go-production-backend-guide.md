@@ -18,6 +18,10 @@
 6. [Валидация входящих данных (DTO Validation) и ошибки RFC 7807](#6-валидация-входящих-данных-dto-validation-и-ошибки-rfc-7807)
 7. [Аутентификация: JWT (Access/Refresh), Context Injection и Pipeline Middleware](#7-аутентификация-jwt-accessrefresh-context-injection-и-pipeline-middleware)
 8. [Production Tooling: golangci-lint, Makefile и Multi-Stage Dockerfile](#8-production-tooling-golangci-lint-makefile-и-multi-stage-dockerfile)
+9. [Боевой CI/CD пайплайн на GitHub Actions (Lint, Test, Vulncheck, Docker Buildx)](#9-боевой-cicd-пайплайн-на-github-actions)
+10. [Продвинутая работа с Apache Kafka: Transactional Outbox, Consumer Groups и DLQ](#10-продвинутая-работа-с-apache-kafka-transactional-outbox-consumer-groups-и-dlq)
+11. [gRPC Interceptors: Цепочки Middleware для Enterprise-микросервисов](#11-grpc-interceptors-цепочки-middleware-для-enterprise-микросервисов)
+12. [Безопасность приложений на Go (AppSec): Защита от OOM, SSRF, Timing Attacks](#12-безопасность-приложений-на-go-appsec-защита-от-oom-ssrf-timing-attacks)
 
 ---
 
@@ -786,3 +790,753 @@ ENTRYPOINT ["/bin/app"]
 > 2. **Размер:** Всего ~18 МБ вместо ~1 ГБ стандартного Go-образа.
 > 3. **Быстрый CI:** Слой `go mod download` кэшируется и не перезакачивается, пока не изменились зависимости.
 > 4. **Корректный TLS:** В образ скопированы `ca-certificates.crt`, поэтому сервис сможет ходить в сторонние HTTPS API без ошибок `x509: certificate signed by unknown authority`.
+
+---
+
+## 9. Боевой CI/CD пайплайн на GitHub Actions
+
+### Архитектура современного Go CI/CD
+В современных высоконагруженных командах CI/CD пайплайн выполняет четыре критических барьера качества (Quality Gates) перед мержем в основную ветку:
+1. **Fast-Fail Линтинг (`golangci-lint`):** проверка кодстайла, утечек памяти, необработанных ошибок (`errcheck`), невыровненных структур (`fieldalignment`) и подозрительных конструкций (`govet`, `staticcheck`).
+2. **Тестирование с детектором гонок (`-race`) и покрытием:** обязательный запуск unit- и integration-тестов под флагом `-race`. В проде флаг `-race` не используется из-за замедления в 2–5 раз и роста потребления памяти, но в CI он предотвращает 99% плавающих дедлоков и дата-рейсов.
+3. **Сканирование уязвимостей (`govulncheck`):** официальный анализатор Go Vulnerability Database от команды Go. В отличие от общих CVE-сканеров, `govulncheck` строит граф вызовов и алертит **только тогда, когда ваш код реально вызывает уязвимую функцию из библиотеки**, полностью устраняя ложные срабатывания (False Positives).
+4. **Сборка и публикация Multi-Arch Docker-образа:** сборка через Docker Buildx с кэшированием слоев в GitHub Actions Cache (`type=gha`), что сокращает время сборки с 3 минут до 15 секунд.
+
+### Эталонный рабочий файл `.github/workflows/ci.yml`:
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+# Автоматически отменяем предыдущие незавершенные запуски для того же PR:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GO_VERSION: '1.23'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 1. ЛИНТИНГ И СТАТИЧЕСКИЙ АНАЛИЗ
+  # ---------------------------------------------------------------------------
+  lint:
+    name: Golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: false # Кэшированием управляет golangci-lint action
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.61.0
+          args: --timeout=5m --verbose
+
+  # ---------------------------------------------------------------------------
+  # 2. ТЕСТИРОВАНИЕ С ДЕТЕКТОРОМ ГОНОК И ПОКРЫТИЕМ
+  # ---------------------------------------------------------------------------
+  test:
+    name: Tests & Race Detector
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Download Go modules
+        run: go mod download && go mod verify
+
+      - name: Run tests with -race
+        run: |
+          go test -v -race -covermode=atomic -coverprofile=coverage.out ./...
+
+      - name: Check minimum coverage (threshold: 70%)
+        run: |
+          TOTAL_COVERAGE=$(go tool cover -func=coverage.out | grep total | awk '{print substr($3, 1, length($3)-1)}')
+          echo "Total coverage: ${TOTAL_COVERAGE}%"
+          if (( $(echo "$TOTAL_COVERAGE < 70.0" | bc -l) )); then
+            echo "❌ Coverage is below required threshold of 70%!"
+            exit 1
+          fi
+
+  # ---------------------------------------------------------------------------
+  # 3. АУДИТ УЯЗВИМОСТЕЙ (GOVULNCHECK)
+  # ---------------------------------------------------------------------------
+  security:
+    name: Security Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Run govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: ${{ env.GO_VERSION }}
+          go-package: ./...
+
+  # ---------------------------------------------------------------------------
+  # 4. СБОРКА И КЭШИРОВАНИЕ DOCKER-ОБРАЗА ЧЕРЕЗ BUILDX
+  # ---------------------------------------------------------------------------
+  build-docker:
+    name: Build & Push Docker Image
+    needs: [lint, test, security]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=sha,format=short
+
+      - name: Build and Push with GHA Caching
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+```
+
+---
+
+## 10. Продвинутая работа с Apache Kafka: Transactional Outbox, Consumer Groups и DLQ
+
+### Проблема двойной записи (Dual-Write Problem)
+Типичная архитектурная катастрофа в микросервисах:
+1. Сервис оформляет платеж: сохраняет заказ в PostgreSQL со статусом `PAID`.
+2. Сервис отправляет событие `OrderPaidEvent` в Kafka для складского сервиса.
+3. **Что если сеть до Kafka моргнула или брокер упал?**  
+   Заказ оплачен в базе, деньги списаны, но склад не получил уведомление — заказ завис навсегда.
+4. **Что если сначала писать в Kafka, а потом в Postgres?**  
+   Если база вернет ошибку (deadlock, уникальный ключ), сообщение в Kafka уже ушло — склад отправит товар, за который не списаны деньги.
+
+---
+
+### Паттерн Transactional Outbox (Золотой стандарт надежности)
+Решение: **сохранять доменную сущность и исходящее событие в одной локальной ACID-транзакции PostgreSQL**.
+
+```
+[HTTP Request: Оплата]
+         │
+         ▼
+ ┌───────────────────────────────────────────────┐
+ │ PostgreSQL Local ACID Transaction             │
+ │  1. INSERT INTO orders (...) VALUES (...)     │
+ │  2. INSERT INTO outbox_events (topic, payload)│
+ └───────────────────────────────────────────────┘
+         │ (Гарантия атомарности 100%)
+         ▼
+ ┌───────────────────────────────────────────────┐
+ │ Background Outbox Worker (Go Goroutine)       │
+ │  SELECT FOR UPDATE SKIP LOCKED ...            │
+ │  kafkaProducer.Publish(event)                 │
+ │  UPDATE outbox_events SET status = 'PUBLISHED'│
+ └───────────────────────────────────────────────┘
+         │
+         ▼
+     [Kafka Broker]
+```
+
+#### DDL таблицы Outbox:
+```sql
+CREATE TABLE outbox_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    aggregate_type VARCHAR(64) NOT NULL,
+    aggregate_id VARCHAR(64) NOT NULL,
+    event_type VARCHAR(64) NOT NULL,
+    topic VARCHAR(128) NOT NULL,
+    payload JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    retry_count INT NOT NULL DEFAULT 0,
+    last_error TEXT
+);
+
+CREATE INDEX idx_outbox_pending ON outbox_events (created_at) WHERE status = 'PENDING';
+```
+
+#### Реализация воркера Outbox на Go:
+```go
+package outbox
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log/slog"
+	"time"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/segmentio/kafka-go"
+)
+
+type Event struct {
+	ID      string          `db:"id"`
+	Topic   string          `db:"topic"`
+	Payload json.RawMessage `db:"payload"`
+}
+
+type OutboxProcessor struct {
+	pool   *pgxpool.Pool
+	writer *kafka.Writer
+	logger *slog.Logger
+}
+
+func (p *OutboxProcessor) Start(ctx context.Context) {
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			if err := p.processBatch(ctx); err != nil {
+				p.logger.Error("failed to process outbox batch", "error", err)
+			}
+		}
+	}
+}
+
+func (p *OutboxProcessor) processBatch(ctx context.Context) error {
+	tx, err := p.pool.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	// Блокируем до 100 записей через SKIP LOCKED, чтобы параллельные поды не конфликтовали:
+	rows, err := tx.Query(ctx, `
+		SELECT id, topic, payload 
+		FROM outbox_events 
+		WHERE status = 'PENDING' 
+		ORDER BY created_at ASC 
+		LIMIT 100 
+		FOR UPDATE SKIP LOCKED
+	`)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	var events []Event
+	for rows.Next() {
+		var e Event
+		if err := rows.Scan(&e.ID, &e.Topic, &e.Payload); err != nil {
+			return err
+		}
+		events = append(events, e)
+	}
+
+	if len(events) == 0 {
+		return nil
+	}
+
+	// Отправляем сообщения в Kafka батчем:
+	kafkaMessages := make([]kafka.Message, len(events))
+	eventIDs := make([]string, len(events))
+	for i, e := range events {
+		kafkaMessages[i] = kafka.Message{
+			Topic: e.Topic,
+			Key:   []byte(e.ID),
+			Value: e.Payload,
+			Time:  time.Now(),
+		}
+		eventIDs[i] = e.ID
+	}
+
+	if err := p.writer.WriteMessages(ctx, kafkaMessages...); err != nil {
+		return fmt.Errorf("kafka write failed: %w", err)
+	}
+
+	// Помечаем отправленные события:
+	_, err = tx.Exec(ctx, `
+		UPDATE outbox_events 
+		SET status = 'PUBLISHED' 
+		WHERE id = ANY($1)
+	`, eventIDs)
+	if err != nil {
+		return err
+	}
+
+	return tx.Commit(ctx)
+}
+```
+
+---
+
+### Consumer Groups, ручной коммит и Graceful Rebalance
+При автокоммите (`commit.interval`) оффсет сдвигается в фоне по таймеру. Если под умер во время обработки сложного сообщения, следующее сообщение уже скоммичено $\to$ **потеря данных**!
+
+#### ✅ Эталонный цикл консьюмера с ручным коммитом:
+```go
+package consumer
+
+import (
+	"context"
+	"errors"
+	"log/slog"
+	"time"
+
+	"github.com/segmentio/kafka-go"
+)
+
+type OrderConsumer struct {
+	reader *kafka.Reader
+	logger *slog.Logger
+}
+
+func (c *OrderConsumer) Run(ctx context.Context) error {
+	for {
+		// 1. FetchMessage забирает сообщение, но НЕ коммитит оффсет:
+		msg, err := c.reader.FetchMessage(ctx)
+		if err != nil {
+			if errors.Is(err, context.Canceled) {
+				return nil // Штатный shutdown
+			}
+			c.logger.Error("failed to fetch message", "error", err)
+			time.Sleep(1 * time.Second)
+			continue
+		}
+
+		// 2. Бизнес-обработка сообщения:
+		if err := c.handleMessage(ctx, msg); err != nil {
+			c.logger.Error("business handling failed", "key", string(msg.Key), "error", err)
+			// При критической ошибке НЕ коммитим — сообщение повторится или уйдет в DLQ
+			continue
+		}
+
+		// 3. Ручной коммит оффсета ТОЛЬКО после успешной бизнес-обработки:
+		if err := c.reader.CommitMessages(ctx, msg); err != nil {
+			c.logger.Error("failed to commit offset", "error", err)
+		}
+	}
+}
+
+func (c *OrderConsumer) handleMessage(ctx context.Context, msg kafka.Message) error {
+	// Десериализация и вызов UseCase
+	return nil
+}
+```
+
+---
+
+### Dead Letter Queue (DLQ) и защита от Poison Pill
+Если в топик попало поврежденное сообщение («ядовитая таблетка»), консьюмер будет падать на нем бесконечно, останавливая вычитку всей партиции.
+
+#### Паттерн DLQ с заголовком попыток (`x-retry-count`):
+```go
+func (c *OrderConsumer) HandleWithDLQ(ctx context.Context, msg kafka.Message, dlqWriter *kafka.Writer) {
+	err := c.processOrder(ctx, msg.Value)
+	if err == nil {
+		_ = c.reader.CommitMessages(ctx, msg)
+		return
+	}
+
+	// Считываем текущее число ретраев из заголовков Kafka:
+	retries := 0
+	for _, h := range msg.Headers {
+		if h.Key == "x-retry-count" && len(h.Value) > 0 {
+			retries = int(h.Value[0])
+		}
+	}
+
+	if retries < 3 {
+		// Отправляем в retry-топик с инкрементом счетчика:
+		msg.Headers = append(msg.Headers, kafka.Header{Key: "x-retry-count", Value: []byte{byte(retries + 1)}})
+		_ = dlqWriter.WriteMessages(ctx, kafka.Message{
+			Topic:   "orders-retry",
+			Key:     msg.Key,
+			Value:   msg.Value,
+			Headers: msg.Headers,
+		})
+	} else {
+		// Превышен лимит ретраев -> отправляем в DLQ топик для ручного разбора инженерами:
+		c.logger.Warn("message moved to DLQ", "key", string(msg.Key), "error", err)
+		_ = dlqWriter.WriteMessages(ctx, kafka.Message{
+			Topic:   "orders-dlq",
+			Key:     msg.Key,
+			Value:   msg.Value,
+			Headers: append(msg.Headers, kafka.Header{Key: "x-dead-reason", Value: []byte(err.Error())}),
+		})
+	}
+
+	// Коммитим оффсет основного топика, чтобы очередь не зависала:
+	_ = c.reader.CommitMessages(ctx, msg)
+}
+```
+
+---
+
+## 11. gRPC Interceptors: Цепочки Middleware для Enterprise-микросервисов
+
+### Зачем нужны интерцепторы
+В gRPC интерцепторы выполняют роль HTTP Middleware: они перехватывают каждый входящий вызов до того, как управление попадет в хэндлер.  
+В микросервисной архитектуре сервер **обязан защищаться цепочкой интерцепторов**:
+1. **Recovery:** перехватывать паники внутри методов и возвращать статус `codes.Internal`, не роняя pod.
+2. **Logging:** логировать имя RPC метода, параметры вызова, время выполнения и код завершения через `slog`.
+3. **Metrics:** собирать Prometheus-гистограммы латентности и счетчики кодов ошибок.
+4. **Tracing:** извлекать контекст W3C Trace Context (`traceparent`) из gRPC-метаданных.
+
+---
+
+### Полная реализация цепочки интерцепторов на Go:
+
+```go
+package grpcserver
+
+import (
+	"context"
+	"fmt"
+	"log/slog"
+	"net"
+	"runtime/debug"
+	"time"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
+)
+
+var (
+	grpcDurationHistogram = promauto.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "grpc_request_duration_seconds",
+		Help:    "gRPC request duration in seconds",
+		Buckets: prometheus.DefBuckets,
+	}, []string{"method", "code"})
+)
+
+// ---------------------------------------------------------------------------
+// 1. RECOVERY INTERCEPTOR: Защита от падений при panic
+// ---------------------------------------------------------------------------
+func RecoveryInterceptor(logger *slog.Logger) grpc.UnaryServerInterceptor {
+	return func(
+		ctx context.Context,
+		req any,
+		info *grpc.UnaryServerInfo,
+		handler grpc.UnaryHandler,
+	) (resp any, err error) {
+		defer func() {
+			if r := recover(); r != nil {
+				stack := string(debug.Stack())
+				logger.ErrorContext(ctx, "panic recovered in gRPC handler",
+					"method", info.FullMethod,
+					"panic", fmt.Sprintf("%v", r),
+					"stack", stack,
+				)
+				err = status.Errorf(codes.Internal, "internal server error: panic recovered")
+			}
+		}()
+		return handler(ctx, req)
+	}
+}
+
+// ---------------------------------------------------------------------------
+// 2. LOGGING & METRICS INTERCEPTOR: Наблюдаемость каждого RPC
+// ---------------------------------------------------------------------------
+func LoggingMetricsInterceptor(logger *slog.Logger) grpc.UnaryServerInterceptor {
+	return func(
+		ctx context.Context,
+		req any,
+		info *grpc.UnaryServerInfo,
+		handler grpc.UnaryHandler,
+	) (any, error) {
+		start := time.Now()
+
+		resp, err := handler(ctx, req)
+
+		duration := time.Since(start)
+		st, _ := status.FromError(err)
+		codeStr := st.Code().String()
+
+		// Записываем метрику в Prometheus:
+		grpcDurationHistogram.WithLabelValues(info.FullMethod, codeStr).Observe(duration.Seconds())
+
+		// Структурированный лог вызова:
+		level := slog.LevelInfo
+		if st.Code() != codes.OK {
+			level = slog.LevelWarn
+		}
+		if st.Code() == codes.Internal || st.Code() == codes.Unknown {
+			level = slog.LevelError
+		}
+
+		logger.Log(ctx, level, "grpc request processed",
+			"method", info.FullMethod,
+			"code", codeStr,
+			"duration_ms", duration.Milliseconds(),
+		)
+
+		return resp, err
+	}
+}
+
+// ---------------------------------------------------------------------------
+// 3. TRACE CONTEXT INTERCEPTOR: Проброс W3C TraceID из метаданных
+// ---------------------------------------------------------------------------
+func TraceContextInterceptor() grpc.UnaryServerInterceptor {
+	return func(
+		ctx context.Context,
+		req any,
+		info *grpc.UnaryServerInfo,
+		handler grpc.UnaryHandler,
+	) (any, error) {
+		md, ok := metadata.FromIncomingContext(ctx)
+		if ok {
+			// Читаем заголовок X-Request-ID или W3C traceparent:
+			if requestIDs := md.Get("x-request-id"); len(requestIDs) > 0 {
+				ctx = context.WithValue(ctx, "request_id", requestIDs[0])
+			}
+		}
+		return handler(ctx, req)
+	}
+}
+
+// ---------------------------------------------------------------------------
+// СБОРКА И ЗАПУСК СЕРВЕРА С ЦЕПОЧКОЙ INTERCEPTORS:
+// ---------------------------------------------------------------------------
+func StartGRPCServer(port string, logger *slog.Logger) (*grpc.Server, error) {
+	lis, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		return nil, err
+	}
+
+	// Порядок чейнинга критичен:
+	// Сначала Recovery, затем Tracing, затем Logging/Metrics, затем сам Handler:
+	server := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			RecoveryInterceptor(logger),
+			TraceContextInterceptor(),
+			LoggingMetricsInterceptor(logger),
+		),
+	)
+
+	logger.Info("gRPC server listening", "port", port)
+	go func() {
+		if err := server.Serve(lis); err != nil {
+			logger.Error("gRPC server stopped", "error", err)
+		}
+	}()
+
+	return server, nil
+}
+```
+
+---
+
+## 12. Безопасность приложений на Go (AppSec): Защита от OOM, SSRF, Timing Attacks
+
+### 1. Защита от отказа в обслуживании (DoS & Memory Exhaustion)
+
+#### ❌ Ловушка `io.ReadAll(r.Body)`:
+```go
+// ❌ СМЕРТЕЛЬНО ДЛЯ PRODUCTION:
+body, err := io.ReadAll(r.Body) // Если злоумышленник отправит 2 ГБ поток, сервер получит OOMKilled!
+```
+
+#### ✅ Эталонная защита через `http.MaxBytesReader`:
+```go
+func HandleUpload(w http.ResponseWriter, r *http.Request) {
+    const maxUploadSize = 10 << 20 // 10 Мегабайт
+
+    // MaxBytesReader оборачивает r.Body и возвращает ошибку при превышении лимита:
+    r.Body = http.MaxBytesReader(w, r.Body, maxUploadSize)
+
+    body, err := io.ReadAll(r.Body)
+    if err != nil {
+        var maxBytesErr *http.MaxBytesError
+        if errors.As(err, &maxBytesErr) {
+            http.Error(w, "Request body is too large (max 10MB)", http.StatusRequestEntityTooLarge)
+            return
+        }
+        http.Error(w, "Failed to read request body", http.StatusBadRequest)
+        return
+    }
+    // Обработка body
+}
+```
+
+#### Обязательная защита от Slowloris атак на `http.Server`:
+Злоумышленник открывает тысячи TCP-соединений и шлет заголовки по 1 байту раз в минуту, парализуя сервер.
+```go
+server := &http.Server{
+    Addr:              ":8080",
+    Handler:           router,
+    ReadHeaderTimeout: 2 * time.Second,  // 🛡️ Защита от Slowloris: заголовки должны прийти за 2 секунды!
+    ReadTimeout:       10 * time.Second, // Время на чтение тела запроса
+    WriteTimeout:      15 * time.Second, // Время на формирование ответа клиенту
+    IdleTimeout:       60 * time.Second, // Таймаут keep-alive соединений
+    MaxHeaderBytes:    1 << 19,          // 512 КБ максимум на заголовки
+}
+```
+
+---
+
+### 2. Криптография и защита от Timing Attacks
+
+#### ❌ Опасность `math/rand`:
+Пакет `math/rand` генерирует **детерминированные псевдослучайные числа**. Если сгенерировать токен сброса пароля или сессионный ID через `math/rand`, злоумышленник, зная алгоритм и пару сгенерированных чисел, может математически восстановить все будущие токены.
+
+#### ✅ Безопасная генерация токенов через `crypto/rand`:
+```go
+import (
+    "crypto/rand"
+    "encoding/hex"
+)
+
+func GenerateSecureToken(lengthBytes int) (string, error) {
+    bytes := make([]byte, lengthBytes)
+    if _, err := rand.Read(bytes); err != nil {
+        return "", fmt.Errorf("failed to generate secure random bytes: %w", err)
+    }
+    return hex.EncodeToString(bytes), nil
+}
+```
+
+#### Защита от атак по времени (Timing Attack) при сравнении хешей:
+При стандартном сравнении строк `token == expectedToken` процессор прерывает сравнение **на первом несовпавшем байте**. Замеряя наносекунды отклика сервера, злоумышленник может посимвольно угадать API-ключ или HMAC-подпись!
+
+```go
+import "crypto/subtle"
+
+// ❌ Уязвимо к Timing Attack:
+// if clientToken == secretApiKey { ... }
+
+// ✅ Безопасно: константное время сравнения независимо от совпадения символов:
+func SecureCompare(a, b string) bool {
+    return subtle.ConstantTimeCompare([]byte(a), []byte(b)) == 1
+}
+```
+
+---
+
+### 3. Защита от Server-Side Request Forgery (SSRF)
+
+#### Угроза:
+Если ваше приложение умеет загружать вебхуки или аватарки по URL, переданному пользователем (`POST /fetch-avatar?url=...`), атакующий передаст адрес внутренней инфраструктуры:
+* `http://169.254.169.254/latest/meta-data/` — сервис метаданных AWS/GCP, отдающий IAM-ключи и секреты инфраструктуры.
+* `http://10.0.0.5:5432` — сканирование внутренних баз данных компании.
+
+#### ✅ Безопасный HTTP-клиент с фильтрацией приватных IP:
+```go
+package security
+
+import (
+	"context"
+	"fmt"
+	"net"
+	"net/http"
+	"syscall"
+	"time"
+)
+
+// NewSafeHTTPClient создает клиент, запрещающий подключения к loopback, private и link-local адресам:
+func NewSafeHTTPClient() *http.Client {
+	dialer := &net.Dialer{
+		Timeout: 5 * time.Second,
+		Control: func(network, address string, c syscall.RawConn) error {
+			host, _, err := net.SplitHostPort(address)
+			if err != nil {
+				return err
+			}
+
+			ip := net.ParseIP(host)
+			if ip == nil {
+				return fmt.Errorf("invalid host IP: %s", host)
+			}
+
+			// Блокируем приватные и служебные диапазоны:
+			if ip.IsLoopback() || ip.IsPrivate() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast() {
+				return fmt.Errorf("access to internal / private network is forbidden (SSRF protection): %s", ip)
+			}
+
+			return nil
+		},
+	}
+
+	transport := &http.Transport{
+		DialContext:         dialer.DialContext,
+		TLSHandshakeTimeout: 5 * time.Second,
+	}
+
+	return &http.Client{
+		Transport: transport,
+		Timeout:   10 * time.Second,
+	}
+}
+```
+
+---
+
+### 4. Защита JWT: предотвращение атаки «alg: none»
+Если библиотека парсит JWT без строгой проверки метода подписи, атакующий может подменить заголовок токена на `{"alg": "none"}` (без подписи) или подсунуть публичный RSA-ключ в HMAC-валидатор.
+
+```go
+import (
+    "fmt"
+    "github.com/golang-jwt/jwt/v5"
+)
+
+func ValidateToken(tokenString string, secretKey []byte) (*jwt.Token, error) {
+    return jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+        // 🛡️ Строго проверяем, что алгоритм подписи именно HMAC-SHA256:
+        if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+            return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+        }
+        return secretKey, nil
+    })
+}
+```
