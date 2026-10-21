@@ -13,28 +13,41 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// WalletHandler обрабатывает входящие HTTP-запросы REST API.
 type WalletHandler struct {
 	service service.WalletService
 }
 
+// NewWalletHandler создает новый экземпляр HTTP-обработчика.
 func NewWalletHandler(svc service.WalletService) *WalletHandler {
 	return &WalletHandler{service: svc}
 }
 
-// HandleOperation processes POST /api/v1/wallet.
+// HandleOperation обрабатывает POST /api/v1/wallet (пополнение или списание).
+// -----------------------------------------------------------------------------
+// Безопасность и обработка:
+// 1. Ограничение размера тела запроса (1 МБ) через io.LimitReader для защиты от DoS-атак переполнением памяти.
+// 2. Десериализация через кастомный UnmarshalJSON, поддерживающий valletId и walletId.
+// 3. Маппинг доменных ошибок на стандартизированные HTTP-коды:
+//    - 400 Bad Request: недостаток средств, невалидный UUID, неверный тип операции, сумма <= 0.
+//    - 404 Not Found: кошелек не найден.
+//    - 200 OK: операция успешно зафиксирована.
+// -----------------------------------------------------------------------------
 func (h *WalletHandler) HandleOperation(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
 
-	body, err := io.ReadAll(io.LimitReader(r.Body, 1<<20)) // 1MB max
+	// Читаем тело с жестким лимитом 1 МБ
+	body, err := io.ReadAll(io.LimitReader(r.Body, 1<<20))
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "failed to read request body")
 		return
 	}
 	defer r.Body.Close()
 
+	// Парсинг и базовая валидация JSON
 	var req domain.WalletOperationRequest
 	if err := json.Unmarshal(body, &req); err != nil {
 		if errors.Is(err, domain.ErrInvalidWalletID) ||
@@ -47,6 +60,7 @@ func (h *WalletHandler) HandleOperation(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	// Выполнение операции на уровне сервиса
 	resp, err := h.service.ProcessOperation(r.Context(), req)
 	if err != nil {
 		switch {
@@ -58,6 +72,7 @@ func (h *WalletHandler) HandleOperation(w http.ResponseWriter, r *http.Request) 
 			errors.Is(err, domain.ErrInvalidWalletID):
 			writeError(w, http.StatusBadRequest, err.Error())
 		default:
+			// Внутренняя непредвиденная ошибка
 			writeError(w, http.StatusInternalServerError, "internal server error")
 		}
 		return
@@ -66,17 +81,20 @@ func (h *WalletHandler) HandleOperation(w http.ResponseWriter, r *http.Request) 
 	writeJSON(w, http.StatusOK, resp)
 }
 
-// HandleGetBalance processes GET /api/v1/wallets/{WALLET_UUID}.
+// HandleGetBalance обрабатывает GET /api/v1/wallets/{WALLET_UUID}.
+// -----------------------------------------------------------------------------
+// Извлекает UUID кошелька из пути запроса, валидирует формат и возвращает текущий баланс.
+// -----------------------------------------------------------------------------
 func (h *WalletHandler) HandleGetBalance(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
 
-	// Extract wallet ID from URL path
+	// Извлечение параметра пути через встроенный функционал Go 1.22+ PathValue
 	idStr := r.PathValue("id")
 	if idStr == "" {
-		// Fallback for paths like /api/v1/wallets/{id}
+		// Резервный разбор пути для обратной совместимости
 		parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
 		if len(parts) > 0 {
 			idStr = parts[len(parts)-1]
@@ -102,7 +120,8 @@ func (h *WalletHandler) HandleGetBalance(w http.ResponseWriter, r *http.Request)
 	writeJSON(w, http.StatusOK, resp)
 }
 
-// HandleCreateWallet processes POST /api/v1/wallets (convenience endpoint for creating wallets).
+// HandleCreateWallet обрабатывает POST /api/v1/wallets.
+// Вспомогательный эндпоинт для начального создания кошельков в автотестах.
 func (h *WalletHandler) HandleCreateWallet(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
@@ -143,17 +162,19 @@ func (h *WalletHandler) HandleCreateWallet(w http.ResponseWriter, r *http.Reques
 	writeJSON(w, http.StatusCreated, resp)
 }
 
-// HandleHealth returns system health status.
+// HandleHealth возвращает статус доступности сервиса для Docker / Kubernetes healthcheck.
 func (h *WalletHandler) HandleHealth(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 }
 
+// writeJSON сериализует ответ в JSON с установкой заголовка Content-Type.
 func writeJSON(w http.ResponseWriter, status int, data any) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(status)
 	_ = json.NewEncoder(w).Encode(data)
 }
 
+// writeError формирует унифицированный JSON с сообщением об ошибке.
 func writeError(w http.ResponseWriter, status int, message string) {
 	writeJSON(w, status, map[string]string{"error": message})
 }

@@ -24,13 +24,14 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+// getTestConfig подготавливает тестовую конфигурацию для локального прогона
 func getTestConfig() *config.Config {
 	cfg, err := config.Load("../config.env")
 	if err != nil {
 		cfg = &config.Config{}
 	}
 
-	// Use local test database if available
+	// Если запускается локально (не в CI), используем локальную тестовую базу данных
 	if os.Getenv("CI") == "" && cfg.DBHost == "postgres" {
 		cfg.DBHost = "127.0.0.1"
 		cfg.DBName = "wallet_test"
@@ -45,6 +46,7 @@ func getTestConfig() *config.Config {
 	return cfg
 }
 
+// setupTestApp поднимает изолированное тестовое приложение и тестовый HTTP-сервер
 func setupTestApp(t *testing.T) (*httptest.Server, *postgres.WalletRepo, service.WalletService) {
 	cfg := getTestConfig()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -69,6 +71,20 @@ func setupTestApp(t *testing.T) (*httptest.Server, *postgres.WalletRepo, service
 	return ts, repo, svc
 }
 
+// TestConcurrency_1000_RPS_SingleWallet — ключевой нагрузочный стресс-тест.
+// -----------------------------------------------------------------------------
+// Цель теста:
+// Доказать выполнение критических требований ТЗ:
+// 1. Обработка 1000 одновременных запросов по ОДНОМУ кошельку.
+// 2. Строго 0 ошибок 50x (Internal Server Error).
+// 3. 100% сохранение финансовой консистентности (отсутствие Lost Updates).
+//
+// Паттерн тестирования:
+// - Создаем кошелек с балансом 100 000.
+// - Создаем 1000 горутин: 500 пополнений по 10 и 500 списаний по 5.
+// - Используем канал-барьер `startBarrier`, чтобы выстрелить всеми 1000 запросами синхронно в одну миллисекунду.
+// - Математическое ожидание: 100000 + 500*10 - 500*5 = 102500.
+// -----------------------------------------------------------------------------
 func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 	ts, repo, _ := setupTestApp(t)
 	if ts == nil {
@@ -81,7 +97,7 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 	walletID := uuid.New()
 	initialBalance := decimal.NewFromInt(100000)
 
-	// Create wallet
+	// Инициализация кошелька с начальным балансом 100000
 	_, err := repo.Create(ctx, walletID, initialBalance)
 	if err != nil {
 		t.Fatalf("failed to create initial wallet: %v", err)
@@ -93,10 +109,12 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 	depositAmount := decimal.NewFromInt(10)
 	withdrawAmount := decimal.NewFromInt(5)
 
+	// Атомарные счетчики статусов ответов для безопасного подсчета из 1000 горутин
 	var success200Count int64
 	var error500Count int64
 	var otherErrorCount int64
 
+	// Настройка HTTP-клиента с увеличенным пулом коннектов под нагрузку
 	client := &http.Client{
 		Timeout: 30 * time.Second,
 		Transport: &http.Transport{
@@ -107,9 +125,10 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 	}
 
 	var wg sync.WaitGroup
+	// Канал-барьер: все горутины ждут закрытия этого канала перед отправкой HTTP-запроса
 	startBarrier := make(chan struct{})
 
-	// Launch 500 deposits and 500 withdrawals simultaneously
+	// Запускаем 500 горутин на пополнение и 500 горутин на списание
 	for i := 0; i < totalRequests; i++ {
 		wg.Add(1)
 		isDeposit := (i < depositCount)
@@ -125,13 +144,13 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 			}
 
 			payload := map[string]any{
-				"valletId":      walletID.String(),
+				"valletId":      walletID.String(), // Проверяем работу с опечаткой из ТЗ
 				"operationType": opType,
 				"amount":        amt,
 			}
 			bodyBytes, _ := json.Marshal(payload)
 
-			<-startBarrier // synchronize start of all 1000 requests
+			<-startBarrier // Блокировка до общего залпа
 
 			resp, err := client.Post(ts.URL+"/api/v1/wallet", "application/json", bytes.NewReader(bodyBytes))
 			if err != nil {
@@ -142,6 +161,7 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 			defer resp.Body.Close()
 			_, _ = io.Copy(io.Discard, resp.Body)
 
+			// Атомарная фиксация кода ответа
 			switch resp.StatusCode {
 			case http.StatusOK:
 				atomic.AddInt64(&success200Count, 1)
@@ -153,7 +173,7 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 		}(isDeposit)
 	}
 
-	// Trigger all 1000 requests at the exact same moment
+	// ЗАЛП: закрываем канал, 1000 горутин одновременно шлют запросы
 	start := time.Now()
 	close(startBarrier)
 	wg.Wait()
@@ -164,7 +184,9 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 	t.Logf("Results: 200 OK = %d, 50x Errors = %d, Other Errors = %d",
 		success200Count, error500Count, otherErrorCount)
 
-	// Requirement: "Ни один запрос не должен быть не обработан (50Х error)"
+	// --------------------------------------------------------------------------
+	// Главная проверка ТЗ: "Ни один запрос не должен быть не обработан (50Х error)"
+	// --------------------------------------------------------------------------
 	if error500Count != 0 {
 		t.Fatalf("CRITICAL: Received %d 500 Internal Server Errors under load!", error500Count)
 	}
@@ -173,8 +195,11 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 		t.Fatalf("expected all %d requests to succeed with 200 OK, got: %d", totalRequests, success200Count)
 	}
 
-	// Verify balance integrity:
-	// initial (100000) + 500 * 10 - 500 * 5 = 100000 + 5000 - 2500 = 102500
+	// --------------------------------------------------------------------------
+	// Проверка финансовой консистентности:
+	// Итоговый баланс = 100000 + (500 * 10) - (500 * 5) = 102500
+	// Ни одно пополнение или списание не должно потеряться
+	// --------------------------------------------------------------------------
 	expectedBalance := initialBalance.Add(decimal.NewFromInt(int64(depositCount * 10))).Sub(decimal.NewFromInt(int64(withdrawCount * 5)))
 
 	getResp, err := client.Get(ts.URL + "/api/v1/wallets/" + walletID.String())
@@ -199,6 +224,8 @@ func TestConcurrency_1000_RPS_SingleWallet(t *testing.T) {
 	t.Logf("SUCCESS: Final balance verified exactly: %v (zero lost updates, zero 50x errors!)", wResp.Balance)
 }
 
+// TestConcurrency_WithdrawExceedingBalance проверяет корректность списания при нехватке денег.
+// При исчерпании баланса сервис обязан возвращать 400 Bad Request, а не 500 Error.
 func TestConcurrency_WithdrawExceedingBalance(t *testing.T) {
 	ts, repo, _ := setupTestApp(t)
 	if ts == nil {
@@ -209,15 +236,15 @@ func TestConcurrency_WithdrawExceedingBalance(t *testing.T) {
 
 	ctx := context.Background()
 	walletID := uuid.New()
-	initialBalance := decimal.NewFromInt(50) // only 50
+	initialBalance := decimal.NewFromInt(50) // Всего 50 единиц
 
 	_, err := repo.Create(ctx, walletID, initialBalance)
 	if err != nil {
 		t.Fatalf("failed to create wallet: %v", err)
 	}
 
-	// Try 10 concurrent withdrawals of 10 each
-	// Exactly 5 must succeed (5 * 10 = 50), and 5 must fail with 400 Bad Request
+	// Запускаем 10 одновременных списаний по 10 единиц
+	// Ровно 5 должны успешно пройти (5 * 10 = 50), а остальные 5 должны отклониться с кодом 400
 	const reqs = 10
 	var successCount int64
 	var insufficientCount int64
@@ -270,7 +297,7 @@ func TestConcurrency_WithdrawExceedingBalance(t *testing.T) {
 		t.Errorf("expected exactly 5 insufficient funds 400 errors, got: %d", insufficientCount)
 	}
 
-	// Final balance must be 0
+	// Итоговый баланс обязан быть ровно 0
 	getResp, err := client.Get(fmt.Sprintf("%s/api/v1/wallets/%s", ts.URL, walletID))
 	if err != nil {
 		t.Fatalf("failed to get balance: %v", err)
