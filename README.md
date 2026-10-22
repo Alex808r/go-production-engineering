@@ -13,7 +13,8 @@
 > - Все решения практических задач и домашних заданий (`homework-02` — `homework-20`), а также сквозные проекты **GoSearch**, **lynks** и высоконагруженный финансовый сервис **wallet** полностью спроектированы, написаны, отлажены и покрыты тестами **самостоятельно**.
 > - Исходные лекционные примеры были существенно переработаны, дополнены подробными комментариями к механизмам рантайма и стандартам production-кода.
 > - Создана фундаментальная авторская энциклопедия **[go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation)** (6 томов глубокой теории Go Core, руководства по Modern Go 1.21–1.24+, Docker & Compose, лайвкодингу, базам данных, System Design, архитектурным паттернам Enterprise и разборам рантайм-ловушек), выходящая далеко за рамки исходной программы курса.
-> - Теоретическая база систематизирует и цитирует эталонные практики современных мировых источников: **Джона Боднера (*Learning Go 2nd Edition*, 2024)** и официального репозитория [learning-go-book-2e](https://github.com/learning-go-book-2e), классики **Алана Донована и Брайана Кернигана (*The Go Programming Language*)**, стайлгайдов **Uber Go** и **Google**, а также разборов ошибок **Тейвы Харшаньи (*100 Go Mistakes*)**.
+> - **Использование материалов книги Джона Боднера:** При написании и расширении энциклопедии [go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation) использованы теоретические материалы и практические примеры из книги **Джона Боднера «Learning Go: An Idiomatic Approach to Real-World Go Programming» (2nd Edition, O'Reilly, 2024)**, а канонические реализации и архитектурные паттерны взяты напрямую из официального репозитория книги: **[learning-go-book-2e (GitHub)](https://github.com/learning-go-book-2e)** с сохранением атрибуции первоисточника.
+> - Теоретическая база также систематизирует и цитирует эталонные практики других мировых источников: классики **Алана Донована и Брайана Кернигана (*The Go Programming Language*)**, стайлгайдов **Uber Go** и **Google**, а также разборов ошибок **Тейвы Харшаньи (*100 Go Mistakes*)**.
 
 Комплексный репозиторий для изучения языка Go с нуля до уверенного Production-уровня и подготовки к техническим собеседованиям (Middle/Senior Go Developer).
 
@@ -24,7 +25,7 @@
   - [GoSearch](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch) — многопоточный поисковый движок (краулер, инвертированный индекс, бинарный поиск, TCP и REST API, веб-интерфейс);
   - [lynks](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks) — распределенный микросервис сокращения ссылок (Clean Architecture, PostgreSQL, Redis/Memcached, Kafka/Event-Driven, Prometheus метрики, Docker Compose);
   - [wallet](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/wallet) — высоконагруженный финансовый REST-сервис управления балансом (1000+ RPS на кошелек, шардированный `KeyLocker`, пул соединений `pgxpool`, строгая изоляция транзакций, идемпотентность, Docker Compose, e2e стресс-тесты под нагрузкой);
-- **Фундаментальную базу знаний** в каталоге [go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation): 6 подробных томов теории, шпаргалки, настольный справочник по стандартным пакетам и коллекциям, гайды по Docker & Compose, базам данных, System Design, Enterprise-стандартам (Kafka Outbox/DLQ, gRPC, CI/CD, AppSec), лайвкодингу (29 задач по SQL и алгоритмы Go) и 14 ловушкам рантайма.
+- **Фундаментальную базу знаний** в каталоге [go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation): 6 подробных томов теории (включая материалы и практические реализации из книги Джона Боднера *«Learning Go 2nd Edition»* и её репозитория [learning-go-book-2e](https://github.com/learning-go-book-2e)), шпаргалки, настольный справочник по стандартным пакетам и коллекциям, гайды по Docker & Compose, базам данных, System Design, Enterprise-стандартам (Kafka Outbox/DLQ, gRPC, CI/CD, AppSec), лайвкодингу (29 задач по SQL и алгоритмы Go) и 14 ловушкам рантайма.
 
 ---
 
@@ -180,7 +181,7 @@ govulncheck ./...
 При проектировании архитектуры учебных сервисов и составлении базы знаний использованы авторитетные профильные издания и официальные стандарты сообщества Go:
 
 1. **Джон Боднер — «Learning Go: An Idiomatic Approach to Real-World Go Programming» (2nd Edition, O'Reilly, 2024):**  
-   Эталонный учебник по современному идиоматичному Go (дженерики, итераторы, паттерны `errors.Is`, `http.ResponseController`, безопасный FFI/Cgo и культура архитектуры). Примеры согласованы с официальным репозиторием [learning-go-book-2e](https://github.com/learning-go-book-2e).
+   Эталонный учебник по современному идиоматичному Go (дженерики, итераторы, паттерны `errors.Is`, `http.ResponseController`, безопасный FFI/Cgo и культура архитектуры). Практические примеры и архитектурные решения в [go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation) взяты и адаптированы напрямую из официального репозитория книги: [github.com/learning-go-book-2e](https://github.com/learning-go-book-2e).
 2. **Алан Донован, Брайан Керниган — «Язык программирования Go» (The Go Programming Language, Addison-Wesley):**  
    Фундаментальный труд от соавторов Unix и языка C об основах дизайна языка, модели памяти и философии Go.
 3. **Тейва Харшаньи — «100 ошибок Go и как их избежать» (100 Go Mistakes and How to Avoid Them, Manning):**  
