@@ -85,6 +85,59 @@ go run .                                          # в первом термин
 curl 'localhost:8080/api/v1/hello?name=Go'        # во втором терминале → {"message":"Hello Go"}
 ```
 
+#### 12.1.1. Управление буферизацией и потоковая отдача (Streaming) через `http.ResponseController` (Go 1.20+)
+
+> 💡 *Пример из официального репозитория книги Jon Bodner: [learning-go-book-2e/ch13 (response_controller)](https://github.com/learning-go-book-2e/ch13/tree/v2/sample_code/response_controller).*
+
+Исторически для принудительного сброса буфера (например, в SSE / Server-Sent Events или при передаче больших файлов частями) разработчики делали type assertion к интерфейсу `http.Flusher`:
+```go
+flusher, ok := w.(http.Flusher)
+```
+Однако если в цепочке стояли middleware-обёртки над `ResponseWriter`, такое приведение часто ломалось (`ok == false`).
+
+В **Go 1.20** представлен тип `http.ResponseController`, который умеет автоматически **разворачивать цепочки middleware** (unwrapping) и предоставляет единый интерфейс управления:
+- `rc.Flush()` — сброс буфера в сетевой сокет.
+- `rc.SetReadDeadline(time.Time)` / `rc.SetWriteDeadline(time.Time)` — динамическая смена таймаутов прямо в процессе обработки запроса.
+- `rc.Hijack()` — перехват низкоуровневого TCP-соединения (для WebSockets).
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+	"net/http"
+	"time"
+)
+
+func streamHandler(w http.ResponseWriter, r *http.Request) {
+	// Создаем ResponseController поверх ResponseWriter
+	rc := http.NewResponseController(w)
+
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+
+	for i := 1; i <= 5; i++ {
+		fmt.Fprintf(w, "Шаг %d: вычисление завершено...\n", i)
+
+		// Принудительно выталкиваем порцию данных клиенту:
+		err := rc.Flush()
+		if err != nil {
+			if errors.Is(err, http.ErrNotSupported) {
+				// Клиент или промежуточный сервер не поддерживает Flusher
+				// (например, HTTP/1.0 без chunked encoding)
+				http.Error(w, "Streaming not supported", http.StatusInternalServerError)
+				return
+			}
+			// Соединение разорвано клиентом или сетевой сбой
+			return
+		}
+		time.Sleep(500 * time.Millisecond)
+	}
+}
+```
+
+Обратите внимание на проверку `errors.Is(err, http.ErrNotSupported)` — это идиоматичный способ убедиться, что базовый транспорт поддерживает стриминг.
+
 ---
 
 ### 12.2. Экосистема роутеров и фреймворков в Go (`chi`, `gin`, `echo`, `fiber`)
