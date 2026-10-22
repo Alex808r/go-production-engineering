@@ -68,6 +68,7 @@
    - [Конструкция if с коротким объявлением (If with Short Statement)](01-go-core-basics.md#12-конструкция-if-с-коротким-объявлением-if-with-short-statement)
    - [Особенности конструкции switch](01-go-core-basics.md#13-особенности-конструкции-switch)
    - [Прерывание вложенных циклов и switch/select: Именованные метки (Labels)](01-go-core-basics.md#14-прерывание-вложенных-циклов-и-switchselect-именованные-метки-labels)
+   - [Оператор goto: строгие правила компилятора и легитимное применение](01-go-core-basics.md#141-оператор-goto-строгие-правила-компилятора-и-легитимное-применение)
    - [Механика конструкции defer](01-go-core-basics.md#15-механика-конструкции-defer)
    - [Особенности работы функции init()](01-go-core-basics.md#16-особенности-работы-функции-init)
 2. [**Функции и модель передачи аргументов (Functions & Pass by Value)**](01-go-core-basics.md#2-функции-и-модель-передачи-аргументов-functions--pass-by-value)
@@ -101,6 +102,7 @@
    - [Многомерные слайсы (Slices of Slices) и динамическая аллокация матриц](01-go-core-basics.md#511-многомерные-слайсы-slices-of-slices-и-динамическая-аллокация-матриц)
    - [Встроенная функция clear() для слайсов (Go 1.21+): clear(s) vs s[:0] vs s = nil](01-go-core-basics.md#512-встроенная-функция-clear-для-слайсов-go-121-clears-vs-s0-vs-s--nil)
    - [Современная функциональная обработка слайсов: библиотека samber/lo (Go Lodash)](01-go-core-basics.md#513-современная-функциональная-обработка-слайсов-библиотека-samberlo-go-lodash)
+   - [Преобразование срезов в массивы и указатели на массив (Go 1.17+ и Go 1.20+)](01-go-core-basics.md#514-преобразование-срезов-в-массивы-и-указатели-на-массив-go-117-и-go-120)
 6. [**Карты (Maps)**](01-go-core-basics.md#6-карты-maps)
    - [Способы создания и инициализации](01-go-core-basics.md#61-способы-создания-и-инициализации)
    - [Поведение nil-мапы, чтение, запись, удаление и очистка clear(m)](01-go-core-basics.md#62-поведение-nil-мапы-чтение-запись-и-удаление)
@@ -131,6 +133,7 @@
 9. [**Методы и Интерфейсы (Methods & Interfaces)**](02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)
    - [Парадигма ООП в Go: Сравнение ООП (Stateful), Процедурного (Stateless) и Функционального стилей](02-go-core-oop-methods.md#90-парадигма-ооп-в-go-методология-stateful-vs-stateless-и-dependency-injection)
    - [Указатели в ресиверах методов (Pointer vs Value Receivers)](02-go-core-oop-methods.md#91-указатели-в-ресиверах-методов-pointer-vs-value-receivers)
+   - [Method Value vs Method Expression и безопасные методы с nil-ресиверами](02-go-core-oop-methods.md#-методы-с-nil-ресиверами-nil-receiver-methods)
    - [Что такое интерфейс: Контракт требований, Duck Typing и сравнение с Ruby](02-go-core-oop-methods.md#92-что-такое-интерфейс-контракт-требований-duck-typing-и-сравнение-с-ruby)
    - [Почему интерфейсы ДОЛЖНЫ быть аргументами функций (Accept interfaces, return structs)](02-go-core-oop-methods.md#почему-интерфейсы-должны-быть-аргументами-функций)
    - [Пустой интерфейс (any / interface{}), Type Assertion и Type Switch](02-go-core-oop-methods.md#93-пустой-интерфейс-any--interface-type-assertion-и-type-switch)
@@ -257,6 +260,7 @@
    - [Назначение файлов go.mod и go.sum](05-go-core-testing-arch.md#192-назначение-файлов-gomod-и-gosum)
    - [Встраивание файлов в бинарник: //go:embed (Go 1.16+)](05-go-core-testing-arch.md#193-встраивание-файлов-в-бинарник-goembed-go-116)
    - [Кодогенерация: go generate](05-go-core-testing-arch.md#194-кодогенерация-go-generate)
+   - [Чтение метаданных сборки в runtime: debug.ReadBuildInfo()](05-go-core-testing-arch.md#195-чтение-метаданных-сборки-в-runtime-debugreadbuildinfo)
 
 20. [**Удаленный вызов процедур (RPC, net/rpc) и gRPC**](05-go-core-testing-arch.md#20-удаленный-вызов-процедур-rpc-netrpc-и-grpc)
 
@@ -344,12 +348,14 @@
 
    - [reflect.TypeOf и reflect.ValueOf](06-go-core-algorithms-interview.md#301-reflecttypeof-и-reflectvalueof)
    - [Инспекция полей структур и тегов](06-go-core-algorithms-interview.md#302-инспекция-полей-структур-и-тегов)
-   - [Почему рефлексия медленная?](06-go-core-algorithms-interview.md#303-почему-рефлексия-медленная)
+   - [Проверка интерфейса на равенство nil: Value.IsNil()](06-go-core-algorithms-interview.md#303-проверка-интерфейса-на-равенство-nil-через-рефлексию-valueisnil)
+   - [Почему рефлексия медленная?](06-go-core-algorithms-interview.md#304-почему-рефлексия-медленная)
 
 31. [**Низкоуровневый доступ: unsafe.Pointer**](06-go-core-algorithms-interview.md#31-низкоуровневый-доступ-unsafepointer)
 
    - [Три правила преобразования unsafe.Pointer](06-go-core-algorithms-interview.md#311-три-правила-преобразования-unsafepointer)
    - [Практический пример: Zero-Copy конверсия byte ↔ string](06-go-core-algorithms-interview.md#312-практический-пример-zero-copy-конверсия-byte-и-string)
+   - [Взлом инкапсуляции (приватные поля) и диагностический флаг -gcflags=-d=checkptr](06-go-core-algorithms-interview.md#313-взлом-инкапсуляции-чтение-и-изменение-неэкспортируемых-приватных-полей-структур)
 
 32. [**Приоритетная очередь: container/heap**](06-go-core-algorithms-interview.md#32-приоритетная-очередь-containerheap)
 
