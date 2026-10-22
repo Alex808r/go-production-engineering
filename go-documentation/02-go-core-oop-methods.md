@@ -2360,6 +2360,67 @@ if errors.As(err, &valErr) {
 | Вызывающему нужны данные об ошибке (поле, код, HTTP-статус)                | Собственный тип с методом `Error()` + `errors.As`                          |
 | Ошибка нужна только для лога, разбирать её никто не будет                  | `fmt.Errorf("...: %w", err)` без специальных типов                         |
 
+#### 10.3.1. Кастомный метод `Is` и паттерн-матчинг ошибок (Wildcard Matching)
+
+> 💡 *Пример из официального репозитория книги Jon Bodner: [learning-go-book-2e/ch09 (custom_is_error_pattern_match)](https://github.com/learning-go-book-2e/ch09/tree/v2/sample_code/custom_is_error_pattern_match).*
+
+По умолчанию `errors.Is(err, target)` сравнивает ошибки оператором `==`. Однако если тип вашей ошибки реализует собственный метод:
+```go
+Is(target error) bool
+```
+функция `errors.Is` вызывает именно его! Это открывает возможность для **шаблонного сопоставления (pattern matching / wildcard matching)**, когда можно проверить принадлежность ошибки ресурсу или категории, игнорируя второстепенные коды или детали:
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type ResourceErr struct {
+	Resource string
+	Code     int
+}
+
+func (re ResourceErr) Error() string {
+	return fmt.Sprintf("%s: %d", re.Resource, re.Code)
+}
+
+// Is реализует частичное совпадение: если в target поле пустое/нулевое,
+// оно считается wildcard-значением (любое значение подходит)
+func (re ResourceErr) Is(target error) bool {
+	other, ok := target.(ResourceErr)
+	if !ok {
+		return false
+	}
+	ignoreResource := other.Resource == ""
+	ignoreCode := other.Code == 0
+	matchResource := other.Resource == re.Resource
+	matchCode := other.Code == re.Code
+
+	return (matchResource || ignoreResource) && (matchCode || ignoreCode)
+}
+
+func main() {
+	err := ResourceErr{Resource: "Database", Code: 404}
+
+	// 1. Точное совпадение:
+	fmt.Println(errors.Is(err, ResourceErr{Resource: "Database", Code: 404})) // true
+
+	// 2. Wildcard: проверяем, что ошибка относится к Database (любой код):
+	fmt.Println(errors.Is(err, ResourceErr{Resource: "Database"})) // true
+
+	// 3. Wildcard: проверяем код 404 для любого ресурса:
+	fmt.Println(errors.Is(err, ResourceErr{Code: 404})) // true
+
+	// 4. Несовпадение:
+	fmt.Println(errors.Is(err, ResourceErr{Resource: "Network"})) // false
+}
+```
+
+Такой подход избавляет от необходимости плодить десятки вспомогательных функций проверки и сохраняет всю выразительность стандартного `errors.Is`.
+
 ---
 
 ### 10.4. Объединение нескольких ошибок: `errors.Join` (Go 1.20+)

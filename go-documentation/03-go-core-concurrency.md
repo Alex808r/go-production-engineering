@@ -584,8 +584,35 @@ flowchart LR
 | **Закрытый канал** (`closed`)        | **Возвращает `zero-value` и `ok = false`** (сначала дочитывает остатки буфера!) | 💥 **`panic: send on closed channel`**       | 💥 **`panic: close of closed channel`** |
 
 > [!TIP]
-> **Использование `nil`-каналов в паттерне `select`:**  
-> Вечная блокировка на `nil`-канале — это не ошибка, а фича языка! При динамическом отключении ветки в `select` достаточно приравнять канал к `nil` (`ch = nil`), и рантайм навсегда перестанет опрашивать эту ветку, не требуя выхода из бесконечного цикла.
+> **Использование `nil`-каналов в паттерне `select` (динамическое отключение веток):**  
+> Вечная блокировка на `nil`-канале — это не ошибка, а фича языка! При динамическом отключении ветки в `select` достаточно приравнять переменную канала к `nil` (`ch = nil`), и рантайм навсегда перестанет опрашивать эту ветку, не требуя выхода из цикла.
+>
+> 💡 *Пример из официального репозитория книги Jon Bodner: [learning-go-book-2e/ch12 (close_case)](https://github.com/learning-go-book-2e/ch12/tree/v2/sample_code/close_case).*
+
+```go
+// Задача: читать из двух каналов до тех пор, пока ОБА не закроются.
+// Если опустить обнуление закрытого канала, чтение из closed-канала
+// будет непрерывно возвращать zero-value и ok=false, сжигая 100% CPU в spin-loop!
+func readFromTwoChannels(in1, in2 <-chan int) {
+    for in1 != nil || in2 != nil {
+        select {
+        case v, ok := <-in1:
+            if !ok {
+                in1 = nil // Отключаем ветку case: nil-канал блокируется в select навсегда!
+                continue
+            }
+            fmt.Println("Значение из in1:", v)
+        case v, ok := <-in2:
+            if !ok {
+                in2 = nil // Отключаем вторую ветку
+                continue
+            }
+            fmt.Println("Значение из in2:", v)
+        }
+    }
+    fmt.Println("Оба канала закрыты, цикл штатно завершён!")
+}
+```
 
 ---
 
@@ -1201,6 +1228,47 @@ func CallC(str string) {
 > [!CAUTION]
 > **Go-код может передать указатель на Go-память в C только в том случае, если эта память сама не содержит других Go-указателей.**  
 > Си-код не имеет права сохранять у себя Go-указатель после завершения вызова функции: сборщик мусора не знает о ссылке из C-кода и может освободить память (а стеки горутин вообще могут перемещаться), что приведёт к порче памяти или `segmentation fault`. Нарушения правил ловятся проверкой рантайма (`panic: runtime error: cgo argument has Go pointer to unpinned Go pointer`). Для долгоживущих ссылок на Go-память используют `runtime.Pinner` (Go 1.21+) или `cgo.Handle`.
+
+> 💡 *Пример передачи непрозрачного дескриптора из репозитория книги Jon Bodner: [learning-go-book-2e/ch16 (handle)](https://github.com/learning-go-book-2e/ch16/tree/v2/sample_code/handle).*
+
+```go
+package main
+
+/*
+#include <stdint.h>
+
+// Эмуляция C-функции, принимающей целочисленный дескриптор вместо сырого указателя
+void register_callback(uintptr_t handle_id);
+*/
+import "C"
+import (
+	"fmt"
+	"runtime/cgo"
+)
+
+type SessionData struct {
+	UserID int
+	Token  string
+}
+
+//export goSessionCallback
+func goSessionCallback(h C.uintptr_t) {
+	// Извлекаем Go-объект обратно по целочисленному дескриптору:
+	handle := cgo.Handle(h)
+	session := handle.Value().(SessionData)
+	fmt.Printf("Получена сессия из Си: UserID=%d, Token=%s\n", session.UserID, session.Token)
+}
+
+func PassSessionToC(s SessionData) {
+	// 1. Создаем безопасный дескриптор в рантайме Go:
+	h := cgo.NewHandle(s)
+	// 2. ОБЯЗАТЕЛЬНО: удаляем дескриптор по окончании использования, иначе утечка в таблице рантайма:
+	defer h.Delete()
+
+	// 3. Передаем в C только uintptr(h) — Си-код не владеет сырым адресом памяти Go:
+	// C.register_callback(C.uintptr_t(h))
+}
+```
 
 #### 4. `CGO_ENABLED=0` в Docker и Production:
 *   С `CGO_ENABLED=1`: бинарник динамически линкуется с системной библиотекой `glibc`. При копировании такого бинарника в минимальный образ `scratch` или `alpine` (где используется `musl`) сервер упадет при старте с ошибкой `file not found` или `sh: app not found`.
