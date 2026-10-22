@@ -49,5 +49,5 @@ go test -v ./lessons/02-syntax/...
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 1: Основы языка Go (Разделы 1–8: Типы, срезы, структуры, указатели)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md)
+- **Теория:** [Том 1.1: Основы языка Go (Разделы 0–3)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md) и [Том 1.2: Структуры данных и память (Разделы 4–8)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-data-structures.md)
 - **Практическое ДЗ:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02) (первая версия краулера GoSearch)

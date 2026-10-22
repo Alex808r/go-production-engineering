@@ -63,7 +63,7 @@ flowchart TD
 ---
 
 ### [Урок 02: Фундаментальный синтаксис и модель памяти](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax)
-* 📖 **Теория:** [Том 1: Разделы 1–8 (Типы, срезы, структуры, указатели, ошибки)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md).
+* 📖 **Теория:** [Том 1.1 и 1.2: Разделы 1–8 (Синтаксис, срезы, структуры, указатели)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md).
 * 💻 **Код лекции:** Директория [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax):
   * `1-basic/` — типы, константы, цикл `for range`.
   * `3-array_slice_map/` — массивы vs срезы (`SliceHeader`: pointer, len, cap, механика `append`), словари `map`.
