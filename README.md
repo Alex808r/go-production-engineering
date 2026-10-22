@@ -13,6 +13,7 @@
 > - Все решения практических задач и домашних заданий (`homework-02` — `homework-20`), а также сквозные проекты **GoSearch**, **lynks** и высоконагруженный финансовый сервис **wallet** полностью спроектированы, написаны, отлажены и покрыты тестами **самостоятельно**.
 > - Исходные лекционные примеры были существенно переработаны, дополнены подробными комментариями к механизмам рантайма и стандартам production-кода.
 > - Создана фундаментальная авторская энциклопедия **[go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation)** (6 томов глубокой теории Go Core, руководства по Modern Go 1.21–1.24+, Docker & Compose, лайвкодингу, базам данных, System Design, архитектурным паттернам Enterprise и разборам рантайм-ловушек), выходящая далеко за рамки исходной программы курса.
+> - Теоретическая база систематизирует и цитирует эталонные практики современных мировых источников: **Джона Боднера (*Learning Go 2nd Edition*, 2024)** и официального репозитория [learning-go-book-2e](https://github.com/learning-go-book-2e), классики **Алана Донована и Брайана Кернигана (*The Go Programming Language*)**, стайлгайдов **Uber Go** и **Google**, а также разборов ошибок **Тейвы Харшаньи (*100 Go Mistakes*)**.
 
 Комплексный репозиторий для изучения языка Go с нуля до уверенного Production-уровня и подготовки к техническим собеседованиям (Middle/Senior Go Developer).
 
@@ -45,12 +46,12 @@ go-course-4/
 ├── lynks/                      # Сквозной проект: микросервисный URL Shortener
 ├── wallet/                     # Сквозной проект: High-Load Wallet REST API (1000+ RPS)
 ├── go-documentation/           # Энциклопедия Go: 6 томов теории и прикладные гайды
-│   ├── 01-go-core-basics.md                # Том 1: Базовый синтаксис, типы, память
-│   ├── 02-go-core-oop-methods.md           # Том 2: ООП, интерфейсы, io
-│   ├── 03-go-core-concurrency.md           # Том 3: Конкурентность, каналы, sync
-│   ├── 04-go-core-backend-web.md           # Том 4: Web, net/http, REST, БД
-│   ├── 05-go-core-testing-arch.md          # Том 5: Тестирование, pprof, Clean Arch, gRPC, очереди
-│   ├── 06-go-core-algorithms-interview.md  # Том 6: Алгоритмы, структуры данных, интервью
+│   ├── 01-go-core-basics.md                # Том 1: Базовый синтаксис, типы, память, срезы, [N]T, goto, clear()
+│   ├── 02-go-core-oop-methods.md           # Том 2: ООП, интерфейсы, io, Google Wire, wildcard errors, errors.Join
+│   ├── 03-go-core-concurrency.md           # Том 3: Конкурентность, каналы, sync, GMP, PressureGauge, cgo.Handle
+│   ├── 04-go-core-backend-web.md           # Том 4: Web, net/http (Go 1.22+), ResponseController streaming, REST, БД
+│   ├── 05-go-core-testing-arch.md          # Том 5: Тестирование (testdata, cache), internal-правила, Clean Arch, gRPC, Kafka
+│   ├── 06-go-core-algorithms-interview.md  # Том 6: Алгоритмы, структуры данных, unsafe/reflect, Swiss Tables, STAR
 │   ├── course-codebase-guide.md            # Путеводитель по кодовой базе репозитория
 │   ├── docker-and-compose-starter-guide.md # Практическое руководство по Docker и Docker Compose
 │   ├── go-core-cheatsheet.md               # Быстрая шпаргалка по Go
@@ -171,3 +172,24 @@ govulncheck ./...
    - Освойте промышленные паттерны в [go-production-backend-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-production-backend-guide.md) (Kafka Transactional Outbox, DLQ, gRPC Interceptors, AppSec).
    - Отработайте 29 практических задач по базам данных в [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md) и проверьте себя на 14 коварных ловушках рантайма в [go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md).
    - Отработайте лайвкодинг по гайдам [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md) и [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview).
+
+---
+
+## 📚 Рекомендованная литература и первоисточники
+
+При проектировании архитектуры учебных сервисов и составлении базы знаний использованы авторитетные профильные издания и официальные стандарты сообщества Go:
+
+1. **Джон Боднер — «Learning Go: An Idiomatic Approach to Real-World Go Programming» (2nd Edition, O'Reilly, 2024):**  
+   Эталонный учебник по современному идиоматичному Go (дженерики, итераторы, паттерны `errors.Is`, `http.ResponseController`, безопасный FFI/Cgo и культура архитектуры). Примеры согласованы с официальным репозиторием [learning-go-book-2e](https://github.com/learning-go-book-2e).
+2. **Алан Донован, Брайан Керниган — «Язык программирования Go» (The Go Programming Language, Addison-Wesley):**  
+   Фундаментальный труд от соавторов Unix и языка C об основах дизайна языка, модели памяти и философии Go.
+3. **Тейва Харшаньи — «100 ошибок Go и как их избежать» (100 Go Mistakes and How to Avoid Them, Manning):**  
+   Практическое руководство по предотвращению скрытых ловушек: struct padding, утечки памяти срезов/map, гонки данных, CFS throttling в Kubernetes.
+4. **Стандарты и стайлгайды ведущих инженерных команд:**  
+   - [Effective Go (Официальное руководство команды Go)](https://go.dev/doc/effective_go)  
+   - [Uber Go Style Guide (Стандарт промышленного кода)](https://github.com/uber-go/guide/blob/master/style.md)  
+   - [Google Go Style Decisions](https://google.github.io/styleguide/go/decisions)
+5. **Системный дизайн и архитектура распределенных систем:**  
+   - Роберт Мартин — «Чистая архитектура» (Clean Architecture)  
+   - Алекс Сюй — «System Design Interview – An Insider's Guide» (Volumes 1 & 2)  
+   - Донн Мартин — [The System Design Primer](https://github.com/donnemartin/system-design-primer)
