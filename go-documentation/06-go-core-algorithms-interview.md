@@ -2285,7 +2285,9 @@ func twoSum(nums []int, target int) []int {
 
 #### 📘 Язык Go и Computer Science:
 - 🌐 [Effective Go (Официальное руководство по идиоматичному коду)](https://go.dev/doc/effective_go)
+- 📖 [Jon Bodner: «Learning Go: An Idiomatic Approach to Real-World Go Programming» (2nd Edition, O'Reilly, 2024)](https://www.oreilly.com/library/view/learning-go-2nd/9781098139285/) и [репозиторий примеров кода (learning-go-book-2e)](https://github.com/learning-go-book-2e)
 - 📖 [Книга Алана Донована и Брайана Кернигана: «Язык программирования Go» (GOPL)](https://www.gopl.io/)
+- 💡 [Teiva Harsanyi: «100 Go Mistakes and How to Avoid Them» (Manning)](https://www.manning.com/books/100-go-mistakes-and-how-to-avoid-them)
 - 💻 [Интерактивный тур A Tour of Go](https://go.dev/tour/welcome/1)
 - ⚙️ [William Kennedy (Ardan Labs): Scheduling In Go (Механика планировщика GMP)](https://www.ardanlabs.com/blog/2018/08/scheduling-in-go-part2.html)
 - 🧵 [Книга: Effective Concurrency in Go (O'Reilly)](https://www.oreilly.com/library/view/effective-concurrency-in/9781804619070/)

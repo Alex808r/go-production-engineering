@@ -10,6 +10,8 @@
 > - 📕 **[Том 4: Backend, Web, Базы данных, Сокеты и Время](04-go-core-backend-web.md)** (Разделы 12, 13, 28, 29)
 > - 📓 **[Том 5: Тестирование, Архитектура и Микросервисы](05-go-core-testing-arch.md)** (Разделы 17–25)
 > - 📔 **[Том 6: Алгоритмы, Структуры данных и STAR-интервью](06-go-core-algorithms-interview.md)** (Разделы 26–27, 30–36)
+> 
+> 💡 *При составлении энциклопедии использованы материалы книги **Джона Боднера «Learning Go: An Idiomatic Approach to Real-World Go Programming» (2nd Edition, 2024)**, а канонические примеры кода и паттерны взяты из официального репозитория [github.com/learning-go-book-2e](https://github.com/learning-go-book-2e).*
 
 > [!TIP]
 > 🎯 **Практические задачники и гайды курса:**
