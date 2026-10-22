@@ -46,8 +46,9 @@ go-course-4/
 ├── GoSearch/                   # Сквозной проект: поисковая система
 ├── lynks/                      # Сквозной проект: микросервисный URL Shortener
 ├── wallet/                     # Сквозной проект: High-Load Wallet REST API (1000+ RPS)
-├── go-documentation/           # Энциклопедия Go: 6 томов теории и прикладные гайды
-│   ├── 01-go-core-basics.md                # Том 1: Базовый синтаксис, типы, память, срезы, [N]T, goto, clear()
+├── go-documentation/           # Энциклопедия Go: 7 томов теории и прикладные гайды
+│   ├── 01-go-core-basics.md                # Том 1.1: Базовый синтаксис, control flow, функции, числа, константы
+│   ├── 01-go-core-data-structures.md       # Том 1.2: Срезы, мапы, строки, указатели, структуры, память
 │   ├── 02-go-core-oop-methods.md           # Том 2: ООП, интерфейсы, io, Google Wire, wildcard errors, errors.Join
 │   ├── 03-go-core-concurrency.md           # Том 3: Конкурентность, каналы, sync, GMP, PressureGauge, cgo.Handle
 │   ├── 04-go-core-backend-web.md           # Том 4: Web, net/http (Go 1.22+), ResponseController streaming, REST, БД
@@ -154,7 +155,7 @@ govulncheck ./...
 ## 📖 Рекомендуемый план самостоятельного обучения
 
 1. **Базовый уровень (Junior Go Developer):**
-   - Прочитайте [Том 1: Основы и синтаксис](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md).
+   - Прочитайте [Том 1.1: Основы и синтаксис](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md) и [Том 1.2: Коллекции и память](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-data-structures.md).
    - Освойте каталоги [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/01-intro), [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax), [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms), [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs), [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io).
    - Выполните задания [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02) — [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/homework-05).
    - Пользуйтесь настольным справочником [go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-std-collections-guide.md).

@@ -1,7 +1,7 @@
 # Шпаргалка по Go (Cheat Sheet)
 
 > [!TIP]
-> 📚 **Навигация:** [📖 Главное оглавление и путь изучения](README.md) — эта страница является **краткой справкой** по синтаксису и командам. Подробные объяснения, «ловушки» и внутреннее устройство — в томах [1](01-go-core-basics.md), [2](02-go-core-oop-methods.md), [3](03-go-core-concurrency.md), [4](04-go-core-backend-web.md), [5](05-go-core-testing-arch.md), [6](06-go-core-algorithms-interview.md). Пошаговый план курса — в [course-codebase-guide.md](course-codebase-guide.md), а все 32 домашних задания — в [homework-tasks.md](homework-tasks.md).
+> 📚 **Навигация:** [📖 Главное оглавление и путь изучения](README.md) — эта страница является **краткой справкой** по синтаксису и командам. Подробные объяснения, «ловушки» и внутреннее устройство — в томах [1.1](01-go-core-basics.md), [1.2](01-go-core-data-structures.md), [2](02-go-core-oop-methods.md), [3](03-go-core-concurrency.md), [4](04-go-core-backend-web.md), [5](05-go-core-testing-arch.md), [6](06-go-core-algorithms-interview.md). Пошаговый план курса — в [course-codebase-guide.md](course-codebase-guide.md), а все 32 домашних задания — в [homework-tasks.md](homework-tasks.md).
 
 ---
 
