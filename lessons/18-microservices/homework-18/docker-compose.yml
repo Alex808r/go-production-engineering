@@ -1,20 +1,30 @@
 version: '3.8'
 
+# Определение сервисов приложения
 services:
+  # ============================================================================
+  # Микросервис сокращателя ссылок (URL Shortener)
+  # ============================================================================
   shortener:
+    # Инструкции сборки собственного Dockerfile
     build:
-      context: ..
-      dockerfile: homework-18/Dockerfile
+      context: ..                          # Контекст сборки: родительская папка
+      dockerfile: homework-18/Dockerfile   # Путь к Dockerfile сервиса
+    # Имя контейнера для отображения в docker ps
     container_name: url-shortener-service
+    # Проброс портов: 8080 на хосте -> 8080 внутри контейнера
     ports:
       - "8080:8080"
+    # Переменные окружения для конфигурации сервиса
     environment:
-      - PORT=8080
-      - BASE_URL=http://localhost:8080
-      - LOG_LEVEL=info
+      - PORT=8080                          # HTTP-порт сервиса
+      - BASE_URL=http://localhost:8080     # Базовый адрес для генерации коротких URL
+      - LOG_LEVEL=info                     # Уровень логирования (slog / log)
+    # Политика автоматического перезапуска при падениях
     restart: unless-stopped
+    # Проверка доступности сервиса через опрос /healthz с помощью wget
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
+      interval: 10s                        # Интервал между проверками
+      timeout: 3s                          # Таймаут на выполнение проверки
+      retries: 3                           # Порог попыток до отметки unhealthy
