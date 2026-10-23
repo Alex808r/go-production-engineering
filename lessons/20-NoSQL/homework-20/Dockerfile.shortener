@@ -1,27 +1,56 @@
 # syntax=docker/dockerfile:1
+# ------------------------------------------------------------------------------
+# Этап 1: Сборка приложения (Builder stage)
+# Используем легковесный образ Golang на базе Alpine Linux
+# ------------------------------------------------------------------------------
 FROM golang:1.22-alpine AS builder
 
+# Задаем рабочую директорию сборщика
 WORKDIR /build
+
+# Устанавливаем git и сертификаты для скачивания зависимостей
 RUN apk add --no-cache git ca-certificates
 
+# Оптимизация кэша слоев: копируем файлы описания модулей
 COPY go.mod go.sum ./
+# Скачиваем внешние зависимости в отдельный кэшируемый слой
 RUN go mod download
 
+# Копируем весь остальной исходный код проекта
 COPY . .
 
+# Компиляция статического исполняемого файла сервиса shortener:
+# CGO_ENABLED=0            — автономный бинарник без CGO
+# GOOS=linux GOARCH=amd64  — сборка под Linux AMD64
+# -ldflags="-s -w"         — стриппинг таблицы символов и DWARF-отладки
+# -extldflags '-static'    — статическая компоновка библиотек
+# -o /app/shortener        — путь сохранения бинарника
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags="-s -w -extldflags '-static'" \
     -o /app/shortener ./homework-20/shortener/cmd
 
+# ------------------------------------------------------------------------------
+# Этап 2: Финальный минимальный runtime-образ (Production stage)
+# Чистый Alpine Linux без Go SDK (~15 МБ)
+# ------------------------------------------------------------------------------
 FROM alpine:3.19
+
+# Устанавливаем ca-certificates (HTTPS), tzdata (таймзоны) и wget (для healthcheck)
 RUN apk --no-cache add ca-certificates tzdata wget
+
+# Рабочая папка сервиса
 WORKDIR /app
 
+# Безопасность: создаем системного пользователя appuser (UID 1000)
 RUN adduser -D -u 1000 appuser
+# Переключаем выполнение на непривилегированного пользователя (отказ от root)
 USER appuser
 
+# Копируем только скомпилированный бинарник с этапа сборщика builder
 COPY --from=builder /app/shortener /app/shortener
 
+# Декларируем сетевой порт веб-сервиса сокращателя ссылок
 EXPOSE 8080
 
+# Точка входа: запуск сервиса shortener в Exec-форме
 ENTRYPOINT ["/app/shortener"]

@@ -1,62 +1,85 @@
 version: '3.8'
 
+# Определение сервисов мультиконтейнерного стека (PostgreSQL + Redis + Microservices)
 services:
+  # ============================================================================
+  # База данных PostgreSQL 15 для хранения постоянных данных
+  # ============================================================================
   postgres:
+    # Официальный образ PostgreSQL 15 на базе Alpine Linux
     image: postgres:15-alpine
     container_name: lynks-postgres
+    # Переменные окружения для инициализации базы данных
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: lynks
+      POSTGRES_USER: postgres       # Имя пользователя СУБД
+      POSTGRES_PASSWORD: postgres   # Пароль пользователя
+      POSTGRES_DB: lynks            # Имя базы данных
+    # Монтирование скрипта начальной инициализации схемы данных (:ro — только для чтения)
     volumes:
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    # Проброс стандартного порта PostgreSQL
     ports:
       - "5432:5432"
     restart: unless-stopped
+    # Проверка готовности СУБД принимать соединения перед запуском зависимых сервисов
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d lynks"]
       interval: 5s
       timeout: 3s
       retries: 5
 
+  # ============================================================================
+  # Быстрый In-Memory кэш Redis 7
+  # ============================================================================
   redis:
+    # Легковесный образ Redis 7 на Alpine
     image: redis:7-alpine
     container_name: lynks-redis
     ports:
       - "6379:6379"
     restart: unless-stopped
+    # Проверка отклика Redis через redis-cli ping
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5
 
+  # ============================================================================
+  # Сервис кэширования memcache на Go
+  # ============================================================================
   memcache:
     build:
-      context: ..
-      dockerfile: homework-20/Dockerfile.memcache
+      context: ..                                  # Контекст сборки: корень репозитория
+      dockerfile: homework-20/Dockerfile.memcache  # Путь к Dockerfile сервиса memcache
     container_name: lynks-memcache
+    # Старт только после успешного прохождения healthcheck сервисом Redis
     depends_on:
       redis:
         condition: service_healthy
     ports:
       - "8082:8082"
     environment:
-      - PORT=8082
-      - REDIS_ADDR=redis:6379
-      - CACHE_TTL=24h
+      - PORT=8082                                  # Порт прослушивания сервера
+      - REDIS_ADDR=redis:6379                      # Адрес Redis в сети Docker Compose
+      - CACHE_TTL=24h                              # Срок хранения кэша
     restart: unless-stopped
+    # Проверка работоспособности через HTTP-запрос к /healthz
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8082/healthz || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 3
 
+  # ============================================================================
+  # Основной веб-сервис сокращателя ссылок shortener
+  # ============================================================================
   shortener:
     build:
-      context: ..
-      dockerfile: homework-20/Dockerfile.shortener
+      context: ..                                  # Контекст сборки: корень репозитория
+      dockerfile: homework-20/Dockerfile.shortener # Dockerfile веб-сервиса
     container_name: lynks-shortener
+    # Ожидание готовности PostgreSQL и старта сервиса кэширования
     depends_on:
       postgres:
         condition: service_healthy
@@ -65,11 +88,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - PORT=8080
-      - BASE_URL=http://localhost:8080
-      - PG_DSN=postgres://postgres:postgres@postgres:5432/lynks?sslmode=disable
-      - MEMCACHE_URL=http://memcache:8082
+      - PORT=8080                                                           # Порт веб-приложения
+      - BASE_URL=http://localhost:8080                                      # Базовый URL для сокращенных ссылок
+      - PG_DSN=postgres://postgres:postgres@postgres:5432/lynks?sslmode=disable # Подключение к PostgreSQL
+      - MEMCACHE_URL=http://memcache:8082                                   # Подключение к сервису memcache
     restart: unless-stopped
+    # Проверка готовности веб-сервера отвечать на запросы
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
       interval: 10s

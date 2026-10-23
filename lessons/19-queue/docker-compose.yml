@@ -1,23 +1,34 @@
 version: '2'
+
+# Определение сервисов инфраструктуры очередей сообщений Apache Kafka
 services:
+  # ============================================================================
+  # Координатор распределенного кластера Apache ZooKeeper
+  # ============================================================================
   zookeeper:
+    # Образ ZooKeeper из Confluent Platform
     image: confluentinc/cp-zookeeper:latest
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_CLIENT_PORT: 2181 # Порт для клиентских подключений к ZooKeeper
+      ZOOKEEPER_TICK_TIME: 2000   # Длительность базового тика сердцебиения (heartbeat) в миллисекундах
     ports:
-      - 22181:2181
+      - 22181:2181                # Проброс порта на хост: 22181 (хост) -> 2181 (контейнер)
   
+  # ============================================================================
+  # Брокер сообщений Apache Kafka
+  # ============================================================================
   kafka:
+    # Официальный образ брокера Kafka от Confluent
     image: confluentinc/cp-kafka:latest
+    # Запуск только после готовности координатора ZooKeeper
     depends_on:
       - zookeeper
     ports:
-      - 29092:29092
+      - 29092:29092               # Внешний порт брокера для подключения клиентов с хоста (localhost:29092)
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_BROKER_ID: 1                                                          # Уникальный числовой идентификатор брокера
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181                                     # Адрес подключения к ZooKeeper
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092 # Адреса листенеров: внутренний (kafka:9092) и внешний (localhost:29092)
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT # Маппинг протоколов безопасности для листенеров
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT                                 # Протокол для межбазового обмена внутри кластера
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1                                   # Фактор репликации топика оффсетов для локальной среды

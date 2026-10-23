@@ -1,75 +1,107 @@
 version: '3.8'
 
+# Определение сервисов (контейнеров) микросервисного стека сокращателя ссылок lynks
 services:
+  # ============================================================================
+  # База данных PostgreSQL 15 для постоянного хранения сокращенных ссылок
+  # ============================================================================
   postgres:
+    # Официальный образ PostgreSQL 15 на базе легковесного Alpine Linux
     image: postgres:15-alpine
+    # Фиксированное имя контейнера для удобства работы в docker ps / docker logs
     container_name: lynks-postgres
+    # Переменные окружения для инициализации базы данных, пользователя и пароля
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: lynks
+      POSTGRES_USER: postgres       # Имя суперпользователя базы данных
+      POSTGRES_PASSWORD: postgres   # Пароль для подключения
+      POSTGRES_DB: lynks            # Имя создаваемой базы данных по умолчанию
+    # Монтирование томов: SQL-схема монтируется в папку авто-инициализации Postgres (:ro — только для чтения)
     volumes:
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    # Проброс порта: 5432 на хосте -> 5432 внутри контейнера
     ports:
       - "5432:5432"
+    # Политика перезапуска: перезапускать контейнер при сбоях, пока он не остановлен вручную
     restart: unless-stopped
+    # Проверка готовности (Healthcheck): утилита pg_isready проверяет прием подключений
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d lynks"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
+      interval: 5s    # Интервал между проверками (каждые 5 секунд)
+      timeout: 3s     # Максимальное время ожидания ответа на команду проверки
+      retries: 5      # Количество успешных/неудачных попыток до смены статуса
 
+  # ============================================================================
+  # Кэш-сервер Redis 7 для быстрого получения частых ссылок в памяти
+  # ============================================================================
   redis:
+    # Официальный легковесный образ Redis 7 на Alpine Linux
     image: redis:7-alpine
     container_name: lynks-redis
+    # Проброс стандартного порта Redis (порт хоста:порт контейнера)
     ports:
       - "6379:6379"
     restart: unless-stopped
+    # Проверка здоровья через ping-pong команду redis-cli
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 3s
       retries: 5
 
+  # ============================================================================
+  # Микросервис memcache: Go-сервис кэширования поверх Redis
+  # ============================================================================
   memcache:
+    # Инструкции сборки собственного Dockerfile
     build:
-      context: ..
-      dockerfile: lynks/Dockerfile.memcache
+      context: ..                          # Контекст сборки: родительская папка с go.mod всего репозитория
+      dockerfile: lynks/Dockerfile.memcache # Путь к целевому Dockerfile сервиса memcache
     container_name: lynks-memcache
+    # Синхронизация старта: запуск только после того, как Redis подтвердит статус healthy
     depends_on:
       redis:
         condition: service_healthy
+    # Проброс порта API сервиса кэширования (8082)
     ports:
       - "8082:8082"
+    # Переменные окружения для конфигурации Go-микросервиса
     environment:
-      - PORT=8082
-      - REDIS_ADDR=redis:6379
-      - CACHE_TTL=24h
+      - PORT=8082                 # Порт, на котором слушает HTTP/gRPC сервер
+      - REDIS_ADDR=redis:6379     # Адрес подключения к Redis по имени сервиса в сети Compose
+      - CACHE_TTL=24h             # Время жизни закэшированных ссылок в Redis
     restart: unless-stopped
+    # Healthcheck через HTTP-запрос к эндпоинту /healthz с помощью утилиты wget
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8082/healthz || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 3
 
+  # ============================================================================
+  # Микросервис shortener: основной веб-сервис сокращения и редиректа ссылок
+  # ============================================================================
   shortener:
     build:
-      context: ..
-      dockerfile: lynks/Dockerfile.shortener
+      context: ..                          # Контекст сборки: корень репозитория
+      dockerfile: lynks/Dockerfile.shortener# Dockerfile основного веб-сервиса
     container_name: lynks-shortener
+    # Порядок запуска: ожидает готовности PostgreSQL (healthy) и старта сервиса кэширования
     depends_on:
       postgres:
         condition: service_healthy
       memcache:
         condition: service_started
+    # Проброс главного публичного порта веб-сервиса (8080)
     ports:
       - "8080:8080"
+    # Переменные окружения для подключения к БД и кэшу
     environment:
-      - PORT=8080
-      - BASE_URL=http://localhost:8080
-      - PG_DSN=postgres://postgres:postgres@postgres:5432/lynks?sslmode=disable
-      - MEMCACHE_URL=http://memcache:8082
+      - PORT=8080                                                           # Порт HTTP-сервера
+      - BASE_URL=http://localhost:8080                                      # Базовый URL для формирования коротких ссылок
+      - PG_DSN=postgres://postgres:postgres@postgres:5432/lynks?sslmode=disable # Строка подключения к PostgreSQL
+      - MEMCACHE_URL=http://memcache:8082                                   # Адрес обращения к сервису memcache
     restart: unless-stopped
+    # Проверка доступности веб-сервера через опрос собственного эндпоинта /healthz
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
       interval: 10s

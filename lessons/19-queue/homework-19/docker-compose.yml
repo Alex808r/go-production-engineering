@@ -1,70 +1,93 @@
 version: '3.8'
 
+# Определение сервисов асинхронного микросервисного стека с Apache Kafka
 services:
+  # ============================================================================
+  # Координатор кластера Apache ZooKeeper (хранит метаданные брокеров и топиков)
+  # ============================================================================
   zookeeper:
+    # Образ ZooKeeper из проверенного дистрибутива Confluent Platform
     image: confluentinc/cp-zookeeper:7.3.0
     container_name: homework19-zookeeper
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_CLIENT_PORT: 2181  # Порт для подключения клиентов Kafka к ZooKeeper
+      ZOOKEEPER_TICK_TIME: 2000    # Базовый интервал heartbeat-тиков ZooKeeper в мс
     ports:
-      - "22181:2181"
+      - "22181:2181"               # Порт хоста 22181 -> 2181 контейнера (для избежания коллизий)
 
+  # ============================================================================
+  # Распределенный брокер сообщений Apache Kafka
+  # ============================================================================
   kafka:
+    # Официальный образ Kafka от Confluent Platform
     image: confluentinc/cp-kafka:7.3.0
     container_name: homework19-kafka
+    # Kafka стартует только после запуска координатора ZooKeeper
     depends_on:
       - zookeeper
     ports:
-      - "9092:9092"
-      - "29092:29092"
+      - "9092:9092"                # Внутренний порт брокера для контейнеров внутри сети Docker
+      - "29092:29092"              # Внешний порт брокера для клиентов с хост-машины (Mac/Linux)
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_BROKER_ID: 1                                                          # Уникальный числовой ID данного брокера в кластере
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181                                     # Адрес подключения к ZooKeeper по имени сервиса
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092 # Раздельные адреса для внутренней сети и для хоста
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT # Протоколы безопасности (без шифрования для dev)
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT                                 # Листенер для межбазового обмена
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1                                   # Фактор репликации системного топика оффсетов (1 для одиночного узла)
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"                                     # Автоматическое создание топиков при первой отправке сообщения
 
+  # ============================================================================
+  # Микросервис shortener: веб-сервис сокращения ссылок (Kafka Producer)
+  # ============================================================================
   shortener:
     build:
-      context: ..
-      dockerfile: homework-19/Dockerfile
+      context: ..                          # Контекст сборки: родительская директория
+      dockerfile: homework-19/Dockerfile   # Общий Dockerfile для сборки сервисов
     container_name: homework19-shortener
+    # Переопределяем команду запуска бинарника shortener
     command: ["/app/shortener"]
+    # Сервис ожидает запуска брокера Kafka
     depends_on:
       - kafka
+    # Публичный HTTP-порт сервиса
     ports:
       - "8080:8080"
     environment:
-      - PORT=8080
-      - BASE_URL=http://localhost:8080
-      - KAFKA_BROKERS=kafka:9092
-      - KAFKA_TOPIC=links-events
+      - PORT=8080                          # Порт веб-сервера
+      - BASE_URL=http://localhost:8080     # Базовый префикс сокращенных ссылок
+      - KAFKA_BROKERS=kafka:9092           # Адрес брокера Kafka для отправки событий переходов
+      - KAFKA_TOPIC=links-events           # Имя топика Kafka для публикации событий
     restart: unless-stopped
+    # Проверка готовности через опрос эндпоинта /healthz
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/healthz || exit 1"]
       interval: 10s
       timeout: 3s
       retries: 3
 
+  # ============================================================================
+  # Микросервис analytics: обработчик статистики (Kafka Consumer)
+  # ============================================================================
   analytics:
     build:
       context: ..
       dockerfile: homework-19/Dockerfile
     container_name: homework19-analytics
+    # Запускаем бинарный файл аналитики
     command: ["/app/analytics"]
     depends_on:
       - kafka
+    # Порт для чтения метрик и аналитики
     ports:
       - "8081:8081"
     environment:
-      - PORT=8081
-      - KAFKA_BROKERS=kafka:9092
-      - KAFKA_TOPIC=links-events
-      - KAFKA_GROUP_ID=analytics-group
+      - PORT=8081                          # Порт HTTP-сервера аналитики
+      - KAFKA_BROKERS=kafka:9092           # Адрес брокера Kafka для вычитки сообщений
+      - KAFKA_TOPIC=links-events           # Имя вычитываемого топика
+      - KAFKA_GROUP_ID=analytics-group     # Идентификатор группы консьюмеров (Consumer Group ID)
     restart: unless-stopped
+    # Проверка доступности сервиса аналитики
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8081/healthz || exit 1"]
       interval: 10s
