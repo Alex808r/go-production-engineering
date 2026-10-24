@@ -9,8 +9,8 @@ all: test build ## Запуск тестов и сборка приложени�
 build: ## Скомпилировать бинарный файл в bin/wallet-app
 	go build -o bin/wallet-app ./cmd/app
 
-run: ## Локальный запуск приложения через go run
-	go run ./cmd/app
+run: ## Локальный нативный запуск (автоматически подключается к Docker PostgreSQL на localhost)
+	DB_HOST=localhost go run ./cmd/app
 
 test: ## Запуск всех unit-тестов
 	go test -v ./...
