@@ -28,6 +28,7 @@
    - [Золотой стандарт: `depends_on` + `condition: service_healthy`](#63-золотой-стандарт-depends_on--condition-service_healthy)
    - [Готовый боевой шаблон: Go App + PostgreSQL 16 + Redis](#64-готовый-боевой-шаблон-go-app--postgresql-16--redis)
    - [Настройка для Dev и Prod режимов: Hot-Reload без пересборки и сохранность данных БД](#65-настройка-для-dev-и-prod-режимов-hot-reload-без-пересборки-и-сохранность-данных-бд)
+   - [Продвинутые паттерны из реального Production (Profiles, SSH, ветвящийся Multi-Stage, Mock-сервисы)](#66-продвинутые-паттерны-из-реального-production-profiles-ssh-ветвящийся-multi-stage-mock-сервисы)
 7. [Топ-10 типовых ошибок и их устранение (Troubleshooting)](#7-топ-10-типовых-ошибок-и-их-устранение-troubleshooting)
 8. [Топ-9 вопросов и ответов по Docker для Go-разработчика (Interview & Production FAQ)](#8-топ-9-вопросов-и-ответов-по-docker-для-go-разработчика-interview--production-faq)
 9. [Дорожная карта: Куда двигаться дальше](#9-дорожная-карта-куда-двигаться-дальше)
@@ -790,6 +791,234 @@ Docker Compose устроен так: если в папке лежит файл
    * ❌ **Bind Mount (`./data:/var/lib/postgresql/data`):** на macOS и Windows работает заметно медленнее из-за трансляции файловых систем через виртуальную машину Docker Desktop, а на Linux часто падает с ошибкой прав доступа:  
      `chown: changing ownership of '/var/lib/postgresql/data': Permission denied`.
    * ✅ **Named Volume (`pgdata:/var/lib/postgresql/data`):** стандарт де-факто для БД. Обеспечивает нативную скорость диска и управляется правами ядра Linux без конфликтов с пользователем хоста.
+
+---
+
+### 6.6. Продвинутые паттерны из реального Production (Profiles, SSH, ветвящийся Multi-Stage, Mock-сервисы)
+
+В больших коммерческих проектах архитекторы и DevOps-инженеры используют ряд специализированных приемов для ускорения разработки и защиты корпоративных секретов. Ниже представлены 5 лучших практик, адаптированных специально под специфику языка Go:
+
+---
+
+#### 1. Профили в Docker Compose (`profiles: [tools]`): как не тратить память на лишние сервисы
+
+В разработке часто нужны вспомогательные веб-интерфейсы:
+* **Adminer / pgAdmin** — для визуального просмотра таблиц PostgreSQL в браузере.
+* **Redis Commander** — для инспекции ключей и TTL в Redis.
+* **Kafka UI** — для просмотра топиков и потребителей (consumer groups).
+
+Если все эти контейнеры поднимаются по умолчанию при каждом `docker compose up`, они впустую отнимают 500–1000 МБ оперативной памяти ноутбука разработчика.
+
+##### Решение: директива `profiles`
+```yaml
+services:
+  # Основные сервисы запускаются всегда
+  app:
+    build: .
+    ports: ["8080:8080"]
+
+  postgres:
+    image: postgres:16-alpine
+    ports: ["5432:5432"]
+
+  # Инструмент запускается ТОЛЬКО по явному требованию!
+  adminer:
+    image: adminer:latest
+    container_name: dev-adminer
+    ports:
+      - "8081:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
+    profiles:
+      - tools # Сервис привязан к профилю "tools"
+```
+
+* **Обычный запуск:** `docker compose up` — поднимет только `app` и `postgres`.
+* **Запуск с инструментами:** `docker compose --profile tools up -d` — поднимет весь стек вместе с Adminer (доступен в браузере по адресу `http://localhost:8081`).
+
+---
+
+#### 2. Безопасное скачивание приватных Go-модулей через SSH (`RUN --mount=type=ssh`)
+
+Если ваша компания разрабатывает общие внутренние библиотеки (например, `gitlab.company.com/corp/auth-pkg`), Go должен скачать их при сборке Docker-образа.
+
+* ❌ **Опасный антипаттерн:** копировать личный SSH-ключ (`COPY id_rsa /root/.ssh/`) или передавать Personal Access Token через `ARG`. Токен и ключ навсегда запекаются в слои образа!
+* ✅ **Продакшен-стандарт (SSH Agent Forwarding в BuildKit):**
+  Контейнер на время выполнения шага временно связывается с сокетом SSH-агента вашей хост-машины. Ключ **никогда не покидает хост** и не попадает в образ!
+
+##### Шаг 1: Настройка в `Dockerfile`:
+```dockerfile
+# syntax=docker/dockerfile:1
+FROM golang:1.24-alpine AS builder
+
+WORKDIR /build
+
+# Устанавливаем git и openssh-client
+RUN apk add --no-cache git openssh-client
+
+# Настраиваем SSH для корпоративного GitLab/GitHub
+RUN mkdir -p -m 0600 ~/.ssh && \
+    ssh-keyscan gitlab.company.com >> ~/.ssh/known_hosts
+
+# Указываем Go, что модули компании являются приватными (не идти в публичный proxy.golang.org)
+ENV GOPRIVATE=gitlab.company.com/*
+
+COPY go.mod go.sum ./
+
+# ⚡ Монтируем SSH-агент хоста:
+RUN --mount=type=ssh \
+    git config --global url."git@gitlab.company.com:".insteadOf "https://gitlab.company.com/" && \
+    go mod download
+```
+
+##### Шаг 2: Сборка с передачей SSH-агента:
+```bash
+# Добавляем ключ в ssh-agent на хосте
+ssh-add ~/.ssh/id_ed25519
+
+# Запускаем сборку с флагом --ssh default
+docker build --ssh default -t my-go-app .
+```
+
+---
+
+#### 3. Ветвящийся Multi-Stage: один Dockerfile для Dev, CI и Prod через `target`
+
+Вместо пложения зоопарка файлов (`Dockerfile`, `Dockerfile.dev`, `Dockerfile.ci`) корпоративный стандарт — **единый ветвящийся `Dockerfile`**:
+
+```dockerfile
+# syntax=docker/dockerfile:1
+# ------------------------------------------------------------------------------
+# 1. Base: общая база с зависимостями
+# ------------------------------------------------------------------------------
+FROM golang:1.24-alpine AS base
+WORKDIR /app
+RUN apk add --no-cache git ca-certificates tzdata
+COPY go.mod go.sum ./
+RUN go mod download
+
+# ------------------------------------------------------------------------------
+# 2. Development: окружение разработчика (Air hot-reload + Delve debugger)
+# ------------------------------------------------------------------------------
+FROM base AS development
+RUN go install github.com/air-verse/air@latest && \
+    go install github.com/go-delve/delve/cmd/dlv@latest
+EXPOSE 8080 40000
+CMD ["air", "-c", ".air.toml"]
+
+# ------------------------------------------------------------------------------
+# 3. Builder: компиляция монолитного бинарника для продакшена
+# ------------------------------------------------------------------------------
+FROM base AS builder
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /bin/app ./cmd/app
+
+# ------------------------------------------------------------------------------
+# 4. Production: чистый легковесный образ 15 МБ
+# ------------------------------------------------------------------------------
+FROM alpine:3.20 AS production
+WORKDIR /app
+RUN addgroup -g 10001 -S appgroup && adduser -u 10001 -S appuser -G appgroup
+COPY --chown=appuser:appgroup --from=builder /bin/app /app/app
+USER appuser:appgroup
+EXPOSE 8080
+ENTRYPOINT ["/app/app"]
+```
+
+##### Использование:
+* В `docker-compose.yml` (для разработки):
+  ```yaml
+  services:
+    app:
+      build:
+        context: .
+        target: development # Собирает стадию с Air и Delve
+      volumes:
+        - .:/app
+  ```
+* В CI/CD (для продакшена):
+  ```bash
+  docker build --target production -t my-app:v1.0.0 .
+  ```
+
+---
+
+#### 4. Выделенные Mock-сервисы внешних API
+
+В микросервисной архитектуре Go-сервис часто общается с внешними поставщиками (банковские платежи, SMS-шлюзы, CRM).
+Если внешний тестовый контур падает, интернет отсутствует или разработчик работает офлайн, разработка останавливается.
+
+##### Решение:
+В `docker-compose.yml` поднимается изолированный легковесный HTTP-сервер заглушек:
+
+```yaml
+services:
+  # Наше основное Go-приложение
+  wallet-app:
+    build: .
+    environment:
+      # Стучимся не в реальный банк, а во внутренний мок-контейнер:
+      PAYMENT_GATEWAY_URL: http://payment-mock:8082
+
+  # Легкий контейнер-заглушка (wiremock или Go-сервер на 50 строк кода)
+  payment-mock:
+    image: wiremock/wiremock:3.5.2-alpine
+    container_name: payment-mock
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./tests/mocks/payment:/home/wiremock/mappings:ro
+    profiles:
+      - test
+      - development
+```
+
+---
+
+#### 5. `Makefile` как профессиональный фасад проекта
+
+Вместо того чтобы заставлять всю команду помнить длинные команды с десятками параметров, в корень репозитория кладется самодокументируемый `Makefile`:
+
+```makefile
+.PHONY: help setup up down reset logs test lint tools
+
+help: ## Показать список доступных команд
+	@awk 'BEGIN {FS = ":.*##"; printf "\nИспользование:\n  make \033[36m<команда>\033[0m\n\nКоманды:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+
+setup: ## Первоначальная настройка: копирование шаблона переменных окружения
+	@test -f config.env || cp config.env.example config.env
+	@echo "✓ config.env готов к использованию"
+
+up: setup ## Запустить весь проект в фоновом режиме (Go App + Postgres)
+	docker compose up -d
+
+down: ## Безопасно остановить контейнеры (БЕЗ удаления томов БД!)
+	docker compose down
+
+reset: ## ⚠️ ВНИМАНИЕ: Сбросить базу данных и удалить все тома
+	docker compose down -v
+
+logs: ## Просмотр объединенных логов всех сервисов в реальном времени
+	docker compose logs -f
+
+tools: ## Запустить стек вспомогательных утилит (Adminer для просмотра БД)
+	docker compose --profile tools up -d adminer
+	@echo "✓ Adminer доступен по адресу: http://localhost:8081"
+
+test: ## Запуск тестов Go с детектором гонок данных (Race Detector)
+	go test -v -race ./...
+```
+
+Новому разработчику достаточно выполнить:
+```bash
+make setup && make up
+```
+чтобы поднять рабочее окружение с базой данных, миграциями и бэкендом за считанные секунды.
 
 ---
 
