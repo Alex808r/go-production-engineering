@@ -97,6 +97,29 @@ services:
     networks:
       - wallet-network
 
+  # ============================================================================
+  # Вспомогательные инструменты разработки (Profiles)
+  # Легковесный веб-интерфейс Adminer для просмотра таблиц PostgreSQL в браузере.
+  # Запускается ТОЛЬКО по явному требованию через профиль tools:
+  # docker compose --profile tools up -d adminer (или команда 'make tools')
+  # Доступен в браузере: http://localhost:8081
+  # ============================================================================
+  adminer:
+    image: adminer:latest
+    container_name: wallet-adminer
+    restart: unless-stopped
+    ports:
+      - "${ADMINER_PORT:-8081}:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - wallet-network
+    profiles:
+      - tools
+
 # ==============================================================================
 # Определение томов (Volumes) для персистентного хранения данных
 # ==============================================================================
