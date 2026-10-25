@@ -10,6 +10,7 @@
    - [Внутреннее устройство: cgroups и namespaces ядра Linux](#12-внутреннее-устройство-cgroups-и-namespaces-ядра-linux)
    - [Четыре столпа Docker: Рецепт, Слепок, Процесс и Реестр](#13-четыре-столпа-docker-рецепт-слепок-процесс-и-реестр)
 2. [Шпаргалка по CLI-командам Docker](#2-шпаргалка-по-cli-командам-docker)
+   - [Присвоение имен сборкам (Build/Image) и контейнерам (Container)](#21-присвоение-имен-сборкам-buildimage-и-контейнерам-container)
 3. [Хранение данных (Volumes) и Сети (Networks)](#3-хранение-данных-volumes-и-сети-networks)
    - [Эфемерность контейнеров и типы томов](#31-эфемерность-контейнеров-и-типы-томов)
    - [Сетевое взаимодействие и встроенный DNS](#32-сетевое-взаимодействие-и-встроенный-dns)
@@ -32,7 +33,13 @@
 7. [Топ-10 типовых ошибок и их устранение (Troubleshooting)](#7-топ-10-типовых-ошибок-и-их-устранение-troubleshooting)
 8. [Топ-10 тем по Docker для Go-разработчика (Interview & Production FAQ)](#8-топ-10-тем-по-docker-для-go-разработчика-interview--production-faq)
    - [Чек-лист готовности Go-контейнера к Продакшену (Production Readiness Checklist)](#-10-чек-лист-готовности-go-контейнера-к-продакшену-production-readiness-checklist)
-9. [Дорожная карта: Куда двигаться дальше](#9-дорожная-карта-куда-двигаться-дальше)
+9. [CI/CD Пайплайны: Автоматическая сборка, тестирование и публикация в GHCR/Docker Hub](#9-cicd-пайплайны-автоматическая-сборка-тестирование-и-публикация-в-ghcrdocker-hub)
+   - [Архитектура облачного пайплайна](#91-архитектура-облачного-пайплайна)
+   - [Что необходимо подготовить: Секреты и права доступа](#92-что-необходимо-подготовить-секреты-и-права-доступа)
+   - [Эталонный боевой GitHub Actions Workflow (.github/workflows/ci.yml)](#93-эталонный-боевой-github-actions-workflow-githubworkflowsciyml)
+   - [Анатомия и фишки: BuildKit, type=gha кэш и Metadata Action](#94-анатомия-и-фишки-продакшен-пайплайна)
+   - [Альтернатива: GitLab CI (.gitlab-ci.yml)](#95-альтернатива-gitlab-ci-gitlab-ciyml)
+10. [Дорожная карта: Куда двигаться дальше](#10-дорожная-карта-куда-двигаться-дальше)
 
 ---
 
@@ -119,7 +126,68 @@ flowchart TD
 
 ## 2. Шпаргалка по CLI-командам Docker
 
-### Запуск и управление контейнерами
+### 2.1. Присвоение имен сборкам (Build/Image) и контейнерам (Container)
+
+В Docker принципиально важно различать **имя образа (шаблона/слепка)** и **имя живого контейнера (процесса)**:
+
+#### 1. Как присвоить имя образу при сборке (`docker build -t`)
+Для присвоения имени и версии образу используется флаг **`-t`** (сокращение от `--tag`):
+```bash
+# Синтаксис: docker build -t <имя_образа>:<тег_версии> <путь_к_папке>
+docker build -t wallet-app:v1.0.0 .
+
+# Сборка с тегом latest (по умолчанию, если тег опущен):
+docker build -t wallet-app .
+# В результате создается образ: wallet-app:latest
+
+# Сборка для публикации в Docker Hub / GitHub Registry (с префиксом аккаунта/организации):
+docker build -t alex808r/wallet-app:v1.0.0 .
+
+# Присвоить образу дополнительное имя/тег без повторной пересборки (docker tag):
+docker tag wallet-app:v1.0.0 wallet-app:latest
+docker tag wallet-app:v1.0.0 alex808r/wallet-app:v1.0.0
+```
+> ⚠️ **Что будет, если собрать без `-t` (`docker build .`):**  
+> Docker соберет образ, но не присвоит ему человекочитаемого имени. В списке `docker images` он отобразится как `<none>:<none>` («висячий» или безымянный образ). Запускать его придется по неудобному длинному хэшу SHA-256 (например, `docker run sha256:7f8a9b...`).
+
+---
+
+#### 2. Как присвоить имя живому контейнеру при запуске (`docker run --name`)
+Для присвоения понятного фиксированного имени запущенному контейнеру используется флаг **`--name`**:
+```bash
+# Синтаксис: docker run --name <имя_контейнера> <имя_образа>
+docker run -d --name wallet-backend-prod -p 8080:8080 wallet-app:v1.0.0
+
+# Теперь управлять контейнером можно по его имени, а не по случайному ID:
+docker logs -f wallet-backend-prod
+docker stop wallet-backend-prod
+docker restart wallet-backend-prod
+
+# Переименовать уже существующий контейнер:
+docker rename wallet-backend-prod wallet-backend-stage
+```
+> ⚠️ **Что будет, если запустить без `--name`:**  
+> Docker автоматически сгенерирует случайное забавное имя из комбинации прилагательного и фамилии известного ученого (например, `quirky_bohr`, `nervous_tesla`, `zen_curie`). В продакшене и скриптах это крайне неудобно, так как вы не знаете имя заранее!
+
+---
+
+#### 3. Как задавать имена в `docker-compose.yml`
+В файле оркестрации имена задаются двумя специальными директивами:
+```yaml
+services:
+  # Внутреннее имя сервиса в Compose (используется для DNS и depends_on)
+  app:
+    # 1. container_name: задает фиксированное имя живого контейнера в выводе "docker ps"
+    container_name: wallet-app-container
+
+    # 2. image: задает имя и тег образа, который будет собран из build
+    build: .
+    image: wallet-app:v1.0.0
+```
+
+---
+
+### 2.2. Запуск и управление контейнерами
 ```bash
 # Запустить контейнер в фоновом режиме (-d) с пробросом порта (-p) и именем (--name)
 docker run -d -p 5432:5432 --name postgres-dev -e POSTGRES_PASSWORD=secret postgres:16-alpine
@@ -288,17 +356,59 @@ RUN go build -o app .
 
 Для этого используется **Многоэтапная сборка (Multi-stage build)**:
 
+```
+┌─────────────────────────────────────────────────────────────┐
+│          ЭТАП 1: Сборщик (golang:1.24-alpine ~800 МБ)       │
+│                                                             │
+│   [ Исходный код Go ] ──> [ go build -ldflags="-s -w" ]     │
+│                                    │                        │
+│                                    ▼                        │
+│                    [ Готовый бинарник: /bin/app ]           │
+│                                                             │
+│   ❌ Весь тяжелый SDK, компилятор и git ВЫБРАСЫВАЮТСЯ!      │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               │ COPY --from=builder /bin/app
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│          ЭТАП 2: Рантайм (alpine:3.20 всего ~15 МБ!)        │
+│                                                             │
+│   ├── Чистая ОС Alpine Linux (~7 МБ)                        │
+│   ├── ca-certificates (для HTTPS) + tzdata                  │
+│   ├── Бинарный файл /app/app (~8 МБ)                        │
+│   └── Запуск: USER appuser (UID 10001, без root)            │
+└─────────────────────────────────────────────────────────────┘
+```
+
 ```mermaid
 flowchart TD
-    subgraph Stage1 ["Этап 1: Сборка (golang:alpine ~800 MB)"]
-        A["Исходный код Go"] --> B["Компилятор go build"]
-        B --> C["Бинарник /bin/wallet-app"]
+    subgraph Builder ["Этап 1: Сборщик — golang:alpine (~800 МБ)"]
+        direction TB
+        Code["Исходный код Go<br/>(main.go, go.mod)"]
+        Compiler["Компилятор Go<br/>(go build -ldflags)"]
+        BinBuilder["Скомпилированный бинарник<br/><b>/bin/wallet-app</b>"]
+
+        Code --> Compiler
+        Compiler --> BinBuilder
     end
-    subgraph Stage2 ["Этап 2: Финальный образ (alpine:3.20 ~15 MB)"]
-        C -- "COPY --from=builder" --> D["/app/wallet-app"]
-        E["config.env + migrations"] --> D
+
+    subgraph Runtime ["Этап 2: Финальный образ — alpine (~15 МБ)"]
+        direction TB
+        OS["Минимальный Alpine<br/>+ ca-certificates, tzdata"]
+        BinFinal["Автономный бинарник<br/><b>/app/wallet-app</b>"]
+        Run["Безопасный запуск:<br/><b>USER appuser (UID 10001)</b>"]
+
+        OS --> BinFinal
+        BinFinal --> Run
     end
-    Stage2 --> F["Финальный легкий образ для деплоя"]
+
+    BinBuilder ==>|"COPY --from=builder<br/>(переносится только 1 файл!)"| BinFinal
+
+    style Builder fill:#fff8e1,stroke:#ffa000,stroke-width:2px
+    style Runtime fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style BinBuilder fill:#ffe082,stroke:#ff8f00,stroke-width:2px
+    style BinFinal fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px
+    style Run fill:#a5d6a7,stroke:#1b5e20,stroke-width:2px
 ```
 
 ---
@@ -1397,15 +1507,292 @@ services:
 
 ---
 
-## 9. Дорожная карта: Куда двигаться дальше
+## 9. CI/CD Пайплайны: Автоматическая сборка, тестирование и публикация в GHCR/Docker Hub
 
-После уверенного владения связкой Docker + Docker Compose изучайте следующие технологии:
+В современном коммерческом цикле разработки никто не собирает и не публикует Docker-образы вручную со своего ноутбука. Ручная сборка нарушает принцип воспроизводимости, зависит от локального окружения разработчика и несет прямые риски безопасности.
+
+Сборка, прогон тестов и публикация в реестр автоматизируются с помощью **CI/CD (Continuous Integration / Continuous Delivery)** при каждом `git push` в ветку `master` или создании Pull Request.
+
+---
+
+### 9.1. Архитектура облачного пайплайна
+
+```
+┌─────────────────────────────────┐
+│     РАЗРАБОТЧИК (Mac / ПК)      │
+│  git push origin master / PR    │
+└────────────────┬────────────────┘
+                 │ Webhook триггер
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 GITHUB ACTIONS RUNNER                       │
+│                                                             │
+│  1. Job: test (Быстрая проверка качества)                   │
+│     ├── golangci-lint run (статический анализ кода)         │
+│     └── go test -v -race ./... (unit-тесты + детектор гонок)│
+│                 │                                           │
+│                 ▼ Успех                                     │
+│  2. Job: build-and-push (Сборка и публикация)               │
+│     ├── Setup QEMU (эмуляция linux/amd64 + linux/arm64)     │
+│     ├── Setup Buildx (движок BuildKit)                      │
+│     ├── Cache type=gha (загрузка слоев из GitHub Cache)     │
+│     ├── docker build (сборка образа с кэшем зависимостей)   │
+│     └── docker push (публикация в GHCR / Docker Hub)        │
+│                 │                                           │
+│                 ▼ Успех                                     │
+│  3. Job: smoke-test (Проверка жизнеспособности)             │
+│     ├── Запуск контейнера: docker run -d -p 8080:8080       │
+│     └── Проверка: curl --fail http://localhost:8080/health  │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│        РЕЕСТР ОБРАЗОВ (GHCR / DOCKER HUB)                   │
+│  ghcr.io/username/wallet-app:latest                         │
+│  ghcr.io/username/wallet-app:v1.2.0                         │
+│  ghcr.io/username/wallet-app:sha-7f8a9b                     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 9.2. Что необходимо подготовить: Секреты и права доступа
+
+Для публикации образа реестр требует авторизации. Есть 2 основных варианта:
+
+#### Вариант А: GitHub Packages (GHCR — `ghcr.io`) — Рекомендуется для проектов на GitHub
+* **Плюсы:** Бесплатно, безлимитные публичные образы, привязан к вашему репозиторию на GitHub.
+* **Что нужно настроить:** **Ничего дополнительно создавать не нужно!** GitHub автоматически выдает временный системный токен `${{ secrets.GITHUB_TOKEN }}` на время работы пайплайна.
+* Нужно лишь указать права в workflow-файле:
+  ```yaml
+  permissions:
+    contents: read
+    packages: write # Право на запись контейнеров в ghcr.io
+  ```
+
+#### Вариант Б: Docker Hub (`docker.io`)
+* **Что нужно настроить:**
+  1. Зарегистрироваться на [hub.docker.com](https://hub.docker.com).
+  2. В настройках профиля (Security) выпустить **Personal Access Token** (Access Token).
+  3. В репозитории на GitHub открыть **Settings $\rightarrow$ Secrets and variables $\rightarrow$ Actions** и добавить два секрета:
+     * `DOCKERHUB_USERNAME`: ваш логин на Docker Hub.
+     * `DOCKERHUB_TOKEN`: созданный токен доступа.
+
+---
+
+### 9.3. Эталонный боевой GitHub Actions Workflow (`.github/workflows/ci.yml`)
+
+Создайте в корне репозитория файл `.github/workflows/ci.yml`:
+
+```yaml
+name: CI/CD Pipeline
+
+# Триггеры: запуск при пуше в master и при создании PR в master
+on:
+  push:
+    branches: [ master, main ]
+    tags: [ 'v*.*.*' ] # Срабатывает при создании релизного Git-тега, например v1.0.0
+  pull_request:
+    branches: [ master, main ]
+
+# Отменяет старые билды в том же PR при поступлении нового коммита
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }} # Формат: owner/repo (например, alex808r/wallet-app)
+
+jobs:
+  # ============================================================================
+  # 1. Этап тестирования и линтинга кода Go
+  # ============================================================================
+  test:
+    name: Run Tests & Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+          cache: true # Кэширует go.sum и $GOPATH/pkg/mod
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.64
+
+      - name: Run Unit Tests with Race Detector
+        run: |
+          go test -v -race -timeout 60s -coverprofile=coverage.out ./...
+
+  # ============================================================================
+  # 2. Этап сборки, кэширования и публикации Docker-образа
+  # ============================================================================
+  build-and-push:
+    name: Build & Push Docker Image
+    needs: test # Запускается ТОЛЬКО после успешного прохождения всех тестов!
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Необходимо для записи в ghcr.io
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Настройка эмулятора QEMU для сборки под несколько платформ (AMD64 + ARM64)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # Установка современного движка сборки Docker Buildx (BuildKit)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Авторизация в реестре GHCR (или Docker Hub)
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Автоматическая генерация семантических Docker-тегов и меток OCI
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=sha,format=short,prefix=sha-
+
+      # Сборка и публикация образа с облачным кэшированием слоев в GitHub Actions
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          # Мультиархитектурная сборка: x86_64 (Intel/AMD) + aarch64 (Apple Silicon, AWS Graviton)
+          platforms: linux/amd64,linux/arm64
+          # Пушим ТОЛЬКО при пуше в master/main или релизных тегах (в PR только тестовая сборка)
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # ⚡ ОБЛАЧНЫЙ КЭШ СЛОЕВ GITHUB ACTIONS (type=gha):
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ============================================================================
+  # 3. Smoke Test (Проверка реальной работоспособности собранного контейнера)
+  # ============================================================================
+  smoke-test:
+    name: Container Smoke Test
+    needs: build-and-push
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run container and verify health
+        run: |
+          # 1. Запускаем свежесобранный контейнер
+          IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}"
+          docker run -d --name smoke-app -p 8080:8080 $IMAGE
+
+          # 2. Ждем старта сервиса и опрашиваем healthcheck эндпоинт
+          sleep 3
+          curl --fail --retry 5 --retry-delay 2 http://localhost:8080/health || (docker logs smoke-app && exit 1)
+
+          echo "✓ Smoke test успешно пройден: контейнер стартовал и отдает 200 OK"
+          docker rm -f smoke-app
+```
+
+---
+
+### 9.4. Анатомия и фишки продакшен-пайплайна:
+
+#### 1. Кэширование слоев `cache-from: type=gha` и `cache-to: type=gha,mode=max`
+* **Проблема без кэша:** Каждый шаг GitHub Actions запускается на чистой виртуальной машине. Без кэша Docker будет при каждом коммите заново скачивать базовый образ Alpine и все зависимости Go из интернета — сборка длится **3–5 минут**.
+* **Решение `type=gha`:** Docker BuildKit сохраняет слои кэша напрямую в облачном хранилище GitHub Actions Cache API.
+* **Почему критичен параметр `mode=max`:**
+  * По умолчанию (`mode=min`) кэшируются только слои финального рантайм-образа.
+  * В Go Multi-Stage сборке 90% времени уходит на первый сборочный этап `builder` (`go mod download`). Параметр `mode=max` принудительно кэширует **все промежуточные сборочные этапы**, сокращая время повторной сборки с 3 минут до **10–15 секунд**!
+
+#### 2. Зачем нужен `docker/metadata-action`
+Он избавляет разработчика от ручного хардкода версий и генерирует теги по строгим стандартам OCI:
+* При пуше в `master` $\rightarrow$ вешает теги `:master` и `:sha-a1b2c3d`.
+* При создании релиза `v1.2.0` $\rightarrow$ создает теги `:1.2.0`, `:1.2`, `:1` и `:latest`.
+* При создании PR #42 $\rightarrow$ создает тег `:pr-42` (удобно для превью-тестирования фичи перед слиянием).
+
+#### 3. Кросс-платформенная сборка `platforms: linux/amd64,linux/arm64`
+Связка `setup-qemu-action` + `setup-buildx-action` собирает единый **Multi-Arch Manifest**:
+* Если сервер в дата-центре работает на процессоре Intel Xeon / AMD EPYC, Docker автоматически скачает образ `linux/amd64`.
+* Если сервер крутится в облаке на энергоэффективных чипах **AWS Graviton** (или разработчик локально запускает контейнер на Mac Apple Silicon M1/M2/M3/M4), Docker автоматически подтянет нативный образ `linux/arm64` без тяжелой программной эмуляции.
+
+---
+
+### 9.5. Альтернатива: GitLab CI (`.gitlab-ci.yml`)
+
+Если в вашей компании используется GitLab, аналогичный конвейер описывается в файле `.gitlab-ci.yml`:
+
+```yaml
+stages:
+  - test
+  - build
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+# Прогон тестов Go
+test:
+  stage: test
+  image: golang:1.24-alpine
+  script:
+    - apk add --no-cache git
+    - go test -v -race ./...
+
+# Сборка и публикация в встроенный GitLab Container Registry
+build_docker:
+  stage: build
+  image: docker:27-cli
+  services:
+    - docker:27-dind # Демон Docker-in-Docker
+  only:
+    - master
+    - tags
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+  script:
+    - docker build --pull --cache-from $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest
+```
+
+---
+
+## 10. Дорожная карта: Куда двигаться дальше
+
+После уверенного владения связкой Docker + Docker Compose и CI/CD изучайте следующие технологии:
 
 1. **Testcontainers-Go:**
    * Написание интеграционных тестов, которые прямо из `go test` автоматически поднимают временный контейнер с реальной базой данных и уничтожают его после завершения тестов. Подробнее: [Том 5: Раздел 17](05-go-core-testing-arch.md#17-интеграционные-тесты-с-testcontainers-go).
-2. **CI/CD Пайплайны (GitHub Actions / GitLab CI):**
-   * Автоматическая сборка Docker-образа по пушу в `master`, прогон тестов внутри контейнера и публикация в Docker Hub / GHCR с кэшированием слоев в GitHub Cache (`type=gha`).
-3. **Оркестрация в продакшене (Kubernetes & Helm):**
+2. **Оркестрация в продакшене (Kubernetes & Helm):**
    * Docker Compose предназначен для локальной разработки и небольших одиночных серверов.
    * Для масштабирования на кластер серверов, автоматического перезапуска при падении узлов и Rolling Updates (обновление без простоя) изучается **Kubernetes (K8s)**.
+3. **Мониторинг и Observability контейнеров (Prometheus, Grafana, Loki):**
+   * Сбор метрик с Go-приложения через эндпоинт `/metrics`, агрегация логов через Grafana Loki и трейсинг распределенных запросов через OpenTelemetry.
 
