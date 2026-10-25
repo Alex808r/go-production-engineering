@@ -350,17 +350,59 @@ RUN go build -o app .
 
 Для этого используется **Многоэтапная сборка (Multi-stage build)**:
 
+```
+┌─────────────────────────────────────────────────────────────┐
+│          ЭТАП 1: Сборщик (golang:1.24-alpine ~800 МБ)       │
+│                                                             │
+│   [ Исходный код Go ] ──> [ go build -ldflags="-s -w" ]     │
+│                                    │                        │
+│                                    ▼                        │
+│                    [ Готовый бинарник: /bin/app ]           │
+│                                                             │
+│   ❌ Весь тяжелый SDK, компилятор и git ВЫБРАСЫВАЮТСЯ!      │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+                               │ COPY --from=builder /bin/app
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│          ЭТАП 2: Рантайм (alpine:3.20 всего ~15 МБ!)        │
+│                                                             │
+│   ├── Чистая ОС Alpine Linux (~7 МБ)                        │
+│   ├── ca-certificates (для HTTPS) + tzdata                  │
+│   ├── Бинарный файл /app/app (~8 МБ)                        │
+│   └── Запуск: USER appuser (UID 10001, без root)            │
+└─────────────────────────────────────────────────────────────┘
+```
+
 ```mermaid
 flowchart TD
-    subgraph Stage1 ["Этап 1: Сборка (golang:alpine ~800 MB)"]
-        A["Исходный код Go"] --> B["Компилятор go build"]
-        B --> C["Бинарник /bin/wallet-app"]
+    subgraph Builder ["Этап 1: Сборщик — golang:alpine (~800 МБ)"]
+        direction TB
+        Code["Исходный код Go<br/>(main.go, go.mod)"]
+        Compiler["Компилятор Go<br/>(go build -ldflags)"]
+        BinBuilder["Скомпилированный бинарник<br/><b>/bin/wallet-app</b>"]
+
+        Code --> Compiler
+        Compiler --> BinBuilder
     end
-    subgraph Stage2 ["Этап 2: Финальный образ (alpine:3.20 ~15 MB)"]
-        C -- "COPY --from=builder" --> D["/app/wallet-app"]
-        E["config.env + migrations"] --> D
+
+    subgraph Runtime ["Этап 2: Финальный образ — alpine (~15 МБ)"]
+        direction TB
+        OS["Минимальный Alpine<br/>+ ca-certificates, tzdata"]
+        BinFinal["Автономный бинарник<br/><b>/app/wallet-app</b>"]
+        Run["Безопасный запуск:<br/><b>USER appuser (UID 10001)</b>"]
+
+        OS --> BinFinal
+        BinFinal --> Run
     end
-    Stage2 --> F["Финальный легкий образ для деплоя"]
+
+    BinBuilder ==>|"COPY --from=builder<br/>(переносится только 1 файл!)"| BinFinal
+
+    style Builder fill:#fff8e1,stroke:#ffa000,stroke-width:2px
+    style Runtime fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style BinBuilder fill:#ffe082,stroke:#ff8f00,stroke-width:2px
+    style BinFinal fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px
+    style Run fill:#a5d6a7,stroke:#1b5e20,stroke-width:2px
 ```
 
 ---
