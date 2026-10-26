@@ -16,7 +16,7 @@
 
 ## Задача №1: Схема базы данных
 
-Файл [`schema.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15/schema.sql) описывает DDL-структуру базы данных для кинопортала.
+Файл [`schema.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/homework-15/schema.sql) описывает DDL-структуру базы данных для кинопортала.
 
 ### Моделируемые сущности и связи:
 - **`studios` (Киностудии):**
@@ -44,7 +44,7 @@
 
 ## Задача №2: Демонстрационные данные
 
-Файл [`data.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15/data.sql) наполняет БД тестовым набором:
+Файл [`data.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/homework-15/data.sql) наполняет БД тестовым набором:
 - 5 мировых киностудий.
 - 6 известных режиссёров (Christopher Nolan, Steven Spielberg, Quentin Tarantino, Denis Villeneuve, David Lynch, Martin Scorsese).
 - 10 известных актёров.
@@ -55,7 +55,7 @@
 
 ## Задача №3: Аналитические SQL-запросы
 
-Файл [`queries.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15/queries.sql) содержит решение 10 типовых аналитических задач:
+Файл [`queries.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/homework-15/queries.sql) содержит решение 10 типовых аналитических задач:
 1. Выборка фильмов с названием студии (`JOIN studios`).
 2. Выборка фильмов для некоторого актёра (`WHERE a.first_name = ... AND a.last_name = ...`).
 3. Подсчёт фильмов для некоторого режиссёра (`COUNT(md.movie_id)`).

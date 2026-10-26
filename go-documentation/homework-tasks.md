@@ -64,9 +64,9 @@
 
 ## Урок 1: Первая программа и базовый ввод-вывод (`fmt`)
 
-> 📖 **Теория:** [Том 1: Разделы 0.1, 0.7 (Старт с нуля и fmt)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#01-структура-программы-package-main-func-main-и-первая-программа)  
-> 💻 **Код лекции:** [01-intro/hello](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/01-intro/hello)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 01)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-01-первая-программа-и-структура-приложения)
+> 📖 **Теория:** [Том 1: Разделы 0.1, 0.7 (Старт с нуля и fmt)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#01-структура-программы-package-main-func-main-и-первая-программа)  
+> 💻 **Код лекции:** [01-intro/hello](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/01-intro/hello)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 01)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-01-первая-программа-и-структура-приложения)
 
 ### 🎯 Условие:
 
@@ -109,9 +109,9 @@ func main() {
 
 ## Урок 2: Переменные, константы и калькулятор
 
-> 📖 **Теория:** [Том 1: Разделы 0.2, 0.3, 3.1 (Переменные, Zero Value, константы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#02-переменные-в-go-явное-var-vs-короткое-объявление)  
-> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 📖 **Теория:** [Том 1: Разделы 0.2, 0.3, 3.1 (Переменные, Zero Value, константы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#02-переменные-в-go-явное-var-vs-короткое-объявление)  
+> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/1-basic)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие:
 
@@ -159,9 +159,9 @@ func main() {
 
 ## Урок 3: Приведение типов и расчет рейтинга
 
-> 📖 **Теория:** [Том 1: Раздел 0.4 (Строгая типизация и конверсия типов)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#04-строгая-типизация-и-явное-приведение-типов-type-conversion)  
-> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 📖 **Теория:** [Том 1: Раздел 0.4 (Строгая типизация и конверсия типов)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#04-строгая-типизация-и-явное-приведение-типов-type-conversion)  
+> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/1-basic)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие:
 
@@ -197,9 +197,9 @@ func main() {
 
 ## Урок 4: Условия (if с областью видимости и switch)
 
-> 📖 **Теория:** [Том 1: Разделы 1.2, 1.3 (if short statement, switch)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#12-конструкция-if-с-коротким-объявлением-if-with-short-statement)  
-> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 📖 **Теория:** [Том 1: Разделы 1.2, 1.3 (if short statement, switch)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#12-конструкция-if-с-коротким-объявлением-if-with-short-statement)  
+> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/1-basic)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие:
 
@@ -252,9 +252,9 @@ func main() {
 
 ## Урок 5: Циклы for, break и continue
 
-> 📖 **Теория:** [Том 1: Разделы 1.1, 1.4 (Циклы for, метки break/continue)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#11-формы-цикла-for-в-go)  
-> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 📖 **Теория:** [Том 1: Разделы 1.1, 1.4 (Циклы for, метки break/continue)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#11-формы-цикла-for-в-go)  
+> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/1-basic)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие:
 
@@ -298,10 +298,10 @@ func main() {
 
 ## Урок 6: Слайсы (Slices) и управление каталогом
 
-> 📖 **Теория:** [Том 1: Раздел 5 (Массивы и слайсы, append, cap)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#5-массивы-и-слайсы-arrays--slices)  
-> 💻 **Код лекции:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/3-array_slice_map)  
-> 🛠️ **Домашнее задание:** [homework-02 (GoSearch crawler)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 📖 **Теория:** [Том 1: Раздел 5 (Массивы и слайсы, append, cap)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#5-массивы-и-слайсы-arrays--slices)  
+> 💻 **Код лекции:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/3-array_slice_map)  
+> 🛠️ **Домашнее задание:** [homework-02 (GoSearch crawler)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/homework-02)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие:
 
@@ -351,10 +351,10 @@ func main() {
 
 ## Урок 7: Словари (Maps) и быстрый поиск тайтлов
 
-> 📖 **Теория:** [Том 1: Раздел 6 (Карты maps, устройство и доступ)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#6-карты-maps)  
-> 💻 **Код лекции:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/3-array_slice_map)  
-> 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 03)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-03-алгоритмы-и-вычислительная-сложность)
+> 📖 **Теория:** [Том 1: Раздел 6 (Карты maps, устройство и доступ)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#6-карты-maps)  
+> 💻 **Код лекции:** [02-syntax/3-array_slice_map](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/3-array_slice_map)  
+> 🛠️ **Домашнее задание:** [homework-03 (Инвертированный индекс)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 03)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-03-алгоритмы-и-вычислительная-сложность)
 
 ### 🎯 Условие:
 
@@ -410,10 +410,10 @@ func main() {
 
 ## Урок 8: Структуры, указатели и методы (Бизнес-модель Goflex)
 
-> 📖 **Теория:** [Том 1: Разделы 7, 8 (Указатели и структуры)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#7-указатели-в-деталях-pointers), [Том 2: Раздел 9 (Методы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
-> 💻 **Код лекции:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/2-structures), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/4-pointers), [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop)  
-> 🛠️ **Домашнее задание:** [homework-06 (ООП движок)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 06)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-06-ооп-в-go-методы-композиция-и-dip)
+> 📖 **Теория:** [Том 1: Разделы 7, 8 (Указатели и структуры)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#7-указатели-в-деталях-pointers), [Том 2: Раздел 9 (Методы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
+> 💻 **Код лекции:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/2-structures), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/4-pointers), [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop)  
+> 🛠️ **Домашнее задание:** [homework-06 (ООП движок)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 06)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-06-ооп-в-go-методы-композиция-и-dip)
 
 ### 🎯 Условие:
 
@@ -517,10 +517,10 @@ func main() {
 
 ## Урок 9: Интерфейсы, полиморфизм и Type Switch
 
-> 📖 **Теория:** [Том 2: Раздел 9 (Интерфейсы, полиморфизм, duck typing)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
-> 💻 **Код лекции:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop), [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces)  
-> 🛠️ **Домашние задания:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06), [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces/homework-09)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-09-интерфейсы-и-полиморфизм)
+> 📖 **Теория:** [Том 2: Раздел 9 (Интерфейсы, полиморфизм, duck typing)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
+> 💻 **Код лекции:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop), [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces)  
+> 🛠️ **Домашние задания:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06), [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces/homework-09)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-09-интерфейсы-и-полиморфизм)
 
 ### 🎯 Условие:
 
@@ -597,11 +597,11 @@ func main() {
 
 ## Урок 10: Конкурентность (Горутины, Каналы, sync, Worker Pool, Context)
 
-> 📖 **Теория:** [Том 3: Разделы 11, 15 (Горутины, каналы, sync, Worker Pool)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md#11-конкурентность-горутины-и-каналы-concurrency)  
-> 💻 **Код лекции:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/10-concurrency), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview)  
-> 🛠️ **Домашнее задание:** [homework-10 (Ping-Pong)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/10-concurrency/homework-10)  
-> 💡 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-10-конкурентность-горутины-и-каналы)
+> 📖 **Теория:** [Том 3: Разделы 11, 15 (Горутины, каналы, sync, Worker Pool)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/03-go-core-concurrency.md#11-конкурентность-горутины-и-каналы-concurrency)  
+> 💻 **Код лекции:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview)  
+> 🛠️ **Домашнее задание:** [homework-10 (Ping-Pong)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/homework-10)  
+> 💡 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-livecoding-guide.md)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-10-конкурентность-горутины-и-каналы)
 
 ### 🎯 Комплексное задание со всеми 5 подзадачами из видео:
 
@@ -749,10 +749,10 @@ func main() {
 
 ## Урок 11: Web HTTP REST API и Middleware
 
-> 📖 **Теория:** [Том 4: Раздел 12 (HTTP сервер, маршрутизация, middleware)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка-и-http-nethttp)  
-> 💻 **Код лекции:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps), [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api)  
-> 🛠️ **Домашние задания:** [homework-12 (Web-сервер)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps/homework-12), [homework-13 (REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api/homework-13)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 12–13)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-12-веб-приложения-и-http-сервер)
+> 📖 **Теория:** [Том 4: Раздел 12 (HTTP сервер, маршрутизация, middleware)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка-и-http-nethttp)  
+> 💻 **Код лекции:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/12-web-apps), [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/13-api)  
+> 🛠️ **Домашние задания:** [homework-12 (Web-сервер)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/12-web-apps/homework-12), [homework-13 (REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/13-api/homework-13)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 12–13)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-12-веб-приложения-и-http-сервер)
 
 ### 🎯 Условие:
 
@@ -872,11 +872,11 @@ func main() {
 
 ## Урок 12: PostgreSQL, pgxpool, ACID-транзакции и Миграции
 
-> 📖 **Теория:** [Том 4: Раздел 13 (PostgreSQL, pgxpool, транзакции)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-postgresql--pgxpool)  
-> 🗄️ **Гайд по БД:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)  
-> 💻 **Код лекции:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps)  
-> 🛠️ **Домашние задания:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 15–16)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-15-реляционные-базы-данных-и-sql)
+> 📖 **Теория:** [Том 4: Раздел 13 (PostgreSQL, pgxpool, транзакции)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-postgresql--pgxpool)  
+> 🗄️ **Гайд по БД:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md)  
+> 💻 **Код лекции:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql), [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps)  
+> 🛠️ **Домашние задания:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/homework-15), [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 15–16)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-15-реляционные-базы-данных-и-sql)
 
 ### 🎯 Условие:
 
@@ -1008,8 +1008,8 @@ func (r *PostgresRepository) SubscribeUserTx(ctx context.Context, userID int64, 
 
 ## Упражнение (A Tour of Go): Квадратный корень методом Ньютона (Циклы и функции)
 
-> 📖 **Теория:** [Том 1: Разделы 1.1, 2.1 (Функции и циклы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#11-формы-цикла-for-в-go)  
-> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic)
+> 📖 **Теория:** [Том 1: Разделы 1.1, 2.1 (Функции и циклы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#11-формы-цикла-for-в-go)  
+> 💻 **Код лекции:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/1-basic)
 
 ### 🎯 Условие:
 
@@ -1127,13 +1127,13 @@ func main() {
 
 ## Занятие 2: Поисковый робот GoSearch (Пакет crawler и консольный поиск)
 
-> 📖 **Теория:** [Том 1: Раздел 5 (Массивы и слайсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#5-массивы-и-слайсы-arrays--slices)  
-> 💻 **Код лекции:** [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax)  
-> 📁 **Каталог решения:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02)  
-> 💻 **Исполняемый пакет:** [homework-02/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02/cmd/gosearch/main.go)  
-> 📦 **Пакеты:** [crawler](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02/pkg/crawler), [spider](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02/pkg/crawler/spider), [membot](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02/pkg/crawler/membot)  
-> 🧪 **Тесты:** [homework-02/cmd/gosearch/main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/homework-02/cmd/gosearch/main_test.go)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 📖 **Теория:** [Том 1: Раздел 5 (Массивы и слайсы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#5-массивы-и-слайсы-arrays--slices)  
+> 💻 **Код лекции:** [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax)  
+> 📁 **Каталог решения:** [homework-02](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/homework-02)  
+> 💻 **Исполняемый пакет:** [homework-02/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/homework-02/cmd/gosearch/main.go)  
+> 📦 **Пакеты:** [crawler](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/homework-02/pkg/crawler), [spider](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/homework-02/pkg/crawler/spider), [membot](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/homework-02/pkg/crawler/membot)  
+> 🧪 **Тесты:** [homework-02/cmd/gosearch/main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/homework-02/cmd/gosearch/main_test.go)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 ### 🎯 Условие задачи:
 
@@ -1150,13 +1150,13 @@ func main() {
 
 ## Занятие 3: Быстрый поисковый индекс (Инвертированный индекс и бинарный поиск)
 
-> 📖 **Теория:** [Том 1: Раздел 6 (Карты maps)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#6-карты-maps), [Том 6: Разделы 26–27 (Сложность O, поиск)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md#26-базовые-алгоритмы-и-o-нотация-в-go)  
-> 💻 **Код лекции:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms)  
-> 📁 **Каталог решения:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03)  
-> 💻 **Исполняемый пакет:** [homework-03/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03/cmd/gosearch/main.go)  
-> 📦 **Пакеты:** [pkg/index](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03/pkg/index), [pkg/crawler](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03/pkg/crawler)  
-> 🧪 **Тесты:** [index_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03/pkg/index/index_test.go), [main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03/cmd/gosearch/main_test.go)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 03)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-03-алгоритмы-и-вычислительная-сложность)
+> 📖 **Теория:** [Том 1: Раздел 6 (Карты maps)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#6-карты-maps), [Том 6: Разделы 26–27 (Сложность O, поиск)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/06-go-core-algorithms-interview.md#26-базовые-алгоритмы-и-o-нотация-в-go)  
+> 💻 **Код лекции:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms)  
+> 📁 **Каталог решения:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03)  
+> 💻 **Исполняемый пакет:** [homework-03/cmd/gosearch/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/cmd/gosearch/main.go)  
+> 📦 **Пакеты:** [pkg/index](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/pkg/index), [pkg/crawler](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/pkg/crawler)  
+> 🧪 **Тесты:** [index_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/pkg/index/index_test.go), [main_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/cmd/gosearch/main_test.go)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 03)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-03-алгоритмы-и-вычислительная-сложность)
 
 ### 🎯 Условие задачи:
 
@@ -1178,11 +1178,11 @@ func main() {
 
 ## Занятие 4: Структуры данных — Циклический двусвязный список со сторожевым элементом (Pop и Reverse)
 
-> 📖 **Теория:** [Том 6: Раздел 27 (Классические структуры данных)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md#27-классические-структуры-данных-data-structures-в-go)  
-> 💻 **Код лекции:** [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs)  
-> 📁 **Каталог решения:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/homework-04) и [04-datastructs/1-list](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/1-list)  
-> 🧪 **Тесты:** [list_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/homework-04/pkg/list/list_test.go)  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 04)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-04-классические-структуры-данных)
+> 📖 **Теория:** [Том 6: Раздел 27 (Классические структуры данных)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/06-go-core-algorithms-interview.md#27-классические-структуры-данных-data-structures-в-go)  
+> 💻 **Код лекции:** [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs)  
+> 📁 **Каталог решения:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs/homework-04) и [04-datastructs/1-list](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs/1-list)  
+> 🧪 **Тесты:** [list_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs/homework-04/pkg/list/list_test.go)  
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 04)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-04-классические-структуры-данных)
 
 ### 🎯 Условие задачи:
 
@@ -1352,12 +1352,12 @@ func (l *List) Reverse() *List {
 
 ## Занятие 5: Ввод-вывод в Go — Персистентность поисковых данных (io.Reader, io.Writer, JSON/GOB кеширование)
 
-> 📖 **Теория:** [Том 2: Раздел 9.6 (Потоковый ввод-вывод io.Reader / io.Writer)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#96-потоковый-ввод-вывод-интерфейсы-ioreader-и-iowriter)  
-> 💻 **Код лекции:** [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io)  
-> 📁 **Каталог решения:** [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/homework-05)  
-> 📦 **Пакеты:** [homework-05/pkg/storage](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/homework-05/pkg/storage)  
+> 📖 **Теория:** [Том 2: Раздел 9.6 (Потоковый ввод-вывод io.Reader / io.Writer)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md#96-потоковый-ввод-вывод-интерфейсы-ioreader-и-iowriter)  
+> 💻 **Код лекции:** [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io)  
+> 📁 **Каталог решения:** [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/homework-05)  
+> 📦 **Пакеты:** [homework-05/pkg/storage](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/homework-05/pkg/storage)  
 > 🧪 **Тесты:** `go test -v ./lessons/05-io/homework-05/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 05)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-05-потоковый-ввод-вывод-файлы-и-json)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 05)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-05-потоковый-ввод-вывод-файлы-и-json)
 
 В данном домашнем задании (каталог `go_course_4/05-io/homework-05/`) реализована персистентность поисковых данных робота **GoSearch**: сохранение отсканированных веб-страниц в файл на диске и их мгновенная загрузка при повторном запуске без необходимости повторного сетевого сканирования.
 
@@ -1470,12 +1470,12 @@ ok      go-core-4/homework-05/pkg/storage       0.512s
 
 ## Занятие 6: ООП в Go — Структуры, методы и идиоматичный рефакторинг
 
-> 📖 **Теория:** [Том 2: Раздел 9 (Методы, получатели, встраивание, DIP)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
-> 💻 **Код лекции:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop)  
-> 📁 **Каталог решения:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06)  
-> 📦 **Пакеты:** [engine](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06/pkg/engine), [geom](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06/pkg/geom)  
+> 📖 **Теория:** [Том 2: Раздел 9 (Методы, получатели, встраивание, DIP)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
+> 💻 **Код лекции:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop)  
+> 📁 **Каталог решения:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06)  
+> 📦 **Пакеты:** [engine](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06/pkg/engine), [geom](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06/pkg/geom)  
 > 🧪 **Тесты:** `go test -v ./lessons/06-oop/homework-06/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 06)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-06-ооп-в-go-методы-композиция-и-dip)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 06)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-06-ооп-в-go-методы-композиция-и-dip)
 
 В рамках данного занятия (каталоги `go_course_4/06-oop/5-hw/` и `go_course_4/06-oop/homework-06/`) решаются две ключевые задачи:
 
@@ -1719,12 +1719,12 @@ ok  	go-core-4/homework-06/pkg/storage	0.173s
 
 ## Занятие 7: Тестирование в Go — Unit-тесты, Табличные тесты, Бенчмарки и Имитация зависимостей
 
-> 📖 **Теория:** [Том 5: Разделы 17.1–17.5 (Unit-тесты, Table-Driven, бенчмарки)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#17-тестирование-бенчмарки-и-профилирование-testing--pprof)  
-> 💻 **Код лекции:** [07-testing](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing)  
-> 📁 **Каталог решения:** [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07)  
-> 📦 **Пакеты:** [sorts](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07/pkg/sorts), [storage](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07/pkg/storage)  
+> 📖 **Теория:** [Том 5: Разделы 17.1–17.5 (Unit-тесты, Table-Driven, бенчмарки)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#17-тестирование-бенчмарки-и-профилирование-testing--pprof)  
+> 💻 **Код лекции:** [07-testing](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing)  
+> 📁 **Каталог решения:** [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07)  
+> 📦 **Пакеты:** [sorts](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07/pkg/sorts), [storage](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07/pkg/storage)  
 > 🧪 **Тесты:** `go test -v -bench=. ./lessons/07-testing/homework-07/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 07)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-07-промышленное-тестирование-и-tdd)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 07)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-07-промышленное-тестирование-и-tdd)
 
 ### 🎯 Условие задачи:
 
@@ -2024,11 +2024,11 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 ## Домашнее задание 8: Профилирование, Отладка и Трассировка в Go
 
-> 📖 **Теория:** [Том 5: Разделы 17.6–17.9 (pprof, трассировка)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#17-тестирование-бенчмарки-и-профилирование-testing--pprof)  
-> 💻 **Код лекции:** [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug)  
-> 📁 **Каталог решения:** [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08)  
+> 📖 **Теория:** [Том 5: Разделы 17.6–17.9 (pprof, трассировка)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#17-тестирование-бенчмарки-и-профилирование-testing--pprof)  
+> 💻 **Код лекции:** [08-prof_debug](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug)  
+> 📁 **Каталог решения:** [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug/homework-08)  
 > 🧪 **Тесты:** `go test -v -bench=. ./lessons/08-prof_debug/homework-08/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 08)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-08-профилирование-бенчмарки-и-трейсинг)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 08)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-08-профилирование-бенчмарки-и-трейсинг)
 
 Решение полностью реализовано в директории [`go_course_4/08-prof_debug/homework-08`](../lessons/08-prof_debug/homework-08).
 
@@ -2071,11 +2071,11 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 ## Домашнее задание 9: Интерфейсы в Go
 
-> 📖 **Теория:** [Том 2: Раздел 9 (Методы и интерфейсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
-> 💻 **Код лекции:** [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces)  
-> 📁 **Каталог решения:** [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces/homework-09)  
+> 📖 **Теория:** [Том 2: Раздел 9 (Методы и интерфейсы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
+> 💻 **Код лекции:** [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces)  
+> 📁 **Каталог решения:** [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces/homework-09)  
 > 🧪 **Тесты:** `go test -v ./lessons/09-interfaces/homework-09/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-09-интерфейсы-и-полиморфизм)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-09-интерфейсы-и-полиморфизм)
 
 Решение полностью реализовано и протестировано в директории [`go_course_4/09-interfaces/homework-09`](../lessons/09-interfaces/homework-09).
 
@@ -2097,11 +2097,11 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 ## Домашнее задание 10: Конкурентное программирование (Игра в Пинг-Понг)
 
-> 📖 **Теория:** [Том 3: Разделы 11, 15 (Конкурентность, горутины, каналы, sync)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md#11-конкурентность-горутины-и-каналы-concurrency)  
-> 💻 **Код лекции:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/10-concurrency)  
-> 📁 **Каталог решения:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/10-concurrency/homework-10)  
+> 📖 **Теория:** [Том 3: Разделы 11, 15 (Конкурентность, горутины, каналы, sync)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/03-go-core-concurrency.md#11-конкурентность-горутины-и-каналы-concurrency)  
+> 💻 **Код лекции:** [10-concurrency](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency)  
+> 📁 **Каталог решения:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/homework-10)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/10-concurrency/homework-10/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-10-конкурентность-горутины-и-каналы)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 10)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-10-конкурентность-горутины-и-каналы)
 
 Решение полностью реализовано и протестировано в директории [`go_course_4/10-concurrency/homework-10`](../lessons/10-concurrency/homework-10).
 
@@ -2122,11 +2122,11 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 ## Домашнее задание 11: Сетевое программирование (Сетевая служба GoSearch)
 
-> 📖 **Теория:** [Том 4: Раздел 28 (Сетевое программирование, TCP, UDP, сокеты)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#28-сетевое-программирование-network-programming)  
-> 💻 **Код лекции:** [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network)  
-> 📁 **Каталог решения:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network/homework-11)  
+> 📖 **Теория:** [Том 4: Раздел 28 (Сетевое программирование, TCP, UDP, сокеты)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#28-сетевое-программирование-network-programming)  
+> 💻 **Код лекции:** [11-network](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/11-network)  
+> 📁 **Каталог решения:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/11-network/homework-11)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/11-network/homework-11/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 11)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-11-сетевое-программирование-tcpudp)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 11)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-11-сетевое-программирование-tcpudp)
 
 Решение полностью реализовано и протестировано в директории [`go_course_4/11-network/homework-11`](../lessons/11-network/homework-11).
 
@@ -2155,11 +2155,11 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 ## Домашнее задание 12: Веб-приложения на Go (Веб-служба GoSearch)
 
-> 📖 **Теория:** [Том 4: Раздел 12 (Backend Web-разработка, HTTP, routing, templates)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка)  
-> 💻 **Код лекции:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps)  
-> 📁 **Каталог решения:** [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps/homework-12)  
+> 📖 **Теория:** [Том 4: Раздел 12 (Backend Web-разработка, HTTP, routing, templates)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка)  
+> 💻 **Код лекции:** [12-web-apps](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/12-web-apps)  
+> 📁 **Каталог решения:** [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/12-web-apps/homework-12)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/12-web-apps/homework-12/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 12)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-12-веб-приложения-и-шаблонизация)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 12)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-12-веб-приложения-и-шаблонизация)
 
 Решение полностью реализовано и протестировано в отдельной директории [`go_course_4/12-web-apps/homework-12`](../lessons/12-web-apps/homework-12) без изменения или затирания предыдущих домашних работ.
 
@@ -2199,11 +2199,11 @@ ok  	go-core-4/homework-07/pkg/storage	0.202s
 
 ## Домашнее задание 13: Разработка REST API (Поисковик GoSearch API и Модель памяти)
 
-> 📖 **Теория:** [Том 4: Раздел 12 (Backend Web-разработка, REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка) | [Том 1: Раздел 1 (Модель памяти Go)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#1-внутреннее-устройство-go-и-система-типов)  
-> 💻 **Код лекции:** [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api)  
-> 📁 **Каталог решения:** [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api/homework-13)  
+> 📖 **Теория:** [Том 4: Раздел 12 (Backend Web-разработка, REST API)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#12-backend-web-разработка) | [Том 1: Раздел 1 (Модель памяти Go)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#1-внутреннее-устройство-go-и-система-типов)  
+> 💻 **Код лекции:** [13-api](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/13-api)  
+> 📁 **Каталог решения:** [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/13-api/homework-13)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/13-api/homework-13/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 13)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-13-rest-api-и-промежуточное-по-middleware)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 13)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-13-rest-api-и-промежуточное-по-middleware)
 
 Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/13-api/homework-13`](../lessons/13-api/homework-13) без изменения или затирания предыдущих решений.
 
@@ -2349,11 +2349,11 @@ ok  	go-core-4/homework-13/pkg/storage	2.460s	coverage: 99.0% of statements
 
 ## Домашнее задание 14: Удалённый вызов процедур (RPC-служба сообщений)
 
-> 📖 **Теория:** [Том 5: Раздел 20 (Удаленный вызов процедур RPC / gRPC)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#20-удаленный-вызов-процедур-rpc--grpc)  
-> 💻 **Код лекции:** [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC)  
-> 📁 **Каталог решения:** [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14)  
+> 📖 **Теория:** [Том 5: Раздел 20 (Удаленный вызов процедур RPC / gRPC)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#20-удаленный-вызов-процедур-rpc--grpc)  
+> 💻 **Код лекции:** [14-RPC](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC)  
+> 📁 **Каталог решения:** [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/14-RPC/homework-14/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 14)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-14-удаленный-вызов-процедур-rpc)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 14)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-14-удаленный-вызов-процедур-rpc)
 
 Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/14-RPC/homework-14`](../lessons/14-RPC/homework-14) без изменения или затирания предыдущих решений.
 
@@ -2408,12 +2408,12 @@ ok  	go-core-4/homework-14/pkg/rpcservice	1.495s	coverage: 100.0% of statements
 
 ## Домашнее задание 15: Реляционные базы данных (Схема БД онлайн-кинотеатра)
 
-> 📖 **Теория:** [Том 4: Раздел 13 (Работа с базами данных: SQL, PostgreSQL, pgx)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд)  
-> 📚 **Руководства:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md) | [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)  
-> 💻 **Код лекции:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql)  
-> 📁 **Каталог решения:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15)  
+> 📖 **Теория:** [Том 4: Раздел 13 (Работа с базами данных: SQL, PostgreSQL, pgx)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд)  
+> 📚 **Руководства:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md) | [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/sql-livecoding-guide.md)  
+> 💻 **Код лекции:** [15-sql](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql)  
+> 📁 **Каталог решения:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/homework-15)  
 > 🧪 **Тесты:** `go test -v ./lessons/15-sql/homework-15/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 15)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-15-проектирование-реляционных-бд-и-sql)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 15)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-15-проектирование-реляционных-бд-и-sql)
 
 Решение полностью реализовано в отдельной изолированной директории [`go_course_4/15-sql/homework-15`](../lessons/15-sql/homework-15) без изменения или затирания предыдущих решений.
 
@@ -2451,12 +2451,12 @@ ok  	go-core-4/homework-15
 
 ## Домашнее задание 16: Приложения с базами данных (Пакет для БД фильмов с паттерном Repository)
 
-> 📖 **Теория:** [Том 4: Раздел 13 (Работа с базами данных: SQL, транзакции, Repository)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд)  
-> 📚 **Руководство:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)  
-> 💻 **Код лекции:** [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps)  
-> 📁 **Каталог решения:** [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16)  
+> 📖 **Теория:** [Том 4: Раздел 13 (Работа с базами данных: SQL, транзакции, Repository)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд)  
+> 📚 **Руководство:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md)  
+> 💻 **Код лекции:** [16-db-apps](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps)  
+> 📁 **Каталог решения:** [homework-16](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/16-db-apps/homework-16/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 16)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-16-работа-с-бд-в-go-интерфейсы-и-драйверы)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 16)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-16-работа-с-бд-в-go-интерфейсы-и-драйверы)
 
 Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/16-db-apps/homework-16`](../lessons/16-db-apps/homework-16) на основе схемы БД информационного сайта о фильмах из Занятия №15.
 
@@ -2534,12 +2534,12 @@ ok  	go-core-4/homework-16/pkg/db/pgsql	1.497s
 
 ## Домашнее задание 17: Архитектура Go-приложения (Clean Architecture и SOLID)
 
-> 📖 **Теория:** [Том 5: Разделы 18, 19 (Архитектура сервисов, Clean Architecture, SOLID)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#18-архитектура-сервисов-и-паттерны-проектирования)  
-> 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)  
-> 💻 **Код лекции:** [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design)  
-> 📁 **Каталог решения:** [homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17)  
+> 📖 **Теория:** [Том 5: Разделы 18, 19 (Архитектура сервисов, Clean Architecture, SOLID)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#18-архитектура-сервисов-и-паттерны-проектирования)  
+> 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-system-design-guide.md)  
+> 💻 **Код лекции:** [17-system-design](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design)  
+> 📁 **Каталог решения:** [homework-17](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/17-system-design/homework-17/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 17)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-17-системный-дизайн-и-чистая-архитектура)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 17)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-17-системный-дизайн-и-чистая-архитектура)
 
 Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/17-system-design/homework-17`](../lessons/17-system-design/homework-17) без изменения или затирания предыдущих решений.
 
@@ -2606,12 +2606,12 @@ ok  	go-core-4/homework-17/solid/srp	2.561s
 
 ## Домашнее задание 18: Разработка микросервисов (URL Shortener Service)
 
-> 📖 **Теория:** [Том 5: Раздел 23 (Cloud-Ready и микросервисная архитектура, Docker, Prometheus)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#23-cloud-ready-и-микросервисная-архитектура)  
-> 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)  
-> 💻 **Код лекции:** [18-microservices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices)  
-> 📁 **Каталог решения:** [homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18)  
+> 📖 **Теория:** [Том 5: Раздел 23 (Cloud-Ready и микросервисная архитектура, Docker, Prometheus)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#23-cloud-ready-и-микросервисная-архитектура)  
+> 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-system-design-guide.md)  
+> 💻 **Код лекции:** [18-microservices](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices)  
+> 📁 **Каталог решения:** [homework-18](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/18-microservices/homework-18/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 18)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-18-микросервисы-docker-и-контейнеризация)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 18)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-18-микросервисы-docker-и-контейнеризация)
 
 Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/18-microservices/homework-18`](../lessons/18-microservices/homework-18) со всеми требованиями к микросервисной архитектуре и контейнеризации.
 
@@ -2666,12 +2666,12 @@ ok  	go-core-4/homework-18/pkg/storage	1.797s
 
 ## Домашнее задание 19: Очереди сообщений и Асинхронная аналитика (Kafka / Event Sourcing)
 
-> 📖 **Теория:** [Том 5: Раздел 21 (Очереди сообщений: Kafka, RabbitMQ, EDA)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#21-очереди-сообщений-и-брокеры-kafka-rabbitmq)  
-> 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)  
-> 💻 **Код лекции:** [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue)  
-> 📁 **Каталог решения:** [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19)  
+> 📖 **Теория:** [Том 5: Раздел 21 (Очереди сообщений: Kafka, RabbitMQ, EDA)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#21-очереди-сообщений-и-брокеры-kafka-rabbitmq)  
+> 📚 **Руководство:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-system-design-guide.md)  
+> 💻 **Код лекции:** [19-queue](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue)  
+> 📁 **Каталог решения:** [homework-19](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/19-queue/homework-19/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 19)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-19-очереди-сообщений-и-брокеры-kafka)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 19)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-19-очереди-сообщений-и-брокеры-kafka)
 
 Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/19-queue/homework-19`](../lessons/19-queue/homework-19) без затирания решений предыдущих уроков.
 
@@ -2760,12 +2760,12 @@ ok  	go-core-4/homework-19/pkg/shortener/storage	0.510s
 
 ## Домашнее задание 20: Итоговый проект Lynks (NoSQL, Redis, PostgreSQL)
 
-> 📖 **Теория:** [Том 4: Раздел 13 (Базы данных)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд) | [Том 5: Разделы 18, 23 (Архитектура, микросервисы, NoSQL/Redis)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md#21-очереди-сообщений-и-брокеры-kafka-rabbitmq)  
-> 📚 **Руководства:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md) | [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-database-interview-guide.md)  
-> 💻 **Код лекции:** [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL)  
-> 📁 **Каталог решения:** [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20) | Исходная спецификация: [`lynks/final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks/final.md)  
+> 📖 **Теория:** [Том 4: Раздел 13 (Базы данных)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд) | [Том 5: Разделы 18, 23 (Архитектура, микросервисы, NoSQL/Redis)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#21-очереди-сообщений-и-брокеры-kafka-rabbitmq)  
+> 📚 **Руководства:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-system-design-guide.md) | [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-database-interview-guide.md)  
+> 💻 **Код лекции:** [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL)  
+> 📁 **Каталог решения:** [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20) | Исходная спецификация: [`lynks/final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lynks/final.md)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/20-NoSQL/homework-20/...`  
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 20)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-20-nosql-базы-данных-и-кэширование-redis)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 20)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-20-nosql-базы-данных-и-кэширование-redis)
 
 Решение полностью реализовано и протестировано в отдельной изолированной директории [`go_course_4/20-NoSQL/homework-20`](../lessons/20-NoSQL/homework-20) без затирания решений предыдущих уроков в строгом соответствии со спецификацией [`final.md`](../lynks/final.md).
 

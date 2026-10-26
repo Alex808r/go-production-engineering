@@ -64,6 +64,6 @@ go test -v -cover ./lessons/09-interfaces/...
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 2: ООП и методы (Разделы 9, 15: Полиморфизм, дженерики, empty interface)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md)
-- **Практическое ДЗ:** [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces/homework-09) (Разработка интерфейсов и реализаций для пакета пользователей)
+- **Теория:** [Том 2: ООП и методы (Разделы 9, 15: Полиморфизм, дженерики, empty interface)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md)
+- **Практическое ДЗ:** [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces/homework-09) (Разработка интерфейсов и реализаций для пакета пользователей)
 

@@ -29,7 +29,7 @@
 
 ## Задача №1: Отладка приложения с помощью Delve (`dlv`)
 
-Реализовано в пакете [`pkg/twosum`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08/pkg/twosum).
+Реализовано в пакете [`pkg/twosum`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug/homework-08/pkg/twosum).
 
 ### 1. Анализ проблемы в Two Sum
 В исходном примере из урока функция `TwoSum` имеет коварный дефект:
@@ -132,7 +132,7 @@ Type 'help' for list of commands.
 - **Breakpoints**: точки останова с поддержкой Condition (выражение) и Hit Count.
 
 ### 4. Исправление дефекта и алгоритмическая оптимизация
-В [`pkg/twosum/twosum.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08/pkg/twosum/twosum.go) реализованы два корректных решения:
+В [`pkg/twosum/twosum.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug/homework-08/pkg/twosum/twosum.go) реализованы два корректных решения:
 
 1. **Исправленный Brute-Force ($O(N^2)$ время, $O(1)$ память)**:
    Начинаем внутренний цикл с `j = i + 1`:
@@ -176,7 +176,7 @@ BenchmarkTwoSumOptimal_1000-8           81206        14813 ns/op
 ## Задача №2: Профилирование процессора и памяти (`pprof`)
 
 ### 1. Профилирование бенчмарков
-Для пакета [`pkg/search`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08/pkg/search) запущен бенчмарк со сбором профилей:
+Для пакета [`pkg/search`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug/homework-08/pkg/search) запущен бенчмарк со сбором профилей:
 ```bash
 go test -bench=BenchmarkBinarySearch_100k -benchmem -cpuprofile=cpu.out -memprofile=mem.out ./lessons/08-prof_debug/homework-08/pkg/search
 ```
@@ -203,7 +203,7 @@ Showing nodes accounting for 1.79s, 100% of 1.79s total
 - **Аллокации**: `0 B/op, 0 allocs/op` — бинарный поиск не производит аллокаций в куче, все переменные (`low`, `high`, `mid`) аллоцируются на стеке.
 
 ### 3. Профилирование живого сервиса (`cmd/app_profile`)
-В [`cmd/app_profile/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08/cmd/app_profile/main.go) реализован HTTP-сервер с подключением `_ "net/http/pprof"`:
+В [`cmd/app_profile/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug/homework-08/cmd/app_profile/main.go) реализован HTTP-сервер с подключением `_ "net/http/pprof"`:
 
 ```bash
 # Сбор CPU профиля за 10 секунд:
@@ -225,7 +225,7 @@ go tool pprof http://localhost:6060/debug/pprof/heap
 
 ## Задача №3: Трассировка выполнения приложения (`runtime/trace` & `go tool trace`)
 
-Реализовано в [`cmd/app_trace/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08/cmd/app_trace/main.go).
+Реализовано в [`cmd/app_trace/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug/homework-08/cmd/app_trace/main.go).
 
 ### 1. Сбор трассировки
 ```go

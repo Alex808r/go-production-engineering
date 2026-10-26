@@ -55,13 +55,13 @@ homework-18/
 
 ## Задача №1: HTTP REST API и хранилище в памяти
 
-### 1. Хранилище на слайсе ([`pkg/storage/slicestore.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18/pkg/storage/slicestore.go)):
+### 1. Хранилище на слайсе ([`pkg/storage/slicestore.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18/pkg/storage/slicestore.go)):
 - В соответствии с ТЗ хранилище использует срез в памяти `[]Link`.
 - Потокобезопасность обеспечена `sync.RWMutex` (безопасное параллельное чтение и запись под `-race`).
 - Генерация уникальных компактных идентификаторов (URL-safe hex).
 - Поддерживается идемпотентность (повторное сохранение того же URL не плодит дубликаты).
 
-### 2. HTTP API ([`pkg/api/api.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18/pkg/api/api.go)):
+### 2. HTTP API ([`pkg/api/api.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18/pkg/api/api.go)):
 - `POST /api/v1/links` — создание короткой ссылки (`{"url": "https://go.dev"}`).
 - `GET /api/v1/links/{id}` — получение объекта ссылки и оригинала по идентификатору.
 - `POST /api/v1/links/resolve` — получение оригинального URL по полной короткой ссылке.
@@ -72,7 +72,7 @@ homework-18/
 
 ## Задача №2: Контейнеризация (Dockerfile и docker-compose)
 
-Файл [`Dockerfile`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18/Dockerfile) построен по лучшим индустриальным практикам:
+Файл [`Dockerfile`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18/Dockerfile) построен по лучшим индустриальным практикам:
 1. **Multi-stage build**:
    - `builder` на базе `golang:1.22-alpine`: компиляция статического бинарника с флагами `CGO_ENABLED=0` и `-ldflags="-s -w"`.
    - `runtime` на базе ультра-легковесного `alpine:3.19` (итоговый образ < 25 МБ).
@@ -80,7 +80,7 @@ homework-18/
    - Запуск от имени непривилегированного пользователя `appuser` (UID 1000).
    - Включены корневые сертификаты `ca-certificates` и зона времени `tzdata`.
 3. **Оркестрация**:
-   - [`docker-compose.yml`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18/docker-compose.yml) с проверкой здоровья контейнера (`healthcheck` через `/healthz`).
+   - [`docker-compose.yml`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18/docker-compose.yml) с проверкой здоровья контейнера (`healthcheck` через `/healthz`).
 
 ---
 

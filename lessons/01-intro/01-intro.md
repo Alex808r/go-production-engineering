@@ -53,5 +53,5 @@ go test -v ./lessons/01-intro/demoapp/pkg/stringutils/...
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 1: Основы языка Go (Разделы 0.1–0.7: Старт с нуля, компиляция, fmt)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md#0-основы-языка-go-старт-с-нуля)
-- **Задачник:** [homework-tasks.md (Урок 1: Первая программа и базовый ввод-вывод)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt)
+- **Теория:** [Том 1: Основы языка Go (Разделы 0.1–0.7: Старт с нуля, компиляция, fmt)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#0-основы-языка-go-старт-с-нуля)
+- **Задачник:** [homework-tasks.md (Урок 1: Первая программа и базовый ввод-вывод)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt)

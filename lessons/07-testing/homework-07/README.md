@@ -25,7 +25,7 @@
 
 ## Задача №1: Модульные тесты `sort.Ints()` и `sort.Strings()`
 
-Реализовано в пакете [`pkg/sorts/sorts_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07/pkg/sorts/sorts_test.go).
+Реализовано в пакете [`pkg/sorts/sorts_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07/pkg/sorts/sorts_test.go).
 
 ### 1. Простой тест для `sort.Ints()`
 Проверяет базовый контракт сортировки целочисленного среза, содержащего положительные числа, отрицательные значения и ноль:
@@ -101,18 +101,18 @@ func TestSortInts(t *testing.T) {
 
 ### Архитектура тестов:
 
-1. **[`pkg/engine/engine_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07/pkg/engine/engine_test.go):**
+1. **[`pkg/engine/engine_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07/pkg/engine/engine_test.go):**
    - `TestEngine_ScanAndSearch`: сквозная проверка связки `Engine + Crawler (mock) + Index` без сетевых вызовов.
    - `TestEngine_SaveAndLoad`: проверка сериализации состояния движка в поток `io.Writer` и последующего восстановления из `io.Reader`.
    - `TestEngine_Encapsulation`: защита внутреннего состояния (`docs`) от внешних мутаций.
    - `TestEngine_NilCrawlerError`, `TestEngine_SaveLoadErrors`: негативные сценарии и валидация ошибок.
-2. **[`pkg/index/index_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07/pkg/index/index_test.go):**
+2. **[`pkg/index/index_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07/pkg/index/index_test.go):**
    - Табличные тесты `TestService_AddAndSearch` с проверкой регистра, токенизации URL, знаков препинания и отсутствующих слов.
    - Табличные тесты `TestBinarySearch_Table` со всеми позициями элемента (начало, середина, конец, выход за границы, пустой срез).
-3. **[`pkg/storage/storage_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07/pkg/storage/storage_test.go):**
+3. **[`pkg/storage/storage_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07/pkg/storage/storage_test.go):**
    - `TestJSONStorageRoundtrip` и `TestGOBStorageRoundtrip` — побитовое сохранение и восстановление структур `Document`.
    - `TestStorage_Errors` — обработка поврежденных данных и `nil`-потоков.
-4. **[`cmd/gosearch/main_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07/cmd/gosearch/main_test.go):**
+4. **[`cmd/gosearch/main_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07/cmd/gosearch/main_test.go):**
    - Интеграционный тест всего приложения GoSearch во временной директории (`t.TempDir()`).
 
 ---

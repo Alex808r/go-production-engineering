@@ -71,10 +71,10 @@ go test -v -race -bench=. ./lessons/17-system-design/...
 ---
 
 ## 🔗 Файлы и связанные материалы
-- [homework-17/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/README.md) — Домашнее задание №17: Конспект и эталонная архитектура
-- [homework-17/cleanarch/entity/movie.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/cleanarch/entity/movie.go) — Доменные сущности (Entities)
-- [homework-17/cleanarch/usecase/movie_usecase.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/cleanarch/usecase/movie_usecase.go) — Сценарии использования и порты (Use Cases)
-- [homework-17/cleanarch/cleanarch_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/cleanarch/cleanarch_test.go) — Тесты и бенчмарки чистой архитектуры
-- [app/internal/api/api.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/app/internal/api/api.go) — Пример HTTP API сервиса
-- **Теория:** [Том 5: Тестирование и архитектура (Разделы 21–22: SOLID, Clean Architecture)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)
-- **Гайд по системному дизайну:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-system-design-guide.md)
+- [homework-17/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/README.md) — Домашнее задание №17: Конспект и эталонная архитектура
+- [homework-17/cleanarch/entity/movie.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/cleanarch/entity/movie.go) — Доменные сущности (Entities)
+- [homework-17/cleanarch/usecase/movie_usecase.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/cleanarch/usecase/movie_usecase.go) — Сценарии использования и порты (Use Cases)
+- [homework-17/cleanarch/cleanarch_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/cleanarch/cleanarch_test.go) — Тесты и бенчмарки чистой архитектуры
+- [app/internal/api/api.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/app/internal/api/api.go) — Пример HTTP API сервиса
+- **Теория:** [Том 5: Тестирование и архитектура (Разделы 21–22: SOLID, Clean Architecture)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md)
+- **Гайд по системному дизайну:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-system-design-guide.md)

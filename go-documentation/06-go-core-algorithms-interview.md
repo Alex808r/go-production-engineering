@@ -5,24 +5,24 @@
 
 > [!IMPORTANT]
 > 💻 **Практика, примеры кода и домашние задания к этому тому:**
-> - 📂 **Код лекций:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms) (Бинарный поиск, сортировки, бенчмарки $O(N)$), [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs) (Двусвязный список, BST-дерево, стек, очередь), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview) (Вопросы и алгоритмические задачи с собеседований).
-> - 🎯 **Задачник:** [homework-tasks.md (Занятия 3, 4, 7)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-3-быстрый-поисковый-индекс-инвертированный-индекс-и-бинарный-поиск).
+> - 📂 **Код лекций:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms) (Бинарный поиск, сортировки, бенчмарки $O(N)$), [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs) (Двусвязный список, BST-дерево, стек, очередь), [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview) (Вопросы и алгоритмические задачи с собеседований).
+> - 🎯 **Задачник:** [homework-tasks.md (Занятия 3, 4, 7)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#занятие-3-быстрый-поисковый-индекс-инвертированный-индекс-и-бинарный-поиск).
 > - 🛠️ **Решения домашних заданий:**
->   - [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03) — Инвертированный хэш-индекс (`map[string][]int`) и бинарный поиск документов `sort.Search` за $O(\log N)$.
->   - [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/homework-04) — Циклический двусвязный список со сторожевым элементом Sentinel (`Pop`, `Reverse`).
->   - [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07) — Реализация алгоритмов быстрой сортировки QuickSort и MergeSort с бенчмарками.
+>   - [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03) — Инвертированный хэш-индекс (`map[string][]int`) и бинарный поиск документов `sort.Search` за $O(\log N)$.
+>   - [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs/homework-04) — Циклический двусвязный список со сторожевым элементом Sentinel (`Pop`, `Reverse`).
+>   - [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/07-testing/homework-07) — Реализация алгоритмов быстрой сортировки QuickSort и MergeSort с бенчмарками.
 > - 💡 **Специализированные гайды к интервью:**
->   - 💻 [go-livecoding-guide.md (Live-Coding: 52 задачи)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
->   - 🗄️ [sql-livecoding-guide.md (Live SQL: 33 задачи)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)
->   - 🗄️ [go-database-interview-guide.md (Собеседование по БД)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)
->   - 🐧 [go-os-and-linux-interview-guide.md (Гайд по ОС, Ядру Linux и Сетям)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-os-and-linux-interview-guide.md)
-> - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Экспресс-подготовка к собеседованию)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#-экспресс-маршрут-подготовки-к-собеседованию-за-1-день-до-интервью).
+>   - 💻 [go-livecoding-guide.md (Live-Coding: 52 задачи)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-livecoding-guide.md)
+>   - 🗄️ [sql-livecoding-guide.md (Live SQL: 33 задачи)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/sql-livecoding-guide.md)
+>   - 🗄️ [go-database-interview-guide.md (Собеседование по БД)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md)
+>   - 🐧 [go-os-and-linux-interview-guide.md (Гайд по ОС, Ядру Linux и Сетям)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-os-and-linux-interview-guide.md)
+> - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Экспресс-подготовка к собеседованию)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#-экспресс-маршрут-подготовки-к-собеседованию-за-1-день-до-интервью).
 
 ---
 
 ## 26. Базовые Алгоритмы и O-нотация в Go
 
-> 🔗 **Практика и примеры кода:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms) | 🛠️ **Домашнее задание:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03) (Бинарный поиск $O(\log N)$) | 🎯 **Задачи:** [homework-tasks.md (Занятие 3)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-3-быстрый-поисковый-индекс-инвертированный-индекс-и-бинарный-поиск) | 💻 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
+> 🔗 **Практика и примеры кода:** [03-algorithms](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms) | 🛠️ **Домашнее задание:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03) (Бинарный поиск $O(\log N)$) | 🎯 **Задачи:** [homework-tasks.md (Занятие 3)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#занятие-3-быстрый-поисковый-индекс-инвертированный-индекс-и-бинарный-поиск) | 💻 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-livecoding-guide.md)
 
 ### 26.1. Оценка сложности алгоритмов (Big-O Notation)
 
@@ -705,7 +705,7 @@ func HasCycle(head *ListNode) bool {
 
 ## 27. Классические Структуры Данных (Data Structures в Go)
 
-> 🔗 **Практика и примеры кода:** [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs) | 🛠️ **Домашнее задание:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/homework-04) (Двусвязный список Sentinel) | 🎯 **Задачи:** [homework-tasks.md (Занятие 4)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-4-структуры-данных--циклический-двусвязный-список-со-сторожевым-элементом-pop-и-reverse)
+> 🔗 **Практика и примеры кода:** [04-datastructs](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs) | 🛠️ **Домашнее задание:** [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs/homework-04) (Двусвязный список Sentinel) | 🎯 **Задачи:** [homework-tasks.md (Занятие 4)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#занятие-4-структуры-данных--циклический-двусвязный-список-со-сторожевым-элементом-pop-и-reverse)
 
 ### 27.1. Связные списки (`container/list` vs Slice)
 
@@ -2005,7 +2005,7 @@ linters-settings:
 
 ## 36. Экспресс-подготовка к собеседованию и Поведенческая секция (STAR)
 
-> 🔗 **Практика и вопросы:** [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview) | 💻 **Live-coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md) | 🗄️ **SQL-задачи:** [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md) | 🗺️ **Экспресс-маршрут:** [course-codebase-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#-экспресс-маршрут-подготовки-к-собеседованию-за-1-день-до-интервью)
+> 🔗 **Практика и вопросы:** [21-interview](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview) | 💻 **Live-coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-livecoding-guide.md) | 🗄️ **SQL-задачи:** [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/sql-livecoding-guide.md) | 🗺️ **Экспресс-маршрут:** [course-codebase-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#-экспресс-маршрут-подготовки-к-собеседованию-за-1-день-до-интервью)
 
 > [!NOTE]
 > 📚 **Первоисточники и база вопросов:**  

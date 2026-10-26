@@ -1,7 +1,7 @@
 # Секреты, подводные камни и Best Practices Go (Uber Style Guide & 100 Go Mistakes)
 
 > **Назначение документа:** Глубокое руководство по скрытым механизмам рантайма Go, ловушкам производительности, утечкам памяти и строгим инженерным практикам production-уровня (на базе Uber Go Style Guide, книги *100 Go Mistakes and How to Avoid Them* Теивы и опыта высоконагруженных систем).  
-> **Исполняемые примеры, тесты и бенчмарки:** см. модуль [`22-modern-go/07-secrets-and-traps`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/07-secrets-and-traps/traps.go).
+> **Исполняемые примеры, тесты и бенчмарки:** см. модуль [`22-modern-go/07-secrets-and-traps`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/07-secrets-and-traps/traps.go).
 
 ---
 

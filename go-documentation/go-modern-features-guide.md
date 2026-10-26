@@ -1,7 +1,7 @@
 # Modern Go Features Guide (Go 1.21–1.26+)
 
 > **Назначение документа:** Комплексное руководство по ключевым нововведениям, архитектурным паттернам и библиотекам современных релизов Go (1.21, 1.22, 1.23, 1.24, 1.25 и 1.26+).  
-> **Практические примеры с тестами и бенчмарками:** см. модуль [`22-modern-go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/22-modern-go.md).
+> **Практические примеры с тестами и бенчмарками:** см. модуль [`22-modern-go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/22-modern-go.md).
 
 ---
 
@@ -290,8 +290,8 @@ defer f.Close()
 ---
 
 ## 🔗 Связанные материалы
-- [Практический модуль 22-modern-go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/22-modern-go.md)
-- [Том 1: Основы и синтаксис Go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-basics.md)
-- [Том 3: Конкурентность и рантайм](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md)
-- [Том 5: Тестирование и архитектура](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)
-- [Гайд по ОС, Ядру Linux и cgroup](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-os-and-linux-interview-guide.md)
+- [Практический модуль 22-modern-go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/22-modern-go.md)
+- [Том 1: Основы и синтаксис Go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md)
+- [Том 3: Конкурентность и рантайм](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/03-go-core-concurrency.md)
+- [Том 5: Тестирование и архитектура](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md)
+- [Гайд по ОС, Ядру Linux и cgroup](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-os-and-linux-interview-guide.md)

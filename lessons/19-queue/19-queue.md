@@ -67,9 +67,9 @@ docker compose -f ./lessons/19-queue/docker-compose.yml up -d
 ---
 
 ## 🔗 Файлы и связанные материалы
-- [1-kafka/kafka.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/1-kafka/kafka.go) — Пример работы с `kafka-go` (Writer, Reader, CommitMessages)
-- [docker-compose.yml](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/docker-compose.yml) — Docker Compose для локального Kafka
-- [homework-19/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19/README.md) — Домашнее задание №19: Асинхронная аналитика
-- [homework-19/e2e_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19/e2e_test.go) — Сквозной E2E-тест пайплайна Shortener -> Kafka -> Analytics
-- [homework-19/pkg/event/event.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19/pkg/event/event.go) — Модели событий и контракты брокера
-- **Теория:** [Том 5: Тестирование и архитектура (Раздел 24: Очереди сообщений, брокеры, Kafka)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)
+- [1-kafka/kafka.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/1-kafka/kafka.go) — Пример работы с `kafka-go` (Writer, Reader, CommitMessages)
+- [docker-compose.yml](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/docker-compose.yml) — Docker Compose для локального Kafka
+- [homework-19/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19/README.md) — Домашнее задание №19: Асинхронная аналитика
+- [homework-19/e2e_test.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19/e2e_test.go) — Сквозной E2E-тест пайплайна Shortener -> Kafka -> Analytics
+- [homework-19/pkg/event/event.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19/pkg/event/event.go) — Модели событий и контракты брокера
+- **Теория:** [Том 5: Тестирование и архитектура (Раздел 24: Очереди сообщений, брокеры, Kafka)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md)

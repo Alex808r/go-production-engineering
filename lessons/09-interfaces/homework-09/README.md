@@ -21,7 +21,7 @@
 
 ## Задача №1: Полиморфизм через общий контракт интерфейса
 
-Реализовано в [`pkg/users/users.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces/homework-09/pkg/users/users.go).
+Реализовано в [`pkg/users/users.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces/homework-09/pkg/users/users.go).
 
 ### Описание решения:
 1. Объявлен интерфейс:

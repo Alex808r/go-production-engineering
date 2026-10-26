@@ -1,7 +1,7 @@
 # Домашнее задание №20: Итоговый проект «Lynks» (NoSQL, Redis, PostgreSQL)
 
-Решение итогового проекта курса «Современная разработка на Go» (**Занятие №20: Нереляционные базы данных** / [`final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/final.md)).  
-Реализовано в отдельной изолированной директории [`homework-20/`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20) без затирания решений предыдущих уроков.
+Решение итогового проекта курса «Современная разработка на Go» (**Занятие №20: Нереляционные базы данных** / [`final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/final.md)).  
+Реализовано в отдельной изолированной директории [`homework-20/`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20) без затирания решений предыдущих уроков.
 
 ---
 
@@ -67,7 +67,7 @@
 
 ## Схема данных PostgreSQL и индексация
 
-Файл [`schema.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/schema.sql):
+Файл [`schema.sql`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/schema.sql):
 
 ```sql
 CREATE TABLE IF NOT EXISTS links (
@@ -109,11 +109,11 @@ CREATE INDEX IF NOT EXISTS idx_links_destination ON links (destination);
 
 ## Контейнеризация и Docker Compose
 
-Файл [`docker-compose.yml`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/docker-compose.yml) оркестрирует 4 сервиса:
+Файл [`docker-compose.yml`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/docker-compose.yml) оркестрирует 4 сервиса:
 - `postgres` (образ `postgres:15-alpine`) с автонакатом `schema.sql`.
 - `redis` (образ `redis:7-alpine`).
-- `memcache` (порт 8082, образ на базе [`Dockerfile.memcache`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/Dockerfile.memcache)).
-- `shortener` (порт 8080, образ на базе [`Dockerfile.shortener`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/Dockerfile.shortener)).
+- `memcache` (порт 8082, образ на базе [`Dockerfile.memcache`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/Dockerfile.memcache)).
+- `shortener` (порт 8080, образ на базе [`Dockerfile.shortener`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/Dockerfile.shortener)).
 
 Команда запуска:
 ```bash

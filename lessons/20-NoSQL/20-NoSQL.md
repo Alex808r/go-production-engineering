@@ -42,7 +42,7 @@
 
 ## ⚙️ Архитектурный паттерн: Cache-Aside (Lazy Loading)
 
-В рамках домашнего задания [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20) реализован классический паттерн **Cache-Aside**:
+В рамках домашнего задания [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20) реализован классический паттерн **Cache-Aside**:
 
 ```mermaid
 sequenceDiagram
@@ -75,34 +75,34 @@ sequenceDiagram
 
 ## 🧪 Компоненты модуля
 
-### 1. Собственное KV-хранилище [`2-KVStore`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/2-KVStore)
-- Реализация: [`kvdb.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/2-KVStore/pkg/kvdb/kvdb.go).
+### 1. Собственное KV-хранилище [`2-KVStore`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/2-KVStore)
+- Реализация: [`kvdb.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/2-KVStore/pkg/kvdb/kvdb.go).
 - Безопасность: разделяемые блокировки чтения `sync.RWMutex.RLock()` и исключительные блокировки записи `sync.RWMutex.Lock()`.
-- Тесты и бенчмарки: [`kvdb_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/2-KVStore/pkg/kvdb/kvdb_test.go).
+- Тесты и бенчмарки: [`kvdb_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/2-KVStore/pkg/kvdb/kvdb_test.go).
 - Производительность:
   - `BenchmarkDB_SET`: **~384 ns/op**
   - `BenchmarkDB_GET`: **~347 ns/op**
   - `BenchmarkDB_ParallelGET`: **~595 ns/op**
 
-### 2. Клиент Redis [`3-redis`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/3-redis)
-- Реализация: [`redis.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/3-redis/redis.go).
+### 2. Клиент Redis [`3-redis`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/3-redis)
+- Реализация: [`redis.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/3-redis/redis.go).
 - Использование пакета `github.com/go-redis/redis/v8`.
 - Корректная обработка отсутствия ключа через `errors.Is(err, redis.Nil)`.
 - Установка TTL через параметр `time.Duration` в вызове `client.Set()`.
 - Денормализация и хранение объектов через JSON-сериализацию.
 
-### 3. Клиент MongoDB [`1-mongo`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/1-mongo)
-- Реализация: [`mongo.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/1-mongo/mongo.go).
+### 3. Клиент MongoDB [`1-mongo`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/1-mongo)
+- Реализация: [`mongo.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/1-mongo/mongo.go).
 - Использование официального драйвера `go.mongodb.org/mongo-driver`.
 - Маппинг BSON-тегов (`bson:"id"`, `bson:"name"`).
 - Потоковое чтение документов через `cur.Next()`, `cur.Decode()` с обязательной валидацией `cur.Err()`.
 - Пул соединений и управление таймаутами через `context.WithTimeout`.
 
-### 4. Домашнее задание [`homework-20`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20)
+### 4. Домашнее задание [`homework-20`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20)
 - Два микросервиса:
-  - [`shortener`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/shortener): API сокращения ссылок, клиент к Memcache, Fallback на PostgreSQL, метрики Prometheus (`shortener_cache_hits_total`, `shortener_cache_misses_total`).
-  - [`memcache`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/memcache): сервис кэширования со встроенным in-memory движком и фоновым потоком очистки устаревших ключей по TTL (Janitor loop).
-- Сквозное E2E тестирование: [`e2e_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/e2e_test.go).
+  - [`shortener`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/shortener): API сокращения ссылок, клиент к Memcache, Fallback на PostgreSQL, метрики Prometheus (`shortener_cache_hits_total`, `shortener_cache_misses_total`).
+  - [`memcache`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/memcache): сервис кэширования со встроенным in-memory движком и фоновым потоком очистки устаревших ключей по TTL (Janitor loop).
+- Сквозное E2E тестирование: [`e2e_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/e2e_test.go).
 - Контейнеризация: Docker Compose с сервисами Shortener, Memcache, Redis и PostgreSQL.
 
 ---
@@ -123,6 +123,6 @@ go run ./lessons/20-NoSQL/2-KVStore/cmd/app/app.go
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 4: Backend и Web (Раздел 13: NoSQL хранилища)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md)
-- **Гайд по базам данных:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)
-- **Практическое ДЗ:** [README домашнего задания 20](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/homework-20/README.md)
+- **Теория:** [Том 4: Backend и Web (Раздел 13: NoSQL хранилища)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md)
+- **Гайд по базам данных:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md)
+- **Практическое ДЗ:** [README домашнего задания 20](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20/README.md)

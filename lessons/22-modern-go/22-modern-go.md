@@ -36,7 +36,7 @@
 
 ## 🔍 Подробный разбор концепций
 
-### 1. `log/slog` — Официальный структурированный логгер ([`01-slog`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/01-slog/slog_demo.go))
+### 1. `log/slog` — Официальный структурированный логгер ([`01-slog`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/01-slog/slog_demo.go))
 До Go 1.21 в стандартной библиотеке существовал только простейший `log.Println`. Команды были вынуждены подключать тяжелые внешние библиотеки (`uber-go/zap`, `rs/zerolog`).
 - **`slog`** объединил производительность, гибкость и стандартный API.
 - Поддерживает структурированные атрибуты: `slog.Int`, `slog.String`, `slog.Group`.
@@ -51,7 +51,7 @@
 
 ---
 
-### 2. Фаззинг-тестирование `testing.F` ([`02-fuzzing`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/02-fuzzing/parser.go))
+### 2. Фаззинг-тестирование `testing.F` ([`02-fuzzing`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/02-fuzzing/parser.go))
 В отличие от классических тестов, где разработчик сам придумывает сценарии, фаззер непрерывно генерирует случайные мутации входных данных (Seed Corpus), стремясь вызвать панику (`panic`), деление на ноль или выход за пределы массива:
 ```go
 func FuzzParseQuery(f *testing.F) {
@@ -68,7 +68,7 @@ go test -fuzz=FuzzParseQuery -fuzztime=5s ./lessons/22-modern-go/02-fuzzing/...
 
 ---
 
-### 3. Пакеты `slices`, `maps`, `cmp` ([`03-std-generics`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/03-std-generics/std_generics.go))
+### 3. Пакеты `slices`, `maps`, `cmp` ([`03-std-generics`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/03-std-generics/std_generics.go))
 С выходом Go 1.21 стандартная библиотека получила мощный набор типизированных функций:
 - `slices.Sort(s)` и `slices.SortFunc`: работают в **~2 раза быстрее** старого `sort.Slice` за счет отсутствия рефлексии и интерфейсных оберток.
 - `slices.BinarySearch` / `slices.BinarySearchFunc`: типизированный бинарный поиск $O(\log N)$.
@@ -81,7 +81,7 @@ go test -fuzz=FuzzParseQuery -fuzztime=5s ./lessons/22-modern-go/02-fuzzing/...
 
 ---
 
-### 4. Продвинутый роутер `net/http.ServeMux` ([`04-enhanced-routing`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/04-enhanced-routing/router.go))
+### 4. Продвинутый роутер `net/http.ServeMux` ([`04-enhanced-routing`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/04-enhanced-routing/router.go))
 В Go 1.22 стандартный мультиплексор научился тому, ради чего раньше ставили `gorilla/mux` или `chi`:
 1. **Метод в строке паттерна:** `"POST /items"`, `"DELETE /items/{id}"`.
 2. **Параметры пути:** `"GET /items/{id}"` извлекаются через `id := r.PathValue("id")`.
@@ -90,7 +90,7 @@ go test -fuzz=FuzzParseQuery -fuzztime=5s ./lessons/22-modern-go/02-fuzzing/...
 
 ---
 
-### 5. Range-over-func итераторы `iter.Seq` ([`05-iterators`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/05-iterators/iterators.go))
+### 5. Range-over-func итераторы `iter.Seq` ([`05-iterators`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/05-iterators/iterators.go))
 В Go 1.23 появилась возможность использовать `for ... := range` для обхода **любых кастомных структур** (деревьев, графов, связных списков, генераторов чисел).
 - Сигнатура итератора одного значения: `type Seq[V any] func(yield func(V) bool)`.
 - Сигнатура для пар (ключ-значение): `type Seq2[K, V any] func(yield func(K, V) bool)`.
@@ -110,7 +110,7 @@ for val := range root.All() {
 
 ---
 
-### 6. Паттерн Graceful Shutdown ([`06-graceful-shutdown`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/06-graceful-shutdown/server.go))
+### 6. Паттерн Graceful Shutdown ([`06-graceful-shutdown`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/06-graceful-shutdown/server.go))
 В продакшене (особенно в Kubernetes) контейнеры регулярно перезапускаются при деплоях. Если завершить процесс через `os.Exit(0)`, активные HTTP-запросы пользователей будут оборваны с ошибкой 502/Connection Reset.
 
 **Эталонная схема Graceful Shutdown:**
@@ -122,7 +122,7 @@ for val := range root.All() {
 
 ---
 
-### 7. Секреты рантайма и ловушки памяти ([`07-secrets-and-traps`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go/07-secrets-and-traps/traps.go))
+### 7. Секреты рантайма и ловушки памяти ([`07-secrets-and-traps`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/22-modern-go/07-secrets-and-traps/traps.go))
 Критически важные знания из **Uber Go Style Guide** и книги **100 Go Mistakes**:
 - **Выравнивание структур (Data Alignment):** Размещение полей по убыванию размера сокращает размер структуры на 33.3% за счет устранения пустого байтового отступа (padding).
 - **Утечки памяти при срезах:** Подсрез `huge[:2]` удерживает весь гигантский базовый массив в RAM. Использование `slices.Clone()` изолирует память и позволяет GC удалить исходный массив.
@@ -130,7 +130,7 @@ for val := range root.All() {
 - **Таймеры в циклах:** `time.After` внутри `select` в бесконечном цикле создает утечку памяти до истечения таймаута; решение — `time.NewTimer` с явным `Stop()`.
 - **Kubernetes CFS Throttling:** Go не знает про лимиты cgroups из коробки — решение `go.uber.org/automaxprocs`.
 - **Compile-time проверки интерфейсов:** `var _ Runner = (*Service)(nil)` защищает от рассинхронизации сигнатур еще на этапе компиляции.
-- Полное руководство: см. [`go-documentation/go-secrets-and-traps-guide.md`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md).
+- Полное руководство: см. [`go-documentation/go-secrets-and-traps-guide.md`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-secrets-and-traps-guide.md).
 
 ---
 

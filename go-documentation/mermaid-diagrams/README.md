@@ -1,6 +1,6 @@
 # Mermaid Diagrams — Стандарт архитектурной визуализации Go Course 4
 
-В данном каталоге собраны стандарты, шаблоны и скилл ([`SKILL.md`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/mermaid-diagrams/SKILL.md)) для построения качественных архитектурных диаграмм в формате **Mermaid** в рамках курса `Go Course 4`.
+В данном каталоге собраны стандарты, шаблоны и скилл ([`SKILL.md`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/mermaid-diagrams/SKILL.md)) для построения качественных архитектурных диаграмм в формате **Mermaid** в рамках курса `Go Course 4`.
 
 ---
 
@@ -36,7 +36,7 @@ mermaid-diagrams/
 
 ## 🔍 Каталог примеров из курса Go Course 4
 
-### 1. Архитектура Cache-Aside ([`20-NoSQL`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/20-NoSQL.md) и [`lynks`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks/README.md))
+### 1. Архитектура Cache-Aside ([`20-NoSQL`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/20-NoSQL.md) и [`lynks`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lynks/README.md))
 
 ```mermaid
 sequenceDiagram
@@ -62,7 +62,7 @@ sequenceDiagram
 
 ---
 
-### 2. Топология микросервисов и баз данных ([`18-microservices`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/18-microservices.md))
+### 2. Топология микросервисов и баз данных ([`18-microservices`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/18-microservices.md))
 
 ```mermaid
 flowchart TD
@@ -89,7 +89,7 @@ flowchart TD
 
 ---
 
-### 3. Модель данных сущностей реляционной БД ([`15-sql`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/15-sql.md))
+### 3. Модель данных сущностей реляционной БД ([`15-sql`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/15-sql.md))
 
 ```mermaid
 erDiagram
@@ -123,9 +123,9 @@ erDiagram
 ---
 
 ## 🔗 Модули с диаграммами в проекте
-- [15-sql — Реляционные базы данных и ER-диаграммы](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/15-sql.md)
-- [17-system-design — Чистая архитектура и слои Clean Architecture](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/17-system-design.md)
-- [18-microservices — Контейнеризация и топология микросервисов](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/18-microservices.md)
-- [19-queue — Потоки сообщений Apache Kafka](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/19-queue.md)
-- [20-NoSQL — Архитектура кэширования Cache-Aside](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/20-NoSQL/20-NoSQL.md)
-- [lynks — Архитектура итогового проекта](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lynks/README.md)
+- [15-sql — Реляционные базы данных и ER-диаграммы](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/15-sql.md)
+- [17-system-design — Чистая архитектура и слои Clean Architecture](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/17-system-design.md)
+- [18-microservices — Контейнеризация и топология микросервисов](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/18-microservices.md)
+- [19-queue — Потоки сообщений Apache Kafka](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/19-queue.md)
+- [20-NoSQL — Архитектура кэширования Cache-Aside](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/20-NoSQL.md)
+- [lynks — Архитектура итогового проекта](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lynks/README.md)
