@@ -50,5 +50,5 @@ go tool pprof -http=:8081 cpu.out
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 5: Тестирование и архитектура (Раздел 20: Профилирование и отладка)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)
-- **Практическое ДЗ:** [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/08-prof_debug/homework-08) (Оптимизация алгоритма Two Sum, профилирование GoSearch с pprof и trace)
+- **Теория:** [Том 5: Тестирование и архитектура (Раздел 20: Профилирование и отладка)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md)
+- **Практическое ДЗ:** [homework-08](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/08-prof_debug/homework-08) (Оптимизация алгоритма Two Sum, профилирование GoSearch с pprof и trace)

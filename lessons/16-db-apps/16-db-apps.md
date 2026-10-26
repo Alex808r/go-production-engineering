@@ -68,9 +68,9 @@ go test -v -bench=. ./lessons/16-db-apps/...
 ---
 
 ## 🔗 Файлы и связанные материалы
-- [1-database-sql/database-sql.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/1-database-sql/database-sql.go) — Пример работы со стандартным пакетом `database/sql`
-- [2-pgx/pgx.go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/2-pgx/pgx.go) — Пример работы с `pgxpool` и `pgx.Batch`
-- [schema.sql](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/schema.sql) — Схема таблиц БД книг
-- [homework-16/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/README.md) — Домашнее задание №16: Пакет для БД фильмов
-- **Теория:** [Том 4: Backend и Web (Раздел 13: Go и СУБД)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md)
-- **Гайд по базам данных:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)
+- [1-database-sql/database-sql.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/1-database-sql/database-sql.go) — Пример работы со стандартным пакетом `database/sql`
+- [2-pgx/pgx.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/2-pgx/pgx.go) — Пример работы с `pgxpool` и `pgx.Batch`
+- [schema.sql](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/schema.sql) — Схема таблиц БД книг
+- [homework-16/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/README.md) — Домашнее задание №16: Пакет для БД фильмов
+- **Теория:** [Том 4: Backend и Web (Раздел 13: Go и СУБД)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md)
+- **Гайд по базам данных:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md)

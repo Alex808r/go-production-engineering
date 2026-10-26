@@ -69,6 +69,6 @@ go run ./lessons/12-web-apps/homework-12/cmd/webapp/main.go
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 4: Backend и Web (Раздел 12: net/http, роутинг, middleware)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md)
-- **Практическое ДЗ:** [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/12-web-apps/homework-12) (Веб-интерфейс поисковика GoSearch с HTML-шаблонами)
+- **Теория:** [Том 4: Backend и Web (Раздел 12: net/http, роутинг, middleware)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md)
+- **Практическое ДЗ:** [homework-12](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/12-web-apps/homework-12) (Веб-интерфейс поисковика GoSearch с HTML-шаблонами)
 

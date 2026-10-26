@@ -54,5 +54,5 @@ go test -bench=. -benchmem ./lessons/03-algorithms/3-dynamic
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 6: Алгоритмы и собеседования (Разделы 26–27: Поиск, сортировки, сложность)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md)
-- **Практическое ДЗ:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/homework-03) (Инвертированный индекс и бинарный поиск документов для GoSearch)
+- **Теория:** [Том 6: Алгоритмы и собеседования (Разделы 26–27: Поиск, сортировки, сложность)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/06-go-core-algorithms-interview.md)
+- **Практическое ДЗ:** [homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03) (Инвертированный индекс и бинарный поиск документов для GoSearch)

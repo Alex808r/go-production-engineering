@@ -5,19 +5,19 @@
 
 > [!IMPORTANT]
 > 💻 **Практика, примеры кода и домашние задания к этому тому:**
-> - 📂 **Код лекций:** [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io) (Файлы, `io.Reader/Writer`, буферизация, JSON/gob), [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop) (Методы, структуры, композиция, DIP), [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces) (Интерфейсы `iface`/`eface`, type assertions).
-> - 🎯 **Задачник:** [homework-tasks.md (Уроки 8–9, Занятия 5–6, ДЗ 9)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex).
+> - 📂 **Код лекций:** [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io) (Файлы, `io.Reader/Writer`, буферизация, JSON/gob), [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop) (Методы, структуры, композиция, DIP), [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces) (Интерфейсы `iface`/`eface`, type assertions).
+> - 🎯 **Задачник:** [homework-tasks.md (Уроки 8–9, Занятия 5–6, ДЗ 9)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex).
 > - 🛠️ **Решения домашних заданий:**
->   - [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/homework-05) — Персистентность индекса GoSearch, сохранение и загрузка через `io.Writer`/`io.Reader`.
->   - [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06) — ООП-рефакторинг GoSearch: сервисный слой `engine` и инверсия зависимостей.
->   - [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces/homework-09) — Контракты интерфейсов хранилища документов GoSearch.
-> - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 1: Уроки 05–06; Этап 2: Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-05-потоковый-ввод-вывод-файлы-и-json).
+>   - [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/homework-05) — Персистентность индекса GoSearch, сохранение и загрузка через `io.Writer`/`io.Reader`.
+>   - [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06) — ООП-рефакторинг GoSearch: сервисный слой `engine` и инверсия зависимостей.
+>   - [homework-09](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces/homework-09) — Контракты интерфейсов хранилища документов GoSearch.
+> - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 1: Уроки 05–06; Этап 2: Урок 09)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-05-потоковый-ввод-вывод-файлы-и-json).
 
 ---
 
 ## 9. Методы и Интерфейсы (Methods & Interfaces)
 
-> 🔗 **Практика и примеры кода:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop), [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces) | 🛠️ **Домашние задания:** [homework-06 (ООП)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06), [homework-09 (Интерфейсы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/09-interfaces/homework-09) | 🎯 **Задачи:** [homework-tasks.md (Урок 9)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-9-интерфейсы-полиморфизм-и-type-switch), [homework-tasks.md (Занятие 6)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-6-ооп-в-go--структуры-методы-и-идиоматичный-рефакторинг), [homework-tasks.md (ДЗ 9)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#домашнее-задание-9-интерфейсы-в-go)
+> 🔗 **Практика и примеры кода:** [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop), [09-interfaces](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces) | 🛠️ **Домашние задания:** [homework-06 (ООП)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06), [homework-09 (Интерфейсы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/09-interfaces/homework-09) | 🎯 **Задачи:** [homework-tasks.md (Урок 9)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-9-интерфейсы-полиморфизм-и-type-switch), [homework-tasks.md (Занятие 6)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#занятие-6-ооп-в-go--структуры-методы-и-идиоматичный-рефакторинг), [homework-tasks.md (ДЗ 9)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#домашнее-задание-9-интерфейсы-в-go)
 
 Интерфейсы в Go реализуются **неявно (Duck Typing)**: если тип содержит все методы интерфейса, он автоматически удовлетворяет контракту этого интерфейса без ключевых слов `implements`.
 
@@ -1462,7 +1462,7 @@ type Image interface {
 
 ### 9.6. Потоковый ввод-вывод: интерфейсы `io.Reader` и `io.Writer`
 
-> 🔗 **Практика и примеры кода:** [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io) | 🛠️ **Домашнее задание:** [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/homework-05) (Файловый кэш, JSON/GOB) | 🎯 **Задачи:** [homework-tasks.md (Занятие 5: Ввод-вывод)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#занятие-5-ввод-вывод-в-go--персистентность-поисковых-данных-ioreader-iowriter-jsongob-кеширование) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 05)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-05-потоковый-ввод-вывод-файлы-и-json)
+> 🔗 **Практика и примеры кода:** [05-io](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io) | 🛠️ **Домашнее задание:** [homework-05](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/homework-05) (Файловый кэш, JSON/GOB) | 🎯 **Задачи:** [homework-tasks.md (Занятие 5: Ввод-вывод)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#занятие-5-ввод-вывод-в-go--персистентность-поисковых-данных-ioreader-iowriter-jsongob-кеширование) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 05)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-05-потоковый-ввод-вывод-файлы-и-json)
 
 #### 1. Концепция ввода-вывода (I/O) в ОС и Go:
 
@@ -2235,7 +2235,7 @@ type Reader interface {
 
 ## 10. Обработка ошибок (Error Handling)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/6-errors](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/6-errors), [05-io/1-files](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/1-files) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02: Ошибки)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 🔗 **Практика и примеры кода:** [02-syntax/6-errors](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/6-errors), [05-io/1-files](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/1-files) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02: Ошибки)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 В Go нет исключений (`try / catch`). Ошибки — это обычные значения, передаваемые первым классом через множественный возврат.
 

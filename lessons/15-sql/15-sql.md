@@ -74,7 +74,7 @@ psql -h localhost -U postgres -d movies_db -f ./lessons/15-sql/homework-15/queri
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 4: Backend и Web (Раздел 13: Реляционные БД)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md)
-- **Практическое руководство:** [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)
-- **Практическое ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/15-sql/homework-15) (База данных онлайн-кинотеатра: студии, актеры, режиссеры, фильмы и 10 аналитических запросов)
+- **Теория:** [Том 4: Backend и Web (Раздел 13: Реляционные БД)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md)
+- **Практическое руководство:** [sql-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/sql-livecoding-guide.md)
+- **Практическое ДЗ:** [homework-15](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/15-sql/homework-15) (База данных онлайн-кинотеатра: студии, актеры, режиссеры, фильмы и 10 аналитических запросов)
 

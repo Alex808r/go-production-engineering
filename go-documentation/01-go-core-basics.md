@@ -6,19 +6,19 @@
 > [!IMPORTANT]
 > 💻 **Практика, примеры кода и домашние задания к этому тому:**
 >
-> - 📂 **Код лекций:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/00-docs) (Тулчейн, Go Modules), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/01-intro) (Hello World, CLI-приложения), [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax) (Фундаментальный синтаксис, функции, циклы, defer, init).
-> - 🎯 **Задачник:** [homework-tasks.md (Уроки 1–3)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt) (Бизнес-логика Goflex: переменные, условия, циклы, функции).
-> - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 1: Junior Go Developer)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#этап-1-junior-go-developer--фундамент-языка-и-структуры-данных).
+> - 📂 **Код лекций:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/00-docs) (Тулчейн, Go Modules), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/01-intro) (Hello World, CLI-приложения), [02-syntax](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax) (Фундаментальный синтаксис, функции, циклы, defer, init).
+> - 🎯 **Задачник:** [homework-tasks.md (Уроки 1–3)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt) (Бизнес-логика Goflex: переменные, условия, циклы, функции).
+> - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Этап 1: Junior Go Developer)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#этап-1-junior-go-developer--фундамент-языка-и-структуры-данных).
 
 ---
 
 ## 0. Основы языка Go: старт с нуля
 
-> 🔗 **Практика и примеры кода:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/00-docs), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/01-intro) |
+> 🔗 **Практика и примеры кода:** [00-docs](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/00-docs), [01-intro](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/01-intro) |
 
-> 🎯 **Задачи:** [homework-tasks.md (Уроки 1–3: Hello World, переменные, типы)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt) |
+> 🎯 **Задачи:** [homework-tasks.md (Уроки 1–3: Hello World, переменные, типы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-1-первая-программа-и-базовый-ввод-вывод-fmt) |
 
-> 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 00–01)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-00-стандарты-разработки-и-go-modules)
+> 🗺️ **Путеводитель:** [course-codebase-guide.md (Уроки 00–01)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-00-стандарты-разработки-и-go-modules)
 
 Раздел предназначен для тех, кто начинает изучение Go с самых азов. Здесь закладывается фундамент: структура файлов, переменные, типизация, консольный ввод-вывод и сборка проекта.
 
@@ -290,7 +290,7 @@ func main() {
 
 ## 1. Управление потоком (Control Flow)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic) | 🎯 **Задачи:** [homework-tasks.md (Уроки 4–5: if, switch, for)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#урок-4-условия-if-с-областью-видимости-и-switch), [Упражнение Tour of Go (Метод Ньютона)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/homework-tasks.md#упражнение-a-tour-of-go-квадратный-корень-методом-ньютона-циклы-и-функции)
+> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/1-basic) | 🎯 **Задачи:** [homework-tasks.md (Уроки 4–5: if, switch, for)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-4-условия-if-с-областью-видимости-и-switch), [Упражнение Tour of Go (Метод Ньютона)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#упражнение-a-tour-of-go-квадратный-корень-методом-ньютона-циклы-и-функции)
 
 В Go минималистичный набор управляющих конструкций: единственный цикл `for`, ветвления `if` и `switch`, механизм отложенных вызовов `defer` и функция инициализации пакета `init()`.
 
@@ -841,7 +841,7 @@ func init() {
 
 ## 2. Функции и модель передачи аргументов (Functions & Pass by Value)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/1-basic), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/02-syntax/4-pointers) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 🔗 **Практика и примеры кода:** [02-syntax/1-basic](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/1-basic), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/4-pointers) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 > [!IMPORTANT]
 > **Фундаментальный закон языка Go:**  

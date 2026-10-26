@@ -53,5 +53,5 @@ go test -bench=. ./lessons/06-oop/5-hw
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 2: ООП и методы (Разделы 9: Методы, интерфейсы, SOLID)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/02-go-core-oop-methods.md)
-- **Практическое ДЗ:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/06-oop/homework-06) (Рефакторинг поискового движка GoSearch с выделением слоя engine)
+- **Теория:** [Том 2: ООП и методы (Разделы 9: Методы, интерфейсы, SOLID)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md)
+- **Практическое ДЗ:** [homework-06](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06) (Рефакторинг поискового движка GoSearch с выделением слоя engine)

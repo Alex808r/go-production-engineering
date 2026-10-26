@@ -19,7 +19,7 @@
 
 ## 🔍 Подробный разбор тем и ловушек
 
-### 1. Ловушка типизированного `nil != nil` в интерфейсах ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/01-basics.go))
+### 1. Ловушка типизированного `nil != nil` в интерфейсах ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview/01-basics.go))
 Интерфейс в рантайме Go представляется структурой `iface` (для непустых интерфейсов с методами) или `eface` (для `any` / `interface{}`), состоящей из двух машинных слов:
 1. `tab` (или `_type`): указатель на тип данных и его таблицу методов.
 2. `data`: указатель на конкретное значение в памяти.
@@ -53,7 +53,7 @@ if err == nil {
 
 ---
 
-### 2. Механика `defer` и именованные возвращаемые значения ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/01-basics.go))
+### 2. Механика `defer` и именованные возвращаемые значения ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview/01-basics.go))
 1. **Вычисление аргументов:** аргументы отложенного вызова вычисляются **в момент объявления `defer`**, а не в момент фактического выполнения.
 2. **Стек LIFO:** отложенные вызовы выполняются в порядке, обратном их объявлению.
 3. **Модификация результатов:** анонимная функция в `defer` выполняется **после** инструкции `return`, но **до** выхода из вызывающей функции. Она имеет доступ к именованным возвращаемым значениям и может их перезаписать:
@@ -68,7 +68,7 @@ func DeferWithNamedReturn() (res int) {
 
 ---
 
-### 3. Мутации и реалокация срезов ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/01-basics.go))
+### 3. Мутации и реалокация срезов ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview/01-basics.go))
 Срез в Go — это заголовок (`SliceHeader`): указатель `Data *T`, длина `Len int` и вместимость `Cap int`.
 - При взятии подслайса `s2 := s1[1:3]` создается новый заголовок, но указатель `Data` ссылается на **тот же базовый массив**.
 - Мутация `s2[1] = 999` изменяет элемент исходного массива, поэтому значение меняется и в `s1[2]`.
@@ -82,7 +82,7 @@ BenchmarkSliceAppend_WithPrealloc-8    363015      3300 ns/op   (~4x быстр�
 
 ---
 
-### 4. Строки, UTF-8 и руны ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/01-basics.go))
+### 4. Строки, UTF-8 и руны ([`01-basics.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview/01-basics.go))
 - `string` — неизменяемый срез байт (`[]byte`).
 - Символы кириллицы в UTF-8 кодируются **2 байтами**. Функция `len("Привет")` возвращает `12`, а не `6`!
 - Цикл `for idx, r := range "Привет"` декодирует UTF-8 поток в руны (`rune` = `int32`), при этом `idx` смещается на 2 байта на каждый символ.
@@ -102,7 +102,7 @@ BenchmarkSliceAppend_WithPrealloc-8    363015      3300 ns/op   (~4x быстр�
 
 ---
 
-### 6. Паттерны многопоточности ([`02-channels.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/21-interview/02-channels.go))
+### 6. Паттерны многопоточности ([`02-channels.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/21-interview/02-channels.go))
 
 #### А. Неблокирующий select (`Select`)
 Использование ветки `default` предотвращает блокировку текущей горутины, если канал не готов к отправке или приему:
@@ -132,7 +132,7 @@ default:
   - *Триггеры:* **Load Factor > 6.5** (удвоение бакетов $2^{B+1}$) или **избыток `overflow`-бакетов** при низком LF (дефрагментация $2^B$).
   - *Инкрементальность:* Переносится ровно по **2 бакета** на операцию записи/удаления для устранения пауз (STW).
   - *Чтение и адресация:* Чтение `m[k]` не эвакуирует бакеты (lock-free). Из-за смещения физических адресов в RAM элементы мапы **неадресуемы** (`&m[k]` запрещён).  
-  *(Подробный разбор: см. [Том 1.2, разд. 6.7](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/01-go-core-data-structures.md#67-внутреннее-устройство-map-в-go-hmap-bmap-коллизии-и-swiss-tables) и [Том 6, вопросы 26–27](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md#361-топ-27-ключевых-вопросов-и-ответов-технического-собеседования))*.
+  *(Подробный разбор: см. [Том 1.2, разд. 6.7](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-data-structures.md#67-внутреннее-устройство-map-в-go-hmap-bmap-коллизии-и-swiss-tables) и [Том 6, вопросы 26–27](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/06-go-core-algorithms-interview.md#361-топ-27-ключевых-вопросов-и-ответов-технического-собеседования))*.
 
 ---
 
@@ -146,7 +146,7 @@ go test -v -race -bench=. ./lessons/21-interview/...
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 6: Алгоритмы и собеседования (Разделы 32–36)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/06-go-core-algorithms-interview.md)
-- **Лайвкодинг:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
-- **Шпаргалка:** [go-core-cheatsheet.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-core-cheatsheet.md)
-- **Базы данных на собеседовании:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)
+- **Теория:** [Том 6: Алгоритмы и собеседования (Разделы 32–36)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/06-go-core-algorithms-interview.md)
+- **Лайвкодинг:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-livecoding-guide.md)
+- **Шпаргалка:** [go-core-cheatsheet.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-core-cheatsheet.md)
+- **Базы данных на собеседовании:** [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md)

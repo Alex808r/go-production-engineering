@@ -78,6 +78,6 @@ go run ./lessons/14-RPC/homework-14/cmd/client/main.go
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 5: Тестирование и архитектура (Раздел 23: RPC, Protobuf, gRPC)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)
-- **Практическое ДЗ:** [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14) (Реализация микросервиса сообщений на Go-RPC)
+- **Теория:** [Том 5: Тестирование и архитектура (Раздел 23: RPC, Protobuf, gRPC)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md)
+- **Практическое ДЗ:** [homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14) (Реализация микросервиса сообщений на Go-RPC)
 

@@ -86,6 +86,6 @@ go run ./lessons/13-api/homework-13/cmd/task3/main.go
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 4: Backend и Web (Раздел 12: REST архитектура, Middleware)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md)
-- **Практическое ДЗ:** [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/13-api/homework-13) (Полноценный REST API сервис поисковика GoSearch с CRUD-операциями)
+- **Теория:** [Том 4: Backend и Web (Раздел 12: REST архитектура, Middleware)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md)
+- **Практическое ДЗ:** [homework-13](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/13-api/homework-13) (Полноценный REST API сервис поисковика GoSearch с CRUD-операциями)
 

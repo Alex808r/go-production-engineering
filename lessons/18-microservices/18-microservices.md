@@ -74,9 +74,9 @@ go test -v -race -bench=. ./pkg/api/...
 ---
 
 ## 🔗 Файлы и связанные материалы
-- [homework-18/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18/README.md) — Домашнее задание №18: URL Shortener микросервис
-- [homework-18/Dockerfile](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18/Dockerfile) — Multi-stage production Dockerfile
-- [homework-18/docker-compose.yml](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/homework-18/docker-compose.yml) — Docker Compose оркестрация
-- [microservice/build/deployment.yaml](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/microservice/build/deployment.yaml) — Манифест Kubernetes Deployment
-- [microservice/build/service.yaml](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/18-microservices/microservice/build/service.yaml) — Манифест Kubernetes Service
-- **Теория:** [Том 5: Тестирование и архитектура (Раздел 23: Микросервисы, Docker, K8s)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/05-go-core-testing-arch.md)
+- [homework-18/README.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18/README.md) — Домашнее задание №18: URL Shortener микросервис
+- [homework-18/Dockerfile](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18/Dockerfile) — Multi-stage production Dockerfile
+- [homework-18/docker-compose.yml](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/homework-18/docker-compose.yml) — Docker Compose оркестрация
+- [microservice/build/deployment.yaml](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/microservice/build/deployment.yaml) — Манифест Kubernetes Deployment
+- [microservice/build/service.yaml](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/18-microservices/microservice/build/service.yaml) — Манифест Kubernetes Service
+- **Теория:** [Том 5: Тестирование и архитектура (Раздел 23: Микросервисы, Docker, K8s)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md)

@@ -1,7 +1,7 @@
 # Домашнее задание №19: Очереди сообщений и Асинхронная аналитика (Kafka / Event-Driven)
 
 Решение домашнего задания по курсу «Современная разработка на Go» (**Занятие №19: Брокеры сообщений**).  
-Реализовано в отдельной изолированной директории [`homework-19/`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19) без модификации и затирания решений предыдущих уроков.
+Реализовано в отдельной изолированной директории [`homework-19/`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19) без модификации и затирания решений предыдущих уроков.
 
 ---
 
@@ -88,7 +88,7 @@ homework-19/
 
 Для обеспечения слабой связности (Loose Coupling) сервисы общаются асинхронными событиями.
 
-Структура события [`pkg/event/event.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19/pkg/event/event.go):
+Структура события [`pkg/event/event.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19/pkg/event/event.go):
 
 ```go
 type LinkCreatedEvent struct {
@@ -114,7 +114,7 @@ type LinkCreatedEvent struct {
    - При получении битого JSON-сообщения консьюмер логирует ошибку и коммитит оффсет, чтобы очередь не зависала в бесконечном цикле.
 
 3. **In-Memory Channel Broker**:
-   - Для автономного запуска модульных тестов без необходимости поднимать локальный кластер Kafka реализован [`ChannelBroker`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19/pkg/event/channel.go). Все тесты выполняются за сотые доли секунды.
+   - Для автономного запуска модульных тестов без необходимости поднимать локальный кластер Kafka реализован [`ChannelBroker`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19/pkg/event/channel.go). Все тесты выполняются за сотые доли секунды.
 
 ---
 
@@ -165,7 +165,7 @@ type LinkCreatedEvent struct {
 
 ## Контейнеризация и Docker Compose
 
-Файл [`docker-compose.yml`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/19-queue/homework-19/docker-compose.yml) поднимает полный стек:
+Файл [`docker-compose.yml`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/19-queue/homework-19/docker-compose.yml) поднимает полный стек:
 - `zookeeper` (порт 22181)
 - `kafka` (порты 9092, 29092)
 - `shortener` (порт 8080)

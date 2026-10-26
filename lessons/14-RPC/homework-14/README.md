@@ -17,7 +17,7 @@
 ## Задача №1: Приложение-сервер RPC
 
 Сервер реализован на базе стандартного пакета Go `net/rpc` в соответствии со всеми требованиями:
-- **Структура сообщения ([`pkg/messages/messages.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14/pkg/messages/messages.go)):**
+- **Структура сообщения ([`pkg/messages/messages.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14/pkg/messages/messages.go)):**
   ```go
   type Message struct {
       ID   int       `json:"id"`
@@ -25,11 +25,11 @@
       Text string    `json:"text"`
   }
   ```
-- **Сервис RPC ([`pkg/rpcservice/service.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14/pkg/rpcservice/service.go)):**
+- **Сервис RPC ([`pkg/rpcservice/service.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14/pkg/rpcservice/service.go)):**
   - Экспортируемый тип `Service` с потокобезопасным хранилищем (`sync.RWMutex`).
   - Метод `Send(req []messages.Message, resp *int) error` — принимает срез сообщений, безопасно добавляет их в накопительный массив и возвращает число добавленных сообщений.
   - Метод `Messages(req struct{}, resp *[]messages.Message) error` — возвращает клиенту копию среза всех накопленных сообщений.
-- **Серверное приложение ([`cmd/server/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14/cmd/server/main.go)):**
+- **Серверное приложение ([`cmd/server/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14/cmd/server/main.go)):**
   - Регистрирует сервис через `rpc.Register(svc)`.
   - Открывает сетевой TCP-порт `:8080` (`net.Listen`).
   - Каждое входящее клиентское соединение обрабатывается конкурентно в отдельной горутине через `go rpc.ServeConn(conn)`.
@@ -39,7 +39,7 @@
 
 ## Задача №2: Приложение-клиент RPC
 
-Клиент ([`cmd/client/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14/cmd/client/main.go)):
+Клиент ([`cmd/client/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14/cmd/client/main.go)):
 - Устанавливает TCP-соединение с сервером по адресу `localhost:8080` через `rpc.Dial`.
 - Формирует пакет сообщений со структурой `{ID, Time, Text}`.
 - Вызывает удаленный метод `client.Call("Service.Send", newBatch, &ackCount)`.
@@ -50,7 +50,7 @@
 
 ## Тестирование
 
-Тесты реализованы в [`pkg/rpcservice/service_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/14-RPC/homework-14/pkg/rpcservice/service_test.go):
+Тесты реализованы в [`pkg/rpcservice/service_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14/pkg/rpcservice/service_test.go):
 1. **Прямое тестирование методов:** проверка логики добавления и извлечения сообщений.
 2. **Сетевое тестирование в памяти через `net.Pipe()`:**
    - Позволяет тестировать полный цикл RPC (сериализацию `encoding/gob`, передачу по сетевому интерфейсу, демаршалинг и вызов на сервере) **без открытия реальных TCP-портов операционной системы**.

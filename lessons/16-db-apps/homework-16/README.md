@@ -34,7 +34,7 @@
 
 ## Задача №1: Интерфейс взаимодействия с БД
 
-Файл [`pkg/db/db.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/db/db.go) определяет доменные модели и контракт хранилища:
+Файл [`pkg/db/db.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/db/db.go) определяет доменные модели и контракт хранилища:
 
 ```go
 type Movie struct {
@@ -63,13 +63,13 @@ type Interface interface {
 }
 ```
 
-Файл [`pkg/db/errors.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/db/errors.go) объявляет доменные ошибки (`db.ErrNotFound`), изолирующие бизнес-логику от драйверов СУБД.
+Файл [`pkg/db/errors.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/db/errors.go) объявляет доменные ошибки (`db.ErrNotFound`), изолирующие бизнес-логику от драйверов СУБД.
 
 ---
 
 ## Задача №2: Пакет для PostgreSQL (pgsql)
 
-Пакет [`pkg/db/pgsql/pgsql.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/db/pgsql/pgsql.go) реализует интерфейс `db.Interface` для PostgreSQL:
+Пакет [`pkg/db/pgsql/pgsql.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/db/pgsql/pgsql.go) реализует интерфейс `db.Interface` для PostgreSQL:
 
 - **Пул соединений**: на базе `github.com/jackc/pgx/v5/pgxpool` с поддержкой `Ping()` и таймаутов контекста.
 - **Пакетная вставка (`AddMovies`)**: объединение вставки массива фильмов в одну транзакцию с использованием `pgx.Batch` (согласно слайду 21 презентации) для минимизации сетевых задержек.
@@ -82,19 +82,19 @@ type Interface interface {
 
 Реализованы тесты:
 
-1. **Модульные тесты хранилища** ([`pkg/db/memsql/memsql_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/db/memsql/memsql_test.go)):
+1. **Модульные тесты хранилища** ([`pkg/db/memsql/memsql_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/db/memsql/memsql_test.go)):
    - `TestAddMovies_And_Movies_All`: добавление массива фильмов и выборка всех (`studioID == 0`).
    - `TestMovies_FilterByStudio`: проверка фильтрации по конкретной студии (`studioID > 0`) и по несуществующей студии.
    - `TestUpdateMovie`: успешное обновление фильма и валидация `db.ErrNotFound` при несуществующем ID.
    - `TestDeleteMovie`: удаление фильма, проверка повторного удаления и проверка отсутствия в списке.
    - `TestConcurrency`: параллельное чтение и запись 40 горутинами с флагом `-race`.
 
-2. **Тесты соответствия контракту pgsql** ([`pkg/db/pgsql/pgsql_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/db/pgsql/pgsql_test.go)):
+2. **Тесты соответствия контракту pgsql** ([`pkg/db/pgsql/pgsql_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/db/pgsql/pgsql_test.go)):
    - Статическая проверка реализации интерфейса: `var _ db.Interface = (*pgsql.DB)(nil)`.
    - Обработка ошибок при недоступности СУБД.
    - Корректная обработка пустого батча.
 
-3. **Тесты REST API** ([`pkg/api/api_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/api/api_test.go)):
+3. **Тесты REST API** ([`pkg/api/api_test.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/api/api_test.go)):
    - `TestHandleMovies_Empty` и `TestHandleMovies_WithFilterByStudio` (включая query param `?studio_id=X` и `?studio_id=0`).
    - `TestHandleMovieByID`, `TestHandleCreateMovies_BatchAndSingle`, `TestHandleUpdateMovie`, `TestHandleDeleteMovie`.
 
@@ -102,19 +102,19 @@ type Interface interface {
 
 ## In-Memory хранилище (memsql)
 
-Пакет [`pkg/db/memsql/memsql.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/db/memsql/memsql.go) реализует `db.Interface` в оперативной памяти с потокобезопасностью на базе `sync.RWMutex`. Используется для мгновенных модульных тестов и демонстрационного запуска сервера без установленного PostgreSQL.
+Пакет [`pkg/db/memsql/memsql.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/db/memsql/memsql.go) реализует `db.Interface` в оперативной памяти с потокобезопасностью на базе `sync.RWMutex`. Используется для мгновенных модульных тестов и демонстрационного запуска сервера без установленного PostgreSQL.
 
 ---
 
 ## REST API и веб-сервер
 
-- Пакет [`pkg/api/api.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/pkg/api/api.go) предоставляет HTTP-эндпоинты (на базе `gorilla/mux`):
+- Пакет [`pkg/api/api.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/pkg/api/api.go) предоставляет HTTP-эндпоинты (на базе `gorilla/mux`):
   - `GET /api/v1/movies?studio_id=X` — получение фильмов (все или фильтр по студии).
   - `GET /api/v1/movies/{id}` — получение фильма по ID.
   - `POST /api/v1/movies` — добавление фильма или массива фильмов.
   - `PUT /api/v1/movies/{id}` — обновление фильма.
   - `DELETE /api/v1/movies/{id}` — удаление фильма.
-- Приложение [`cmd/server/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/16-db-apps/homework-16/cmd/server/main.go) запускает HTTP-сервер с таймаутами и Graceful Shutdown.
+- Приложение [`cmd/server/main.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/16-db-apps/homework-16/cmd/server/main.go) запускает HTTP-сервер с таймаутами и Graceful Shutdown.
 
 ---
 

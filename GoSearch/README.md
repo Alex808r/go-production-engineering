@@ -25,17 +25,17 @@ GoSearch/
 
 ## 🔍 Ключевые компоненты
 
-### 1. Краулер ([`pkg/crawler`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch/pkg/crawler/crawler.go))
+### 1. Краулер ([`pkg/crawler`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/GoSearch/pkg/crawler/crawler.go))
 Интерфейс `crawler.Interface`:
 ```go
 type Interface interface {
     Scan(url string, depth int) ([]Document, error)
 }
 ```
-- [`spider.Service`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch/pkg/crawler/spider): рекурсивно обходит веб-страницы по ссылкам `href`, извлекая URL и Title с заданной глубиной `depth`.
-- [`membot.Service`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch/pkg/crawler/membot/membot.go): возвращает статичный набор документов для офлайн-разработки и юнит-тестов.
+- [`spider.Service`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/GoSearch/pkg/crawler/spider): рекурсивно обходит веб-страницы по ссылкам `href`, извлекая URL и Title с заданной глубиной `depth`.
+- [`membot.Service`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/GoSearch/pkg/crawler/membot/membot.go): возвращает статичный набор документов для офлайн-разработки и юнит-тестов.
 
-### 2. Инвертированный индекс ([`pkg/index`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/GoSearch/pkg/index/index.go))
+### 2. Инвертированный индекс ([`pkg/index`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/GoSearch/pkg/index/index.go))
 - Индекс хранит отображение `map[string][]int`: **слово $\to$ срез идентификаторов документов (ID)**.
 - При индексации заголовки документов токенизируются, приводятся к нижнему регистру и очищаются от знаков препинания (`cleanWord`).
 - Дубликаты слов внутри одного документа устраняются через `seen[word]`.
@@ -99,6 +99,6 @@ go run ./GoSearch/cmd/gosearch/gosearh.go -s Go
 ---
 
 ## 🔗 Связанные материалы курса
-- [03-algorithms — Поиск и сортировка](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/03-algorithms/03-algorithms.md)
-- [04-datastructs — Структуры данных и деревья поиска](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/04-datastructs.md)
-- [05-io — Потоковый ввод-вывод и чтение](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/05-io/05-io.md)
+- [03-algorithms — Поиск и сортировка](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/03-algorithms.md)
+- [04-datastructs — Структуры данных и деревья поиска](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/04-datastructs/04-datastructs.md)
+- [05-io — Потоковый ввод-вывод и чтение](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/05-io.md)

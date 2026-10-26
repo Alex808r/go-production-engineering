@@ -63,6 +63,6 @@ go test -v -race -cover ./lessons/11-network/...
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 4: Backend и Web (Раздел 29: Сетевое программирование)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/04-go-core-backend-web.md)
-- **Практическое ДЗ:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/11-network/homework-11) (Сетевая TCP-служба поиска для GoSearch с клиентом netclient)
+- **Теория:** [Том 4: Backend и Web (Раздел 29: Сетевое программирование)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md)
+- **Практическое ДЗ:** [homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/11-network/homework-11) (Сетевая TCP-служба поиска для GoSearch с клиентом netclient)
 

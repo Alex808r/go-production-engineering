@@ -94,34 +94,34 @@
 
 ## Практическая реализация SOLID в Go (`solid/`)
 
-Все 5 принципов реализованы и покрыты тестами в каталоге [`homework-17/solid`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/solid):
+Все 5 принципов реализованы и покрыты тестами в каталоге [`homework-17/solid`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/solid):
 
 ### SRP: Single Responsibility Principle
-- Код: [`solid/srp/srp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/solid/srp/srp.go)
+- Код: [`solid/srp/srp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/solid/srp/srp.go)
 - Бизнес-логика каталога фильмов (`MovieService`) отделена от форматирования отчетов (`ReportFormatter`).
 - Изменение формата вывода отчета (например, добавление CSV) не затрагивает логику управления фильмами.
 
 ### OCP: Open-Closed Principle
-- Код: [`solid/ocp/ocp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/solid/ocp/ocp.go)
+- Код: [`solid/ocp/ocp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/solid/ocp/ocp.go)
 - Функция `FilterMovies(movies, spec)` закрыта для модификации, но открыта для добавления новых фильтров (по году, по рейтингу, по кассовым сборам, логическое «И» через `AndSpecification`).
 
 ### LSP: Liskov Substitution Principle
-- Код: [`solid/lsp/lsp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/solid/lsp/lsp.go)
+- Код: [`solid/lsp/lsp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/solid/lsp/lsp.go)
 - Сервис `NotificationService` ожидает контракт `Notifier`. Реализации `EmailNotifier` и `SMSNotifier` строго соблюдают инварианты поведения без побочных эффектов.
 
 ### ISP: Interface Segregation Principle
-- Код: [`solid/isp/isp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/solid/isp/isp.go)
+- Код: [`solid/isp/isp.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/solid/isp/isp.go)
 - Вместо гигантского «божественного» интерфейса объявлены узкие интерфейсы: `Reader`, `Writer`, `Deleter`. Сервис чтения `ReadOnlyService` зависит только от `Reader`, не требуя заглушек для методов записи и удаления.
 
 ### DIP: Dependency Inversion Principle
-- Код: [`solid/dip/dip.go`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/solid/dip/dip.go)
+- Код: [`solid/dip/dip.go`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/solid/dip/dip.go)
 - Сервис бронирования билетов `TicketBookingService` зависит от абстракций `PaymentGateway` и `TicketRepository`. Реализации моков и продакшен-адаптеров передаются через Dependency Injection.
 
 ---
 
 ## Эталонная реализация Clean Architecture в Go (`cleanarch/`)
 
-Каталог [`homework-17/cleanarch`](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/17-system-design/homework-17/cleanarch) содержит чистую структуру:
+Каталог [`homework-17/cleanarch`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/17-system-design/homework-17/cleanarch) содержит чистую структуру:
 
 ```
 homework-17/

@@ -69,6 +69,6 @@ go test -v -race -cover ./lessons/10-concurrency/...
 ---
 
 ## 🔗 Связанные материалы
-- **Теория:** [Том 3: Конкурентное программирование (Разделы 11, 14–16: Каналы, sync, context)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/03-go-core-concurrency.md)
-- **Практическое ДЗ:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/10-concurrency/homework-10) (Синхронизация двух игроков Ping-Pong через каналы)
+- **Теория:** [Том 3: Конкурентное программирование (Разделы 11, 14–16: Каналы, sync, context)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/03-go-core-concurrency.md)
+- **Практическое ДЗ:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/homework-10) (Синхронизация двух игроков Ping-Pong через каналы)
 
