@@ -411,7 +411,7 @@ func main() {
 ## Урок 8: Структуры, указатели и методы (Бизнес-модель Goflex)
 
 > 📖 **Теория:** [Том 1: Разделы 7, 8 (Указатели и структуры)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/01-go-core-basics.md#7-указатели-в-деталях-pointers), [Том 2: Раздел 9 (Методы)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/02-go-core-oop-methods.md#9-методы-и-интерфейсы-methods--interfaces)  
-> 💻 **Код лекции:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/2-structures), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/4-pointers), [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop)  
+> 💻 **Код лекции:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/4-struct), [02-syntax/4-pointers](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/4-pointers), [06-oop](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop)  
 > 🛠️ **Домашнее задание:** [homework-06 (ООП движок)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/06-oop/homework-06)  
 > 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 06)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-06-ооп-в-go-методы-композиция-и-dip)
 
@@ -2761,7 +2761,7 @@ ok  	go-core-4/homework-19/pkg/shortener/storage	0.510s
 ## Домашнее задание 20: Итоговый проект Lynks (NoSQL, Redis, PostgreSQL)
 
 > 📖 **Теория:** [Том 4: Раздел 13 (Базы данных)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/04-go-core-backend-web.md#13-работа-с-базами-данных-sql-и-реляционные-субд) | [Том 5: Разделы 18, 23 (Архитектура, микросервисы, NoSQL/Redis)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/05-go-core-testing-arch.md#21-очереди-сообщений-и-брокеры-kafka-rabbitmq)  
-> 📚 **Руководства:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-system-design-guide.md) | [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-database-interview-guide.md)  
+> 📚 **Руководства:** [go-system-design-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-system-design-guide.md) | [go-database-interview-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-database-interview-guide.md)  
 > 💻 **Код лекции:** [20-NoSQL](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL)  
 > 📁 **Каталог решения:** [homework-20](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20) | Исходная спецификация: [`lynks/final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lynks/final.md)  
 > 🧪 **Тесты:** `go test -v -race ./lessons/20-NoSQL/homework-20/...`  

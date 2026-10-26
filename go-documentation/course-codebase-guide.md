@@ -90,7 +90,7 @@ flowchart TD
   ```
 * 🛠️ **Домашнее задание:** **[homework-03](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03)** — Построение инвертированного индекса (`map[string][]int`) и бинарный поиск документов в `GoSearch`.
   * Реализация индекса: [homework-03/pkg/index/index.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/pkg/index/index.go)
-  * Поиск документов: [homework-03/pkg/index/search.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/pkg/index/search.go)
+  * Поиск документов: [homework-03/pkg/index/search.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/03-algorithms/homework-03/pkg/index/index.go)
 
 ---
 
@@ -215,7 +215,7 @@ flowchart TD
   * `2-echo/` — параллельный TCP эхо-сервер с отдельной горутиной на каждое соединение.
   * `3-deadline/` — предотвращение зависания соединений через `conn.SetDeadline()`.
 * 🛠️ **Домашнее задание:** **[homework-11](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/11-network/homework-11)** — Создание сетевой TCP-службы для поисковой системы `GoSearch` и консольного сетевого клиента `netclient`.
-  * TCP-сервер: [homework-11/pkg/netsrv/netsrv.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/11-network/homework-11/pkg/netsrv/netsrv.go)
+  * TCP-сервер: [homework-11/pkg/netsrv/netsrv.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/11-network/homework-11/pkg/netsrv/server.go)
   * Сетевой клиент: [homework-11/cmd/netclient/main.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/11-network/homework-11/cmd/netclient/main.go)
 
 ---
@@ -248,7 +248,7 @@ flowchart TD
   * `1-Go-RPC/` — встроенный механизм `net/rpc` в Go (клиент и сервер каталога книг).
   * `2-gRPC/` — Google Protocol Buffers + gRPC: описание контракта `.proto`, сгенерированные структуры, gRPC сервер и клиент со стримингом.
 * 🛠️ **Домашнее задание:** **[homework-14](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14)** — Создание сетевой RPC-службы передачи сообщений.
-  * Сервис и клиент: [homework-14/pkg/rpcservice/rpcservice.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14/pkg/rpcservice/rpcservice.go)
+  * Сервис и клиент: [homework-14/pkg/rpcservice/rpcservice.go](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/14-RPC/homework-14/pkg/rpcservice/service.go)
 * ⚠️ **Подводный камень:** Сгенерированные структуры Protobuf содержат внутренний `sync.Mutex`. Передавать их нужно **только по указателю** (`*pb.Book`), избегая копирования lock-значений по значению.
 
 ---

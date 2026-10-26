@@ -3312,7 +3312,7 @@ ch := make(chan int, 10) // буферизованный канал на 10 эл
 
 ## 8. Пользовательские типы и Структуры (Structs)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/2-structures) | 🎯 **Задачи:** [homework-tasks.md (Урок 8: Бизнес-модель Goflex)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex)
+> 🔗 **Практика и примеры кода:** [02-syntax/2-structures](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/4-struct) | 🎯 **Задачи:** [homework-tasks.md (Урок 8: Бизнес-модель Goflex)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/homework-tasks.md#урок-8-структуры-указатели-и-методы-бизнес-модель-goflex)
 
 В Go нет классов. Структура (`struct`) — единственный способ создания сложных композитных типов данных для моделирования предметной области.
 

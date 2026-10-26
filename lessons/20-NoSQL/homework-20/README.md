@@ -1,6 +1,6 @@
 # Домашнее задание №20: Итоговый проект «Lynks» (NoSQL, Redis, PostgreSQL)
 
-Решение итогового проекта курса «Современная разработка на Go» (**Занятие №20: Нереляционные базы данных** / [`final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/final.md)).  
+Решение итогового проекта курса «Современная разработка на Go» (**Занятие №20: Нереляционные базы данных** / [`final.md`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lynks/final.md)).  
 Реализовано в отдельной изолированной директории [`homework-20/`](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/20-NoSQL/homework-20) без затирания решений предыдущих уроков.
 
 ---
