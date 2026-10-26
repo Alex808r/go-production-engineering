@@ -12,9 +12,10 @@
 >   - [homework-04](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/04-datastructs/homework-04) — Циклический двусвязный список со сторожевым элементом Sentinel (`Pop`, `Reverse`).
 >   - [homework-07](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/07-testing/homework-07) — Реализация алгоритмов быстрой сортировки QuickSort и MergeSort с бенчмарками.
 > - 💡 **Специализированные гайды к интервью:**
->   - 💻 [go-livecoding-guide.md (Live-Coding: 47 задач)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
->   - 🗄️ [sql-livecoding-guide.md (Live SQL: 28 задач)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)
+>   - 💻 [go-livecoding-guide.md (Live-Coding: 52 задачи)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-livecoding-guide.md)
+>   - 🗄️ [sql-livecoding-guide.md (Live SQL: 33 задачи)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/sql-livecoding-guide.md)
 >   - 🗄️ [go-database-interview-guide.md (Собеседование по БД)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-database-interview-guide.md)
+>   - 🐧 [go-os-and-linux-interview-guide.md (Гайд по ОС, Ядру Linux и Сетям)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-os-and-linux-interview-guide.md)
 > - 🗺️ **Сквозной путеводитель:** [course-codebase-guide.md (Экспресс-подготовка к собеседованию)](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/course-codebase-guide.md#-экспресс-маршрут-подготовки-к-собеседованию-за-1-день-до-интервью).
 
 ---
@@ -2138,6 +2139,119 @@ val2 := <-ch
 fmt.Println(val1, val2) // 0 0. Как понять, какое значение было реальным?
 ```
 *Ответ:* Использовать `comma-ok`: `v, ok := <-ch`. Для первого `ok == true`, для второго `ok == false`.
+
+#### Квиз 5: Поведение select с буфером 1 в цикле (Ozon Interview)
+```go
+func main() {
+    ch := make(chan int, 1)
+    for i := 0; i < 10; i++ {
+        select {
+        case x := <-ch:
+            fmt.Println(x)
+        case ch <- i:
+        }
+    }
+}
+```
+*Вопрос:* Что выведет программа? Что произойдет, если канал будет небуферизованным (`make(chan int)`)?  
+*Ответ:* Выведет четные числа: `0 2 4 6 8`.  
+*Объяснение:* 
+1. При `i=0` буфер пуст: чтение блокируется, выполняется запись `ch <- 0`.
+2. При `i=1` буфер полон (ёмкость 1): запись блокируется, выполняется чтение `x := <-ch`, выводится `0`, буфер опустошается.
+3. При `i=2` буфер пуст: записывается `2`.
+4. При `i=3` считывается и выводится `2`, и так далее до конца цикла.  
+*Если канал небуферизованный (`make(chan int)`):* На первой же итерации (`i=0`) обе ветки `select` заблокированы (нет других горутин). Без секции `default` программа упадет в **дедлок рантайма**: `fatal error: all goroutines are asleep - deadlock!`.
+
+#### Квиз 6: Последовательность вычисления выражений при чтении из каналов
+```go
+func worker() <-chan int {
+    ch := make(chan int)
+    go func() {
+        time.Sleep(3 * time.Second)
+        ch <- 1
+    }()
+    return ch
+}
+
+func main() {
+    start := time.Now()
+    _, _ = <-worker(), <-worker()
+    fmt.Println(time.Since(start).Round(time.Second))
+}
+```
+*Вопрос:* Сколько секунд займет выполнение: 3 секунды или 6 секунд? Почему?  
+*Ответ:* **6 секунд!**  
+*Объяснение:* В спецификации Go порядок вычисления операндов в выражении кортежа строго детерминирован **слева направо** (Left-to-Right Evaluation Order). Сначала вызывается первая функция `worker()` и блокируется операция чтения `<-worker()`, ожидая 3 секунды. Только после завершения первого чтения управление переходит ко второму операнду: вызывается второй `worker()` и блокируется чтение из второго канала еще на 3 секунды ($3 + 3 = 6$ с).  
+*Как выполнить параллельно за 3 секунды?* Запустить обе горутины заранее до чтения:
+```go
+ch1, ch2 := worker(), worker() // Обе горутины работают параллельно
+_, _ = <-ch1, <-ch2           // Суммарно ~3 секунды
+```
+
+#### Квиз 7: Ошибка «звездочки» при сохранении в интерфейсный кэш
+```go
+type Warehouse struct {
+    Id   int
+    Name string
+}
+
+type Cache interface {
+    Put(key int, val any)
+    Get(key int) any
+}
+
+func Save(c Cache, wh *Warehouse) {
+    c.Put(wh.Id, *wh) // ⚠️ Сохраняем разыменованную структуру
+}
+
+func Load(c Cache, id int) *Warehouse {
+    item := c.Get(id)
+    return item.(*Warehouse) // 💥 Что произойдет здесь?
+}
+```
+*Вопрос:* Что произойдет при вызове `Load` после `Save`?  
+*Ответ:* Произойдет фатальная паника приведения типа: `panic: interface conversion: interface {} is main.Warehouse, not *main.Warehouse`.  
+*Объяснение:* В функцию `Put` через `*wh` передается значение типа `Warehouse` (разыменованная структура). Внутри пустого интерфейса `any` (`eface`) сохраняется дескриптор типа `main.Warehouse`. В функции `Load` утверждается тип указателя `*Warehouse`. В Go конкретный тип структуры `T` и указатель на неё `*T` — это два абсолютно разных несовместимых типа.  
+*Правильное решение:* Передавать указатель `c.Put(wh.Id, wh)` либо безопасно приводить тип через `comma-ok`: `v, ok := item.(*Warehouse)`.
+
+#### Квиз 8: Перезапись среза при наличии свободной емкости (Slice Capacity Overwrite)
+```go
+func main() {
+    x := make([]int, 2, 4)
+    x[0] = 0
+    x[1] = 1
+
+    a := append(x, 2)
+    b := append(x, 3)
+
+    fmt.Println(a, b)
+}
+```
+*Вопрос:* Что выведет программа: `[0 1 2] [0 1 3]` или что-то другое?  
+*Ответ:* Выведет `[0 1 3] [0 1 3]`.  
+*Объяснение:* Срез `x` имеет длину 2 и емкость 4 (`len=2, cap=4`). Его базовый массив: `[0, 1, _, _]`.  
+Вызов `append(x, 2)` видит свободную емкость и записывает `2` в индекс 2 массива (`[0, 1, 2, _]`), возвращая `a` длины 3.  
+Вызов `append(x, 3)` снова выполняется над исходным `x` (`len=2`), записывает `3` в тот же самый индекс 2 базового массива, **перетирая двойку** (`[0, 1, 3, _]`), и возвращает `b` длины 3.  
+Поскольку `a` и `b` ссылаются на один и тот же базовый массив, оба среза отображают `[0 1 3]`.  
+*Как обезопасить код?* Использовать 3-индексный срез (Full Slice Expression): `x[:2:2]`. Тогда `cap == len`, и каждый `append` будет гарантированно аллоцировать независимый базовый массив в куче.
+
+#### Квиз 9: Неизменяемость строк в Go (String Immutability)
+```go
+func main() {
+    s := "ozon"
+    s[0] = 'O'
+    fmt.Println(s)
+}
+```
+*Вопрос:* Что произойдет при компиляции или запуске?  
+*Ответ:* **Ошибка компиляции:** `cannot assign to s[0] (value of type byte)`.  
+*Объяснение:* В Go строки неизменяемы (immutable). Внутренняя структура строки (`StringHeader`) указывает на сегмент данных только для чтения (`.rodata`). Попытка изменения байта строки по индексу запрещена на уровне грамматики языка.  
+*Как изменить символ?* Создать изменяемый срез байт `[]byte` или рун `[]rune`:
+```go
+b := []byte(s)
+b[0] = 'O'
+s = string(b) // "Ozon"
+```
 
 ---
 

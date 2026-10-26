@@ -17,8 +17,9 @@
 >
 > - 📖 **[README.md (Главное оглавление базы знаний по Go)](README.md)** — глубокий разбор языка, рантайма, структур данных и конкурентности в 6 томах; краткая справка — [go-core-cheatsheet.md](go-core-cheatsheet.md).
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)** — PostgreSQL, `pgxpool`, транзакции ACID, Redis, миграции и 30 вопросов.
-> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 47 задач по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).
-> - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник: 29 задач)](sql-livecoding-guide.md)** — 29 практических задач на SQL-запросы, JOINs, EXPLAIN ANALYZE, Consecutive Seats и оконные функции.
+> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 52 задачи по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).
+> - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник: 33 задачи)](sql-livecoding-guide.md)** — 33 практические задачи на SQL-запросы, JOINs, EXPLAIN ANALYZE, Consecutive Seats и оконные функции.
+> - 🐧 **[go-os-and-linux-interview-guide.md (Гайд по ОС, Ядру Linux и Сетям)](go-os-and-linux-interview-guide.md)** — виртуальная память, сисколы, futex, файловые дескрипторы, OOM, процессы vs потоки, HTTP, балансировка и прокси.
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)** — 4-шаговый фреймворк, расчеты и 4 кейса архитектуры.
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и примерам курса)](course-codebase-guide.md)** — сквозная карта курса: 23 лекционных модуля (00–22), проекты GoSearch, Lynks и Wallet (1000+ RPS), навигатор по домашним заданиям (homework-02–20).
 

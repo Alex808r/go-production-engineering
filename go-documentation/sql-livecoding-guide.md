@@ -1,4 +1,4 @@
-# 🗄️ Задачник по Live SQL (Топ-29 практических задач с собеседований: Junior, Middle, Senior)
+# 🗄️ Задачник по Live SQL (Топ-33 практических задач с собеседований: Junior, Middle, Senior)
 
 Практическое руководство для подготовки к написанию SQL-запросов в реальном времени (Live SQL Coding) на позиции Junior, Middle и Senior Backend Go Developer.
 
@@ -6,14 +6,15 @@
 > Все примеры написаны для **PostgreSQL** (диалектные особенности отмечены). Чтобы потренироваться, поднимите локальную БД по инструкции из [Тома 4, раздел 12.9 (Docker Compose)](04-go-core-backend-web.md#129-docker-compose-для-postgresql-в-локальной-разработке), создайте таблицы из условия задач и наполните их тестовыми данными.
 > 
 > 💡 **Рекомендация по уровню подготовки:**
-> - Для **Junior и Middle разработчиков** (а также при переходе на Go/Postgres с других стеков) рекомендуется начать с **[Раздела 7 (Базовый SQL и фундамент реляционных БД)](#7-базовый-sql-и-фундамент-реляционных-бд-junior--middle-практикум)** и **[Раздела 5 (Все виды JOIN)](#5-все-виды-join-и-каверзные-ловушки)** — они охватывают группировку, ловушки `NULL`, пагинацию в API, блокировки и `UPSERT`.
+> - Для **Junior и Middle разработчиков** (а также при переходе на Go/Postgres с других стеков) рекомендуется начать с **[Раздела 7 (Базовый SQL и фундамент реляционных БД)](#7-базовый-sql-и-фундамент-реляционных-бд-junior--middle-практикум)**, **[Раздела 8 (Скрининг Ozon)](#8-задачи-со-скрининга-и-проектирования-бд-ozon-technical-screening)** и **[Раздела 5 (Все виды JOIN)](#5-все-виды-join-и-каверзные-ловушки)** — они охватывают группировку, ловушки `NULL`, пагинацию в API, блокировки и `UPSERT`.
 > - Для позиций **Middle+ и Senior** ключевыми являются **[Раздел 1 (Оконные функции)](#1-оконные-функции-и-ранжирование)**, **[Раздел 3 (Временные ряды)](#3-аналитика-временных-рядов-и-накопительные-итоги)** и **[Раздел 6 (EXPLAIN ANALYZE и оптимизация)](#6-разбор-explain-analyze-и-live-оптимизация)**.
 
 > [!TIP]
 > 📚 **Связанные материалы и практический код:**  
 > - 📖 **[README.md (Главное оглавление базы знаний по Go)](README.md)** — язык Go, память и рантайм; краткая справка — [go-core-cheatsheet.md](go-core-cheatsheet.md).  
 > - 🗄️ **[go-database-interview-guide.md (Гайд по Базам Данных)](go-database-interview-guide.md)** — PostgreSQL, `pgxpool`, ACID, MVCC, индексы, EXPLAIN ANALYZE и 30 вопросов.  
-> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 47 задач по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).  
+> - 💻 **[go-livecoding-guide.md (Live-Coding на Go)](go-livecoding-guide.md)** — 52 задачи по многопоточности, структурам данных и алгоритмам в Go (Junior, Middle, Senior).  
+> - 🐧 **[go-os-and-linux-interview-guide.md (Гайд по ОС, Ядру Linux и Сетям)](go-os-and-linux-interview-guide.md)** — виртуальная память, сисколы, futex, файловые дескрипторы, OOM, процессы vs потоки, HTTP, балансировка и прокси.  
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)** — 4-шаговый фреймворк, расчеты и 4 кейса архитектуры.  
 > - 🎯 **[homework-tasks.md (Практический задачник Goflex)](homework-tasks.md)** — постановка и разбор всех 32 домашних заданий.  
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе)](course-codebase-guide.md)** — сквозная карта курса, лекционные примеры (00–22), проекты GoSearch, Lynks и Wallet (1000+ RPS), ДЗ (homework-02–20).  
@@ -60,6 +61,11 @@
    - [Задача 27: Заполнение пропусков во временных рядах через GENERATE_SERIES](#задача-27-заполнение-пропусков-во-временных-рядах-через-generate_series)
    - [Задача 28: Индексируемые условия дат (SARGable запросы vs DATE_TRUNC)](#задача-28-индексируемые-условия-дат-sargable-запросы-vs-date_trunc)
    - [Задача 29: Поиск смежных свободных мест (Consecutive Available Seats / Кинотеатр)](#задача-29-поиск-смежных-свободных-мест-consecutive-available-seats--кинотеатр)
+8. [Задачи со Скрининга и Проектирования БД (Ozon Technical Screening)](#8-задачи-со-скрининга-и-проектирования-бд-ozon-technical-screening)
+   - [Задача 30: Группировка и фильтрация заказов (Ozon Screening: Orders)](#задача-30-группировка-и-фильтрация-заказов-ozon-screening-orders)
+   - [Задача 31: Покупки до блокировки пользователя и фильтрация сумм (Ozon Screening: Purchases & Ban List)](#задача-31-покупки-до-блокировки-пользователя-и-фильтрация-сумм-ozon-screening-purchases--ban-list)
+   - [Задача 32: Моделирование архитектуры чатов и сообщений (Ozon RDBMS: Chats & Messages)](#задача-32-моделирование-архитектуры-чатов-и-сообщений-ozon-rdbms-chats--messages)
+   - [Задача 33: Моделирование каталога библиотеки (Ozon RDBMS: Library Catalog)](#задача-33-моделирование-каталога-библиотеки-ozon-rdbms-library-catalog)
 
 ---
 
@@ -1275,4 +1281,253 @@ LEFT JOIN address a ON p.id = a.person_id;
 -- Эквивалент через CASE WHEN (более громоздкий):
 -- CASE WHEN a.city IS NOT NULL THEN a.city ELSE 'Unknown' END AS city
 ```
+
+---
+
+## 8. Задачи со Скрининга и Проектирования БД (Ozon Technical Screening)
+
+### Задача 30: Группировка и фильтрация заказов (Ozon Screening: Orders)
+
+#### 🎯 Условие:
+Дана таблица `orders`:
+```sql
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    price_total NUMERIC NOT NULL
+);
+```
+Напишите SQL-запрос, который вернёт количество заказов по каждому пользователю с `price_total >= 1000` в виде `(user_id, order_count)`, отсортированному по количеству заказов в обратном порядке (по убыванию).
+
+#### ✅ Эталонное решение:
+```sql
+SELECT 
+    user_id, 
+    COUNT(*) AS order_count
+FROM orders 
+WHERE price_total >= 1000 
+GROUP BY user_id 
+ORDER BY order_count DESC;
+```
+
+#### 💡 Ловушка и вопросы интервьюера:
+1. **Почему `WHERE`, а не `HAVING`?**  
+   Условие `price_total >= 1000` фильтрует **исходные строки** до агрегации. Написание этого условия в `HAVING` либо вызовет синтаксическую ошибку (поле `price_total` не входит в `GROUP BY`), либо заставит СУБД агрегировать ненужные строки. `WHERE` отсекает строки на раннем этапе (Index Scan / Seq Scan), экономя память и CPU.
+2. **`COUNT(*)` vs `COUNT(id)`:**  
+   В современных версиях PostgreSQL и MySQL `COUNT(*)` оптимизирован и работает идентично `COUNT(1)` / `COUNT(id)`. Но `COUNT(col)` игнорирует строки с `NULL`, а `COUNT(*)` считает все физические строки группы.
+
+---
+
+### Задача 31: Покупки до блокировки пользователя и фильтрация сумм (Ozon Screening: Purchases & Ban List)
+
+#### 🎯 Условие:
+Дана схема интернет-магазина:
+```sql
+-- Пользователи:
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    firstname TEXT NOT NULL,
+    lastname TEXT NOT NULL,
+    birth DATE NOT NULL
+);
+
+-- Покупки:
+CREATE TABLE purchase (
+    sku INT NOT NULL,
+    price NUMERIC NOT NULL,
+    user_id INT NOT NULL REFERENCES users(id),
+    date DATE NOT NULL
+);
+
+-- Список заблокированных пользователей:
+CREATE TABLE ban_list (
+    user_id INT NOT NULL REFERENCES users(id),
+    date_from DATE NOT NULL
+);
+```
+
+#### Задание 1: Покупки до блокировки
+Вывести уникальные комбинации пользователя и SKU товара для всех покупок, совершенных пользователями **до того, как их забанили** (или если пользователь никогда не был забанен). Отсортировать по фамилии, имени, ID пользователя и SKU.
+
+##### ✅ Решение 1:
+```sql
+SELECT DISTINCT 
+    u.id, 
+    u.firstname, 
+    u.lastname, 
+    p.sku
+FROM users u
+JOIN purchase p ON u.id = p.user_id
+LEFT JOIN ban_list bl ON u.id = bl.user_id
+WHERE bl.user_id IS NULL       -- 1. Пользователь никогда не был заблокирован
+   OR bl.date_from > p.date    -- 2. Либо покупка совершена ДО даты блокировки
+ORDER BY u.lastname, u.firstname, u.id, p.sku;
+```
+
+> [!WARNING]
+> 🚨 **Ловушка с `INNER JOIN ban_list`:**  
+> Если соединить `ban_list` через обычный `JOIN`, в результирующую выборку попадут **ТОЛЬКО пользователи, которые есть в таблице банов**! Все честные незаблокированные пользователи будут безвозвратно отброшены. Обязателен **`LEFT JOIN`** с проверкой `bl.user_id IS NULL`.
+
+---
+
+#### Задание 2: VIP-покупатели с суммой $> 5000$
+Найти пользователей, совершивших покупок на общую сумму больше 5000 рублей. Вывести: `id`, `firstname`, `lastname`, `total_amount`.
+
+##### ✅ Решение 2 (Идиоматичный `HAVING`):
+```sql
+SELECT 
+    u.id, 
+    u.firstname, 
+    u.lastname, 
+    SUM(p.price) AS total_amount
+FROM users u 
+JOIN purchase p ON u.id = p.user_id
+GROUP BY u.id, u.firstname, u.lastname
+HAVING SUM(p.price) > 5000
+ORDER BY total_amount DESC;
+```
+
+---
+
+### Задача 32: Моделирование архитектуры чатов и сообщений (Ozon RDBMS: Chats & Messages)
+
+#### 🎯 Условие:
+Спроектировать схему реляционной базы данных для мессенджера (Ozon Chat):
+1. Сущности: **Пользователь**, **Чат**, **Сообщение**.
+2. Пользователь может состоять в нескольких чатах одновременно.
+3. В чате может быть много пользователей (Связь N:M).
+4. Сообщение принадлежит строго одному чату и строго одному автору (Связь N:1).
+
+#### ✅ DDL-схема таблиц (PostgreSQL):
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE chats (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Таблица связки многие-ко-многим (N:M):
+CREATE TABLE user_chats (
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    chat_id INT NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
+    joined_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (user_id, chat_id)
+);
+
+CREATE TABLE messages (
+    id BIGSERIAL PRIMARY KEY,
+    chat_id INT NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
+    author_id INT NOT NULL REFERENCES users(id),
+    content TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+-- Индекс для мгновенной выборки переписки чата в хронологическом порядке:
+CREATE INDEX idx_messages_chat_created ON messages (chat_id, created_at DESC);
+```
+
+#### Запрос: Выбрать все чаты пользователя 'Вася' в формате (chat_id, chat_name):
+```sql
+SELECT 
+    uc.chat_id, 
+    c.name AS chat_name
+FROM users u
+JOIN user_chats uc ON uc.user_id = u.id
+JOIN chats c ON c.id = uc.chat_id
+WHERE u.name = 'Вася';
+```
+
+#### 🛡️ Вопросы собеседования сеньор-грейда (18–19 грейд Ozon):
+1. **Что будет, если вместо `JOIN` применить `LEFT JOIN`?**  
+   Ничего не изменится для существующих пользователей с чатами. Но если Вася есть в базе, а чатов у него нет: обычный `JOIN` вернет 0 строк, а `LEFT JOIN` вернет 1 строку с `chat_id = NULL`.
+2. **Сколько и какие индексы созданы по этой схеме?**  
+   Автоматически создано **4 уникальных B-Tree индекса** на Primary Key каждой таблицы (`users_pkey`, `chats_pkey`, `user_chats_pkey`, `messages_pkey`).
+3. **Запрос поиска чатов Васи стал медленным при росте базы. Почему?**  
+   Условие `WHERE u.name = 'Вася'` делает полный скан таблицы `users` (**`Seq Scan`**), так как по полю `name` нет индекса!  
+   *Решение:* добавить `CREATE INDEX idx_users_name ON users(name);`.
+4. **Что показывает команда `EXPLAIN ANALYZE` и какой узел указывает на нехватку индекса?**  
+   Показывает реальный план выполнения, буферы и время в миллисекундах. Узел **`Seq Scan`** с большим `Rows Removed by Filter` однозначно сигнализирует об отсутствии индекса.
+5. **Какой первичный ключ лучше: `BIGSERIAL` или `UUID`?**  
+   - `BIGSERIAL (8 байт)`: компактный, монотонно возрастает, идеален для B-Tree (нет фрагментации страниц), быстрый `Index Scan`. Но выдает объем бизнеса и требует централизованной генерации СУБД.
+   - `UUID (16 байт)`: распределенная генерация в Go без обращения к базе. Но случайный `UUIDv4` фрагментирует B-Tree страницы и увеличивает кэш в 2 раза. В современном проде используют **`UUIDv7`** (сортируемый по времени).
+6. **Шардирование:** чаты растут, диск переполнен. Что делать?  
+   Шардировать таблицу **`messages`** (она занимает 95% диска из-за текста). Ключ шардирования — **`chat_id`**. Все сообщения одного чата будут лежать на одной ноде, позволяя читать переписку без межшардовых распределенных запросов.
+
+---
+
+### Задача 33: Моделирование каталога библиотеки (Ozon RDBMS: Library Catalog)
+
+#### 🎯 Условие:
+Описать модель библиотеки. Три сущности: **«Автор»**, **«Книга»**, **«Читатель»**.  
+Физически книга (экземпляр) только одна и может быть на руках только у одного читателя одновременно. У книги может быть несколько авторов.
+
+#### ✅ Схема DDL:
+```sql
+CREATE TABLE authors (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE readers (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    card_number TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE books (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    -- Физически экземпляр книги один. Если null — книга в библиотеке (на полке):
+    reader_id INT REFERENCES readers(id) ON DELETE SET NULL,
+    borrowed_at TIMESTAMP
+);
+
+-- Связка книги и авторов (многие-ко-многим):
+CREATE TABLE book_authors (
+    book_id INT NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+    author_id INT NOT NULL REFERENCES authors(id) ON DELETE CASCADE,
+    PRIMARY KEY (book_id, author_id)
+);
+```
+
+#### Запросы собеседования:
+
+##### 1. Выбрать названия всех книг, которые сейчас на руках у читателей:
+```sql
+SELECT b.title, r.name AS reader_name, b.borrowed_at
+FROM books b
+JOIN readers r ON b.reader_id = r.id;
+```
+
+##### 2. Выбрать названия книг, у которых более 3 соавторов:
+```sql
+SELECT b.title, COUNT(ba.author_id) AS authors_count
+FROM books b
+JOIN book_authors ba ON b.id = ba.book_id
+GROUP BY b.id, b.title
+HAVING COUNT(ba.author_id) > 3;
+```
+
+##### 3. Топ-3 самых читаемых авторов на данный момент:
+```sql
+SELECT 
+    a.id, 
+    a.name, 
+    COUNT(*) AS books_on_hands
+FROM authors a
+JOIN book_authors ba ON a.id = ba.author_id
+JOIN books b ON b.id = ba.book_id
+WHERE b.reader_id IS NOT NULL -- книга физически на руках
+GROUP BY a.id, a.name
+ORDER BY books_on_hands DESC
+LIMIT 3;
+```
+
 
