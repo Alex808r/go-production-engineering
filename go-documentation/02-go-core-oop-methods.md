@@ -2235,7 +2235,7 @@ type Reader interface {
 
 ## 10. Обработка ошибок (Error Handling)
 
-> 🔗 **Практика и примеры кода:** [02-syntax/6-errors](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/6-errors), [05-io/1-files](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/1-files) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02: Ошибки)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
+> 🔗 **Практика и примеры кода:** [02-syntax/6-errors](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/02-syntax/6-errors), [05-io/1-files](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/05-io/4-files) | 🗺️ **Путеводитель:** [course-codebase-guide.md (Урок 02: Ошибки)](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/course-codebase-guide.md#урок-02-фундаментальный-синтаксис-и-модель-памяти)
 
 В Go нет исключений (`try / catch`). Ошибки — это обычные значения, передаваемые первым классом через множественный возврат.
 

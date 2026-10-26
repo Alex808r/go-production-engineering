@@ -1278,7 +1278,7 @@ func PassSessionToC(s SessionData) {
 
 ## 15. Продвинутая Синхронизация и Паттерны Конкурентности
 
-> 🔗 **Практика и примеры кода:** [10-concurrency/4-race](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/4-race), [10-concurrency/5-patterns](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/5-patterns) | 🛠️ **ДЗ:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/homework-10) | 🎯 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-livecoding-guide.md)
+> 🔗 **Практика и примеры кода:** [10-concurrency/4-race](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/5-shared_mem), [10-concurrency/5-patterns](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/10-pattern-pipeline) | 🛠️ **ДЗ:** [homework-10](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/lessons/10-concurrency/homework-10) | 🎯 **Live-Coding:** [go-livecoding-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-livecoding-guide.md)
 
 ### 15.1. `sync.Mutex`, `sync.RWMutex`, `sync.Once` и `sync.Pool`
 
