@@ -27,6 +27,7 @@
 > - 💻 **[go-livecoding-guide.md (Live-Coding на Go: 52 задачи + Гайд по интервью)](go-livecoding-guide.md)** — топ задач от Junior до Senior, 5-шаговый фреймворк решения, табличные тесты и топ-10 вопросов с подвохом.
 > - 🗄️ **[sql-livecoding-guide.md (Live SQL Задачник: 33 задачи)](sql-livecoding-guide.md)** — практические задачи с собеседований (Junior/Middle/Senior): оконные функции, JOIN, пагинация, блокировки, UPSERT, EXPLAIN ANALYZE.
 > - 🏛️ **[go-system-design-guide.md (System Design для Go)](go-system-design-guide.md)**
+> - 🧩 **[go-design-patterns-guide.md (Паттерны проектирования в Go: GoF, Concurrency & Highload)](go-design-patterns-guide.md)** — полное руководство по архитектурным и конкурентным паттернам с обоснованием и антипаттернами
 > - 📊 **[mermaid-diagrams (Стандарты визуализации архитектуры Mermaid)](mermaid-diagrams/README.md)** — скилл и палитра для построения диаграмм C4, Sequence, State Machine и Flowchart.
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и дорожной карте)](course-codebase-guide.md)** — сквозная карта: 22 лекционных модуля (00–22), продакшен-проекты GoSearch, Lynks и Highload Wallet (1000+ RPS), навигатор по домашним заданиям и гайдам.
 
