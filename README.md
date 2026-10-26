@@ -65,6 +65,7 @@ go-course-4/
 │   ├── docker-and-compose-starter-guide.md # Практическое руководство по Docker и Docker Compose
 │   ├── go-core-cheatsheet.md               # Быстрая шпаргалка по Go
 │   ├── go-database-interview-guide.md      # Вопросы и практика по SQL и NoSQL (блокировки, транзакции, MVCC)
+│   ├── go-design-patterns-guide.md         # Паттерны проектирования в Go (GoF, Concurrency, Highload, антипаттерны)
 │   ├── go-livecoding-guide.md              # Задачи для лайвкодинга с разбором (52 задачи)
 │   ├── go-modern-features-guide.md         # Руководство по фичам Go 1.21–1.26+ (slog, iter, synctest, Swiss Tables)
 │   ├── go-os-and-linux-interview-guide.md  # Гайд по ОС, Ядру Linux, Сетям и Системному программированию
