@@ -1,4 +1,4 @@
-# 💻 Задачник по Live-Coding на Go (Топ-47 задач с реальных собеседований: Junior, Middle, Senior)
+# 💻 Задачник по Live-Coding на Go (Топ-52 задачи с реальных собеседований: Junior, Middle, Senior)
 
 Практическое руководство для подготовки к секции живого программирования (Live-Coding / Coding Interview) на позиции Junior, Middle и Senior Go Developer.
 
@@ -79,6 +79,11 @@
    - [Задача 45: Конвейерный параллельный подсчёт цифр в словах с отменой (DigitsCounter Pipeline)](#задача-45-конвейерный-параллельный-подсчёт-цифр-в-словах-с-отменой-digitscounter-pipeline)
    - [Задача 46: Сжатие плато точек временного ряда на графике (Point Plateau Filter)](#задача-46-сжатие-плато-точек-временного-ряда-на-графике-point-plateau-filter)
    - [Задача 47: Реализация ErrGroup своими руками (Concurrency First-Error with Context Cancel)](#задача-47-реализация-errgroup-своими-руками-concurrency-first-error-with-context-cancel)
+   - [Задача 48: Проверка слайса на монотонность (isMonotonic)](#задача-48-проверка-слайса-на-монотонность-ismonotonic)
+   - [Задача 49: Функция zip и вариативная zipVariadic для слайсов](#задача-49-функция-zip-и-вариативная-zipvariadic-для-слайсов)
+   - [Задача 50: Генерация N уникальных случайных чисел (uniqRandn)](#задача-50-генерация-n-уникальных-случайных-чисел-uniqrandn)
+   - [Задача 51: Перебор паролей по хэшу MD5 (RecoverPassword)](#задача-51-перебор-паролей-по-хэшу-md5-recoverpassword)
+   - [Задача 52: Ревью кода: In-Memory кэш с багами синхронизации и гонками](#задача-52-ревью-кода-in-memory-кэш-с-багами-синхронизации-и-гонками)
 7. [Стратегия Live-Coding и Топ-10 каверзных вопросов с подвохом](#7-стратегия-live-coding-и-топ-10-каверзных-вопросов-с-подвохом)
    - [7.1. Пошаговый 5-шаговый фреймворк поведения на лайвкодинге](#71-пошаговый-5-шаговый-фреймворк-поведения-на-лайвкодинге)
    - [7.2. Шаблон табличных тестов (Table-Driven Tests) прямо на интервью](#72-шаблон-табличных-тестов-table-driven-tests-прямо-на-интервью)
@@ -3377,6 +3382,708 @@ func TestErrGroup(t *testing.T) {
 ```
 
 - **Сложность:** Time $O(\max(T_i))$ — время работы ограничено самой долгой задачей, Space $O(1)$ дополнительной памяти (не зависит от числа задач).
+
+---
+
+### Задача 48: Проверка слайса на монотонность (isMonotonic)
+
+#### 🎯 Условие:
+
+Напишите функцию `IsMonotonic(s []int) bool`, которая определяет, является ли переданный срез целых чисел монотонным.
+Срез считается **монотонным**, если он:
+1. Монотонно **не убывает** ($s[i] \le s[i+1]$ для всех допустимых $i$), **ЛИБО**
+2. Монотонно **не возрастает** ($s[i] \ge s[i+1]$ для всех допустимых $i$).
+
+**Примеры:**
+- `[]int{1, 2, 2, 3}` $\to$ `true` (не убывает)
+- `[]int{6, 5, 4, 4}` $\to$ `true` (не возрастает)
+- `[]int{1, 3, 2}` $\to$ `false` (сначала возрастает, затем убывает)
+- `[]int{1, 1, 1}` $\to$ `true` (одновременно не возрастает и не убывает)
+- `[]int{}` или `[]int{42}` $\to$ `true` (тривиально монотонны)
+
+#### 💡 Ловушки и частые ошибки:
+
+1. **Граничные случаи длины $\le 2$:** Срез из 0, 1 или 2 элементов **всегда** монотонен. Проверка `len(s) <= 2` даёт мгновенный возврат `true` без циклов.
+2. **Серии одинаковых чисел в начале:** Нельзя определять направление монотонности только по первой паре `s[0]` и `s[1]`. Если `s[0] == s[1]`, знак разности равен 0, но последующие элементы могут как возрастать, так и убывать (например, `[2, 2, 2, 3, 1]`).
+3. **Лишние аллокации и сортировки:** Попытка скопировать срез и отсортировать его (`sort.Ints`) требует $O(N \log N)$ времени и $O(N)$ дополнительной памяти в куче. Ожидается строго **один проход** за $O(N)$ времени и $O(1)$ памяти.
+4. **Ранний выход (Early Exit):** Как только зафиксировано, что нарушились **оба** флага (`!increasing && !decreasing`), дальнейший обход бессмыслен — нужно сразу возвращать `false`.
+
+#### 🚀 Эталонное решение (Идиоматичный Go):
+
+```go
+package livecoding
+
+import "testing"
+
+// IsMonotonic возвращает true, если срез монотонно не убывает либо монотонно не возрастает.
+// Временная сложность: O(N), пространственная сложность: O(1).
+func IsMonotonic(s []int) bool {
+	if len(s) <= 2 {
+		return true
+	}
+
+	increasing := true
+	decreasing := true
+
+	for i := 1; i < len(s); i++ {
+		if s[i] > s[i-1] {
+			decreasing = false
+		}
+		if s[i] < s[i-1] {
+			increasing = false
+		}
+
+		// Ранний выход: последовательность уже не может быть ни возрастающей, ни убывающей
+		if !increasing && !decreasing {
+			return false
+		}
+	}
+
+	return increasing || decreasing
+}
+```
+
+#### 🧪 Модульные тесты (Table-Driven Tests):
+
+```go
+func TestIsMonotonic(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    []int
+		expected bool
+	}{
+		{"empty slice", []int{}, true},
+		{"single element", []int{42}, true},
+		{"two elements increasing", []int{1, 5}, true},
+		{"two elements decreasing", []int{5, 1}, true},
+		{"two identical elements", []int{3, 3}, true},
+		{"strictly increasing", []int{1, 2, 3, 4, 5}, true},
+		{"non-decreasing with duplicates", []int{1, 2, 2, 3, 3, 4}, true},
+		{"strictly decreasing", []int{5, 4, 3, 2, 1}, true},
+		{"non-increasing with duplicates", []int{6, 5, 4, 4, 2}, true},
+		{"all identical elements", []int{7, 7, 7, 7}, true},
+		{"oscillating", []int{1, 3, 2}, false},
+		{"starts flat then changes direction", []int{2, 2, 2, 1, 4}, false},
+		{"plateau in the middle violating monotonicity", []int{1, 5, 3, 5}, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := IsMonotonic(tt.input)
+			if got != tt.expected {
+				t.Errorf("IsMonotonic(%v) = %v, expected %v", tt.input, got, tt.expected)
+			}
+		})
+	}
+}
+```
+
+- **Сложность:** Time $O(N)$ — ровно один линейный проход, Space $O(1)$ — два булевых флага без аллокаций.
+
+---
+
+### Задача 49: Функция zip и вариативная zipVariadic для слайсов
+
+#### 🎯 Условие:
+
+1. Напишите функцию `Zip(s1, s2 []int) [][]int`, объединяющую элементы двух срезов целых чисел в срез пар `[]int{s1[i], s2[i]}`. Длина результирующего среза определяется длиной **наиболее короткого** из входных срезов (`min(len(s1), len(s2))`).
+2. Напишите обобщённую вариативную версию `ZipVariadic[T any](slices ...[]T) [][]T`, которая принимает произвольное количество срезов одинакового типа $T$ и объединяет их $i$-е элементы в кортежи размера $K$ (где $K$ — число переданных срезов), также обрезая результат по самому короткому срезу.
+
+**Примеры:**
+- `Zip([]int{1, 2, 3}, []int{4, 5})` $\to$ `[][]int{{1, 4}, {2, 5}}`
+- `ZipVariadic([]string{"a", "b"}, []string{"1", "2", "3"}, []string{"x", "y"})` $\to$ `[][]string{{"a", "1", "x"}, {"b", "2", "y"}}`
+
+#### 💡 Ловушки и частые ошибки:
+
+1. **Паника выхода за границы (`index out of range`):** Если длины срезов не совпадают, наивный цикл до `len(s1)` вызовет `panic` при обращении к `s2[i]`. Границей цикла **всегда** должен быть минимум длин.
+2. **Пустые срезы и nil:** Если хотя бы один срез пустой (`len == 0`) или не передано ни одного среза, функция должна корректно возвращать пустой срез `[][]T{}`, а не паниковать.
+3. **Аллокации и Capacity Preallocation:** Нельзя делать `res := [][]T{}` и затем вызывать `append` в цикле. Нужно сразу аллоцировать результирующий срез нужной длины `make([][]T, minLen)`.
+4. **Независимость кортежей:** Каждый внутренний срез кортежа обязан быть независимым `make([]T, numSlices)`. Повторное использование одного и того же базового массива приведёт к порче данных.
+
+#### 🚀 Эталонное решение (Идиоматичный Go):
+
+```go
+package livecoding
+
+import "testing"
+
+// Zip объединяет два среза int в срез пар, ограничиваясь минимальной длиной.
+// Time: O(min(len(s1), len(s2))), Space: O(min(len(s1), len(s2)))
+func Zip(s1, s2 []int) [][]int {
+	minLen := len(s1)
+	if len(s2) < minLen {
+		minLen = len(s2)
+	}
+
+	if minLen == 0 {
+		return [][]int{}
+	}
+
+	res := make([][]int, minLen)
+	for i := 0; i < minLen; i++ {
+		res[i] = []int{s1[i], s2[i]}
+	}
+	return res
+}
+
+// ZipVariadic обобщённо объединяет K срезов любого типа T в срез кортежей.
+// Длина результата равна минимальной длине среди всех переданных срезов.
+func ZipVariadic[T any](slices ...[]T) [][]T {
+	if len(slices) == 0 {
+		return [][]T{}
+	}
+
+	// Находим срез минимальной длины
+	minLen := len(slices[0])
+	for _, s := range slices[1:] {
+		if len(s) < minLen {
+			minLen = len(s)
+		}
+	}
+
+	if minLen == 0 {
+		return [][]T{}
+	}
+
+	k := len(slices)
+	res := make([][]T, minLen)
+	for i := 0; i < minLen; i++ {
+		tuple := make([]T, k)
+		for j := 0; j < k; j++ {
+			tuple[j] = slices[j][i]
+		}
+		res[i] = tuple
+	}
+	return res
+}
+```
+
+#### 🧪 Модульные тесты:
+
+```go
+func TestZip(t *testing.T) {
+	t.Run("equal lengths", func(t *testing.T) {
+		s1 := []int{1, 2, 3}
+		s2 := []int{4, 5, 6}
+		got := Zip(s1, s2)
+		expected := [][]int{{1, 4}, {2, 5}, {3, 6}}
+		if len(got) != len(expected) {
+			t.Fatalf("expected len %d, got %d", len(expected), len(got))
+		}
+		for i := range got {
+			if got[i][0] != expected[i][0] || got[i][1] != expected[i][1] {
+				t.Errorf("at %d: got %v, expected %v", i, got[i], expected[i])
+			}
+		}
+	})
+
+	t.Run("different lengths", func(t *testing.T) {
+		s1 := []int{1, 2, 3, 4, 5}
+		s2 := []int{10, 20}
+		got := Zip(s1, s2)
+		if len(got) != 2 {
+			t.Fatalf("expected len 2, got %d", len(got))
+		}
+	})
+
+	t.Run("empty slice", func(t *testing.T) {
+		got := Zip([]int{}, []int{1, 2, 3})
+		if len(got) != 0 {
+			t.Fatalf("expected empty slice, got len %d", len(got))
+		}
+	})
+}
+
+func TestZipVariadic(t *testing.T) {
+	t.Run("three string slices", func(t *testing.T) {
+		s1 := []string{"a", "b"}
+		s2 := []string{"1", "2", "3"}
+		s3 := []string{"x", "y"}
+
+		got := ZipVariadic(s1, s2, s3)
+		if len(got) != 2 {
+			t.Fatalf("expected len 2, got %d", len(got))
+		}
+		if got[0][0] != "a" || got[0][1] != "1" || got[0][2] != "x" {
+			t.Errorf("unexpected tuple 0: %v", got[0])
+		}
+		if got[1][0] != "b" || got[1][1] != "2" || got[1][2] != "y" {
+			t.Errorf("unexpected tuple 1: %v", got[1])
+		}
+	})
+
+	t.Run("no slices provided", func(t *testing.T) {
+		got := ZipVariadic[int]()
+		if len(got) != 0 {
+			t.Fatalf("expected empty slice, got len %d", len(got))
+		}
+	})
+}
+```
+
+- **Сложность:** Time $O(K \cdot M)$, где $K$ — количество входных срезов, $M = \min(\text{len}(s_i))$; Space $O(K \cdot M)$ под результирующую матрицу.
+
+---
+
+### Задача 50: Генерация N уникальных случайных чисел (uniqRandn)
+
+#### 🎯 Условие:
+
+Напишите функцию `UniqRandn(n, maxVal int) ([]int, error)`, которая возвращает срез из `n` **уникальных** псевдослучайных целых чисел в полуинтервале $[0, \text{maxVal})$.
+
+**Примеры:**
+- `UniqRandn(3, 10)` $\to$ `[7, 2, 9]` (любые 3 уникальных числа от 0 до 9 включительно, `error == nil`)
+- `UniqRandn(10, 5)` $\to$ `nil, error` (невозможно выбрать 10 уникальных чисел из 5 доступных)
+
+#### 💡 Ловушки и частые ошибки:
+
+1. **Принцип Дирихле и бесконечный цикл (Pigeonhole Principle):**
+   Если $n > \text{maxVal}$, выбрать $n$ уникальных чисел математически невозможно! Цикл вида `for len(res) < n` без валидации входных данных навсегда зависнет в бесконечном цикле со 100% загрузкой ядра CPU. Функция обязана валидировать `n > maxVal`, `n < 0`, `maxVal <= 0` и возвращать информативную ошибку.
+2. **Проблема коллекционера купонов (Coupon Collector's Problem):**
+   Если использовать только `map[int]struct{}` для дедупликации, то при приближении $n$ к `maxVal` (например, выборка 99 999 чисел из 100 000) вероятность сгенерировать ещё не выбранное число стремится к нулю. Количество итераций цикла возрастает до $O(\text{maxVal} \cdot \ln \text{maxVal})$, вызывая резкую деградацию производительности.
+3. **Оптимизация для плотных выборок (Тасование Фишера-Йейтса):**
+   Кандидат уровня Senior обязан упомянуть порог переключения:
+   - Если $n \le \text{maxVal} / 2$ (разреженная выборка): используем `map[int]struct{}` — коллизий мало, время $O(n)$, память $O(n)$.
+   - Если $n > \text{maxVal} / 2$ (плотная выборка): эффективнее использовать алгоритм тасования Фишера-Йейтса (`math/rand/v2.Perm(maxVal)[:n]`), который гарантирует строго $O(\text{maxVal})$ времени без единой коллизии.
+4. **Потокобезопасность `math/rand`:**
+   В Go $\le$ 1.19 глобальный `rand.Intn()` использовал глобальный `sync.Mutex`, создавая жёсткий контеншн в высоконагруженных сервисах. В современном Go (Go 1.22+) стандартная библиотека предоставляет быстрый пакет `math/rand/v2` (`rand.IntN`), работающий без глобальных блокировок на thread-local генераторах.
+
+#### 🚀 Эталонное решение (Идиоматичный Go):
+
+```go
+package livecoding
+
+import (
+	"errors"
+	"math/rand/v2"
+	"testing"
+)
+
+var (
+	ErrInvalidN      = errors.New("n must be non-negative")
+	ErrMaxValTooLow  = errors.New("maxVal must be positive")
+	ErrNotEnoughKeys = errors.New("n cannot exceed maxVal (pigeonhole principle)")
+)
+
+// UniqRandn генерирует срез из n уникальных случайных чисел в диапазоне [0, maxVal).
+// Для плотных выборок (n > maxVal / 2) переключается на тасование Фишера-Йейтса,
+// предотвращая бесконечные коллизии Coupon Collector's Problem.
+func UniqRandn(n, maxVal int) ([]int, error) {
+	if n < 0 {
+		return nil, ErrInvalidN
+	}
+	if maxVal <= 0 {
+		return nil, ErrMaxValTooLow
+	}
+	if n > maxVal {
+		return nil, ErrNotEnoughKeys
+	}
+	if n == 0 {
+		return []int{}, nil
+	}
+
+	// Оптимизация для плотных выборок: тасование Fisher-Yates (rand.Perm)
+	// Гарантирует O(maxVal) времени без коллизий
+	if n > maxVal/2 {
+		perm := rand.Perm(maxVal)
+		return perm[:n], nil
+	}
+
+	// Для разреженных выборок: дедупликация через хэш-мапу O(n)
+	res := make([]int, 0, n)
+	seen := make(map[int]struct{}, n)
+
+	for len(res) < n {
+		num := rand.IntN(maxVal)
+		if _, exists := seen[num]; !exists {
+			seen[num] = struct{}{}
+			res = append(res, num)
+		}
+	}
+
+	return res, nil
+}
+```
+
+#### 🧪 Модульные тесты:
+
+```go
+func TestUniqRandn(t *testing.T) {
+	t.Run("successful generation sparse", func(t *testing.T) {
+		n := 5
+		maxVal := 100
+		res, err := UniqRandn(n, maxVal)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(res) != n {
+			t.Fatalf("expected len %d, got %d", n, len(res))
+		}
+
+		seen := make(map[int]bool)
+		for _, x := range res {
+			if x < 0 || x >= maxVal {
+				t.Errorf("value %d out of bounds [0, %d)", x, maxVal)
+			}
+			if seen[x] {
+				t.Errorf("duplicate value found: %d", x)
+			}
+			seen[x] = true
+		}
+	})
+
+	t.Run("dense generation via permutation", func(t *testing.T) {
+		n := 80
+		maxVal := 100
+		res, err := UniqRandn(n, maxVal)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(res) != n {
+			t.Fatalf("expected len %d, got %d", n, len(res))
+		}
+	})
+
+	t.Run("pigeonhole principle violation", func(t *testing.T) {
+		_, err := UniqRandn(10, 5)
+		if !errors.Is(err, ErrNotEnoughKeys) {
+			t.Fatalf("expected ErrNotEnoughKeys, got: %v", err)
+		}
+	})
+
+	t.Run("zero elements requested", func(t *testing.T) {
+		res, err := UniqRandn(0, 10)
+		if err != nil || len(res) != 0 {
+			t.Fatalf("expected empty slice with nil error, got res=%v, err=%v", res, err)
+		}
+	})
+}
+```
+
+- **Сложность:**
+  - При $n \le \text{maxVal}/2$: Time в среднем $O(N)$, Space $O(N)$ под `map`.
+  - При $n > \text{maxVal}/2$: Time строго $O(\text{maxVal})$, Space $O(\text{maxVal})$ под перестановку.
+
+---
+
+### Задача 51: Перебор паролей по хэшу MD5 (RecoverPassword)
+
+#### 🎯 Условие:
+
+В ходе аудита безопасности сервиса обнаружен забытый хэш MD5 `targetHashHex` (32 hex-символа). Известно, что пароль состоял исключительно из символов заданного алфавита `alphabet` (например, латинские буквы в нижнем регистре `'a'-'z'`) и имел длину не более `maxLen`.
+
+Напишите функцию `RecoverPassword(targetHashHex string, alphabet []rune, maxLen int) (string, bool)`, которая восстанавливает исходный пароль методом полного перебора (Brute-force Backtracking).
+
+#### 💡 Ловушки, Безопасность и Архитектурный контекст:
+
+1. **Раздувание кучи при рекурсии (Heap Exhaustion):**
+   Генерация всех комбинаций строк в промежуточный срез в памяти потребует $O(|\Sigma|^{\text{maxLen}})$ памяти (для алфавита из 26 символов и длины 6 это более 300 млн строк — верная смерть процесса от OOM Killer). Перебор необходимо производить **поточно (на лету)** с возвратом назад (backtracking), переиспользуя один буфер рун/байт.
+2. **Атаки по времени (Timing Attacks):**
+   Прямое сравнение массивов или строк через оператор `==` или `bytes.Equal` прерывается на **первом же несовпавшем байте**. Это позволяет злоумышленнику по микросекундным задержкам ответа сервиса байт за байтом восстановить хэш секрета. Для криптографически безопасного сравнения в продакшене **всегда** используется `crypto/subtle.ConstantTimeCompare`.
+3. **Вопросы интервьюера о хранении паролей в БД:**
+   - **Почему MD5 категорически запрещён для паролей?** Хэш MD5 алгоритмически слаб (подвержен быстрым коллизиям), но главное — он **экстремально быстр**: современный кластер видеокарт (GPU) вычисляет более 100 миллиардов хэшей MD5 в секунду, делая brute-force тривиальным.
+   - **Что такое Rainbow Tables (Радужные таблицы)?** Это предвычисленные таблицы соответствия открытых текстов и их хэшей с алгоритмом редукции. Позволяют мгновенно найти пароль по хэшу за $O(1)$.
+   - **Зачем нужна криптографическая соль (Salt)?** Уникальная случайная соль для каждого пользователя (например, 16–32 случайных байта из `crypto/rand`) делает хэш уникальным даже для одинаковых паролей, полностью обесценивая радужные таблицы и заставляя взломщика атаковать каждого пользователя индивидуально.
+   - **Что использовать вместо MD5?** Медленные, memory-hard функции формирования ключа (KDF): **Argon2id** (победитель Password Hashing Competition), **bcrypt** или **scrypt**. Они требуют сотен миллисекунд процессора и мегабайтов RAM на одну попытку, делая перебор на GPU экономически невозможным.
+
+#### 🚀 Эталонное решение (Идиоматичный Go):
+
+```go
+package livecoding
+
+import (
+	"crypto/md5"
+	"crypto/subtle"
+	"encoding/hex"
+	"testing"
+)
+
+// RecoverPassword восстанавливает пароль длиной до maxLen по MD5 хэшу.
+// Использует потоковый бэктрекинг без аллокаций срезов и ConstantTimeCompare.
+func RecoverPassword(targetHashHex string, alphabet []rune, maxLen int) (string, bool) {
+	targetBytes, err := hex.DecodeString(targetHashHex)
+	if err != nil || len(targetBytes) != md5.Size {
+		return "", false
+	}
+
+	buf := make([]rune, 0, maxLen)
+
+	var backtrack func(depth int) (string, bool)
+	backtrack = func(depth int) (string, bool) {
+		if depth > 0 {
+			// Вычисляем MD5 текущей комбинации
+			candidate := string(buf)
+			h := md5.Sum([]byte(candidate))
+
+			// Защита от timing attacks: постоянное время сравнения байт
+			if subtle.ConstantTimeCompare(h[:], targetBytes) == 1 {
+				return candidate, true
+			}
+		}
+
+		if depth == maxLen {
+			return "", false
+		}
+
+		for _, ch := range alphabet {
+			buf = append(buf, ch)
+			if found, ok := backtrack(depth + 1); ok {
+				return found, true
+			}
+			buf = buf[:len(buf)-1] // Откат (Backtrack)
+		}
+
+		return "", false
+	}
+
+	return backtrack(0)
+}
+```
+
+#### 🧪 Модульные тесты:
+
+```go
+func TestRecoverPassword(t *testing.T) {
+	alphabet := []rune("abc12")
+
+	// Тестовый пароль: "b2"
+	// MD5("b2") = e7d8b584a2ae0fd2b1e326c264705574
+	h := md5.Sum([]byte("b2"))
+	targetHex := hex.EncodeToString(h[:])
+
+	recovered, ok := RecoverPassword(targetHex, alphabet, 3)
+	if !ok {
+		t.Fatalf("expected password to be found")
+	}
+	if recovered != "b2" {
+		t.Fatalf("expected 'b2', got '%s'", recovered)
+	}
+
+	// Пароль, которого нет в пределах maxLen
+	notFoundHex := hex.EncodeToString(md5.Sum([]byte("xyz"))[:])
+	_, ok = RecoverPassword(notFoundHex, alphabet, 2)
+	if ok {
+		t.Fatalf("expected password not to be found")
+	}
+}
+```
+
+- **Сложность:** Time $O(|\Sigma|^{\text{maxLen}} \cdot \text{maxLen})$ — полный перебор комбинаций, Space $O(\text{maxLen})$ — память ограничена лишь глубиной стека вызовов и буфером.
+
+---
+
+### Задача 52: Ревью кода: In-Memory кэш с багами синхронизации и гонками
+
+#### 🎯 Условие (Задача с реального секционного интервью Ozon):
+
+На собеседовании кандидату предлагается провести **Code Review** следующего фрагмента продакшен-кода in-memory кэша:
+
+```go
+type Cache struct {
+    data map[string]interface{}
+}
+
+func (c *Cache) Get(k string) interface{} {
+    var m sync.Mutex
+    m.Lock()
+    defer m.Unlock()
+    return c.data[k]
+}
+
+func (c *Cache) Set(k string, v interface{}) {
+    c.data[k] = v
+}
+```
+
+**Вопросы интервьюера:**
+1. Какие критические дефекты, ошибки многопоточности и уязвимости присутствуют в этом коде?
+2. Что произойдёт во время работы сервиса под нагрузкой? Сможет ли сработать `recover()`?
+3. Как правильно переписать этот кэш с учётом современных стандартов Go (дженерики, RWMutex, предотвращение Cache Stampede)?
+
+---
+
+#### 💡 Разбор дефектов и уязвимостей (Senior Code Review):
+
+```mermaid
+flowchart TD
+    subgraph Defect1["Баг 1: Локальный Mutex в Get()"]
+        M1["var m sync.Mutex"] --> M2["Создаётся в стеке при КАЖДОМ вызове Get!"]
+        M2 --> M3["Блокирует только сам себя.\nСинхронизации между горутинами НЕТ!"]
+    end
+
+    subgraph Defect2["Баг 2: Отсутствие синхронизации в Set()"]
+        S1["c.data[k] = v"] --> S2["Параллельный Get и Set или Set и Set"]
+        S2 --> S3["fatal error: concurrent map writes\nКрах всего процесса, recover() БЕССИЛЕН!"]
+    end
+
+    subgraph Defect3["Баг 3: Неинициализированный map"]
+        N1["c := &Cache{}"] --> N2["c.data == nil"]
+        N2 --> N3["panic: assignment to entry in nil map"]
+    end
+```
+
+1. **Критический баг синхронизации: Локальный мьютекс `var m sync.Mutex` внутри `Get`:**
+   Каждый вызов метода `Get` выделяет **новую собственную переменную мьютекса** в стековом фрейме. Разные горутины захватывают абсолютно независимые мьютексы. Защиты разделяемого ресурса `c.data` фактически **не существует**.
+2. **Фатальная ошибка рантайма: Отсутствие мьютекса в `Set`:**
+   В Go встроенный тип `map` принципиально не потокобезопасен. При параллельной записи и чтении или одновременных записях рантайм Go вызовет **неперехватываемый крах процесса**:
+   `fatal error: concurrent map read and map write`
+   `recover()` **не способен** перехватить эту ошибку рантайма — контейнер сервиса падает мгновенно.
+3. **Неправильный примитив синхронизации (`Mutex` вместо `RWMutex`):**
+   В кэшах обычно $95\%+$ запросов — это чтение (`Get`). Использование обычного `sync.Mutex` заставляет все параллельные чтения выстраиваться в одну строгую очередь. Применение `sync.RWMutex` позволяет миллионам горутин одновременно выполнять `RLock()` без блокировки друг друга.
+4. **Неинициализированная мапа (`nil map`):**
+   Если структура создана через `c := &Cache{}`, то `c.data` равна `nil`. Чтение из `nil`-мапы в Go разрешено (вернёт нулевое значение), но любая запись `c.data[k] = v` немедленно завершится `panic: assignment to entry in nil map`. Обязателен конструктор `NewCache()`.
+5. **Запрет копирования мьютекса (Copying Locks):**
+   Мьютекс нельзя копировать после первого использования. Если метод принимает `Cache` по значению (`func foo(c Cache)`), внутренний счётчик мьютекса скопируется, что приведёт к дедлокам (ловит линтер `go vet`). Структуру с мьютексом можно передавать исключительно по указателю.
+6. **Окно гонки TOCTOU и Cache Stampede в сценариях `GetOrCreate`:**
+   Если клиентский код делает:
+   ```go
+   if val := cache.Get(key); val == nil {
+       val = fetchFromDatabase(key) // Долгий SQL запрос
+       cache.Set(key, val)
+   }
+   ```
+   1000 одновременных запросов обнаружат `val == nil` и отправят 1000 одинаковых тяжёлых запросов в базу данных. Для решения применяют паттерн **Double-Checked Locking**, либо метод `GetOrCompute(key, computeFunc)`, либо библиотеку `golang.org/x/sync/singleflight`.
+7. **Контеншн шины процессора при Highload (100k+ RPS):**
+   При огромных нагрузках даже `sync.RWMutex` становится узким местом из-за постоянной инвалидации кэш-линий процессора (Cache line bouncing). В таких случаях кэш шардируют (Sharded Cache на 32–64 шардов по хэшу ключа `hash(key) % numShards`) с индивидуальным мьютексом на каждый шард, либо применяют `sync.Map` для сценариев редкого обновления.
+
+---
+
+#### 🚀 Исправленная эталонная реализация (Production-Ready Thread-Safe Cache):
+
+```go
+package livecoding
+
+import (
+	"sync"
+	"testing"
+)
+
+// SafeCache представляет потокобезопасный in-memory кэш на базе sync.RWMutex и дженериков Go.
+type SafeCache[K comparable, V any] struct {
+	mu   sync.RWMutex
+	data map[K]V
+}
+
+// NewSafeCache создаёт инициализированный экземпляр кэша с предвыделенной памятью.
+func NewSafeCache[K comparable, V any](capacity int) *SafeCache[K, V] {
+	if capacity < 0 {
+		capacity = 0
+	}
+	return &SafeCache[K, V]{
+		data: make(map[K]V, capacity),
+	}
+}
+
+// Get возвращает значение по ключу и флаг наличия.
+// Множество горутин могут читать кэш одновременно через RLock.
+func (c *SafeCache[K, V]) Get(key K) (V, bool) {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+
+	val, ok := c.data[key]
+	return val, ok
+}
+
+// Set сохраняет значение в кэш под эксклюзивной блокировкой.
+func (c *SafeCache[K, V]) Set(key K, val V) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.data[key] = val
+}
+
+// Delete удаляет значение по ключу.
+func (c *SafeCache[K, V]) Delete(key K) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	delete(c.data, key)
+}
+
+// GetOrCompute реализует атомарный паттерн Double-Checked Locking,
+// предотвращая проблему Cache Stampede при промахе кэша.
+func (c *SafeCache[K, V]) GetOrCompute(key K, compute func() V) V {
+	// Шаг 1: Быстрое чтение под RLock
+	c.mu.RLock()
+	if val, ok := c.data[key]; ok {
+		c.mu.RUnlock()
+		return val
+	}
+	c.mu.RUnlock()
+
+	// Шаг 2: Эксклюзивная блокировка для вычисления
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	// Двойная проверка: возможно, другая горутина успела вычислить значение
+	if val, ok := c.data[key]; ok {
+		return val
+	}
+
+	val := compute()
+	c.data[key] = val
+	return val
+}
+```
+
+#### 🧪 Тестирование на отсутствие гонок (Concurrency Stress Test):
+
+Запуск теста с флагом `-race` (`go test -race -v`) подтверждает абсолютную потокобезопасность реализации:
+
+```go
+func TestSafeCache_Concurrency(t *testing.T) {
+	cache := NewSafeCache[string, int](100)
+	var wg sync.WaitGroup
+
+	numGoroutines := 50
+	operationsPerGoroutine := 200
+
+	// Параллельные писатели
+	for i := 0; i < numGoroutines; i++ {
+		wg.Add(1)
+		go func(workerID int) {
+			defer wg.Done()
+			for j := 0; j < operationsPerGoroutine; j++ {
+				cache.Set("counter", workerID*1000+j)
+			}
+		}(i)
+	}
+
+	// Параллельные читатели
+	for i := 0; i < numGoroutines; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for j := 0; j < operationsPerGoroutine; j++ {
+				_, _ = cache.Get("counter")
+			}
+		}()
+	}
+
+	// Параллельные вычислители GetOrCompute
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			cache.GetOrCompute("heavy_key", func() int {
+				return 42
+			})
+		}()
+	}
+
+	wg.Wait()
+
+	val, ok := cache.Get("heavy_key")
+	if !ok || val != 42 {
+		t.Fatalf("expected heavy_key=42, got %v (ok=%v)", val, ok)
+	}
+}
+```
+
+- **Сложность:**
+  - `Get`: Time $O(1)$ в среднем, параллельное неблокирующее чтение между читателями.
+  - `Set`, `Delete`: Time $O(1)$ в среднем, эксклюзивная синхронизация.
+  - Space: $O(N)$ памяти, пропорционально количеству сохранённых ключей.
 
 ---
 
