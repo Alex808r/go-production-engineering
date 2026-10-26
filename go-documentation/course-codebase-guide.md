@@ -1,8 +1,8 @@
-# Путеводитель студента по курсу Go: От нуля до Production
+# Путеводитель по инженерной дорожной карте и кодовой базе Go: От основ до Production & Highload
 
 > [!IMPORTANT]
 > 🧭 **Как пользоваться этим путеводителем:**  
-> Данный документ — это ваш **главный пошаговый навигатор** по курсу. Все материалы объединены в **4 последовательных этапа** от базового синтаксиса до распределенных систем.  
+> Данный документ — это ваш **главный пошаговый навигатор** по кодовой базе и дорожной карте изучения Go. Все материалы объединены в **4 последовательных этапа** от базового синтаксиса до распределенных систем и Highload.  
 > 
 > На каждом шаге соблюдайте единое правило трех действий:
 > 1. 📖 **Изучите теорию** в соответствующем томе энциклопедии [go-documentation](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation).
@@ -28,7 +28,7 @@ flowchart TD
 | **[🟢 Этап 1](#-этап-1-фундамент-go-синтаксис-память-и-структуры-данных-уроки-0005)** | 00 — 05 | **Junior** | Владение синтаксисом, памятью срезов/мап, алгоритмами поиска, списками и потоковым I/O. |
 | **[🟡 Этап 2](#-этап-2-проектирование-качество-кода-и-конкурентность-уроки-0610)** | 06 — 10 | **Middle** | Идиоматичное ООП (композиция/DIP), Table-driven тесты, профилирование `pprof` и конкурентность без гонок (`-race`). |
 | **[🟠 Этап 3](#-этап-3-сети-web-разработка-api-и-базы-данных-уроки-1116)** | 11 — 16 | **Middle+** | Разработка клиент-серверных веб-приложений, RESTful API, gRPC сервисов и работа с PostgreSQL через пул соединений. |
-| **[🔴 Этап 4](#-этап-4-распределенные-системы-микросервисы-modern-go-и-интервью-уроки-1722)** | 17 — 22 | **Senior** | Проектирование Clean Architecture, упаковка в Docker/Compose, шина Kafka, кэширование в Redis, Modern Go (1.21–1.26+), решение задач на собеседованиях. |
+| **[🔴 Этап 4](#-этап-4-распределенные-системы-микросервисы-modern-go-и-интервью-уроки-1722)** | 17 — 22 | **Senior** | Проектирование Clean Architecture, упаковка в Docker/Compose, шина Kafka, кэширование в Redis, Modern Go (1.21–1.26+), Highload Wallet (1000+ RPS), решение задач на собеседованиях. |
 
 ---
 
@@ -344,11 +344,12 @@ flowchart TD
   * 💡 **[go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md)** — 14 рантайм-ловушек Go (Uber Style Guide & 100 Go Mistakes).
   * ⚡ **[go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-std-collections-guide.md)** — справочник по стандартным коллекциям и пакетам Go.
   * ⚡ **[go-core-cheatsheet.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-core-cheatsheet.md)** — экспресс-шпаргалка по синтаксису и командам.
+  * 🤖 **[AGENTS.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/AGENTS.md)** — промышленный регламент парного программирования с AI-ассистентами (Git Safety, Code Evidence, мультимодульная верификация).
 
 ---
 
-### [Урок 22: Современный Go 1.21–1.24+ и Best Practices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go)
-* 📖 **Теория:** [go-modern-features-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-modern-features-guide.md) (Гайд по Modern Go 1.21–1.24+), [go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-std-collections-guide.md) и [go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md).
+### [Урок 22: Современный Go 1.21–1.26+ и Best Practices](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go)
+* 📖 **Теория:** [go-modern-features-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-modern-features-guide.md) (Гайд по Modern Go 1.21–1.26+: Swiss Tables, weak, testing/synctest, WaitGroup.Go, os.Root, cgroup v2), [go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-std-collections-guide.md) и [go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/go-documentation/go-secrets-and-traps-guide.md).
 * 💻 **Код лекции:** Директория [22-modern-go](file:///Users/user/workspace/golang_projects/go-core-4/go_course_4/lessons/22-modern-go):
   * `01-slog/` — структурированное логирование `log/slog` (JSONHandler, текстовый логгер, сокрытие конфиденциальных данных через `slog.LogValuer`).
   * `02-fuzzing/` — фаззинг-тестирование (`testing.F`) для выявления скрытых паник и уязвимостей рантайма.
@@ -417,14 +418,16 @@ go test ./...
 go vet ./...
 
 # Проверка известных уязвимостей сторонних зависимостей (Vulnerability Scanner)
-govulncheck ./...
+go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
 # Прогон тестов конкретного этапа или ДЗ с проверкой гонок данных
 go test -v -race ./lessons/10-concurrency/homework-10/...
 go test -v -race ./lessons/20-NoSQL/homework-20/...
 
-# Прогон тестов высоконагруженного сервиса Wallet (включая стресс-тест на 1000+ RPS)
-go test -v -race ./wallet/...
+# Прогон тестов финансового сервиса Wallet (самостоятельный модуль)
+cd wallet && make test-race
+# или прямой запуск через go test:
+cd wallet && go test -v -race ./...
 ```
 
 ### 2. Бенчмарки и профилирование (pprof)
