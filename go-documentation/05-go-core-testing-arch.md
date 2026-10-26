@@ -1568,7 +1568,17 @@ package movie;
 option go_package = "github.com/company/project/gen/movie/v1;moviev1";
 
 service MovieService {
+    // 1. Unary RPC: классический запрос-ответ
     rpc GetMovie (GetMovieRequest) returns (GetMovieResponse);
+
+    // 2. Server Streaming RPC: один запрос — непрерывный поток ответов от сервера
+    rpc StreamMovies (StreamMoviesRequest) returns (stream GetMovieResponse);
+
+    // 3. Client Streaming RPC: непрерывный поток сообщений от клиента — один ответ сервера
+    rpc UploadMovieViews (stream ViewEvent) returns (UploadSummary);
+
+    // 4. Bidirectional Streaming RPC: независимый двунаправленный обмен сообщениями
+    rpc LiveChat (stream ChatMessage) returns (stream ChatMessage);
 }
 
 message GetMovieRequest {
@@ -1580,7 +1590,61 @@ message GetMovieResponse {
     string title = 2;
     double rating = 3;
 }
+
+message StreamMoviesRequest {
+    string genre = 1;
+}
+
+message ViewEvent {
+    string movie_id = 1;
+    int64 timestamp = 2;
+}
+
+message UploadSummary {
+    int32 processed_count = 1;
+}
+
+message ChatMessage {
+    string user = 1;
+    string text = 2;
+}
 ```
+
+#### 4 типа gRPC взаимодействия (Streaming Patterns на Go):
+
+1. **Unary RPC (`GetMovie`):**
+   Обычный синхронный вызов: `func (s *Server) GetMovie(ctx context.Context, req *Req) (*Resp, error)`.
+2. **Server Streaming (`StreamMovies`):**
+   Сервер отправляет клиенту последовательность сообщений в цикле через метод `stream.Send()` и возвращает `nil` при завершении:
+   ```go
+   func (s *MovieServer) StreamMovies(req *moviev1.StreamMoviesRequest, stream moviev1.MovieService_StreamMoviesServer) error {
+       for _, m := range fetchMoviesByGenre(req.GetGenre()) {
+           if err := stream.Send(m); err != nil {
+               return err // Клиент оборвал соединение
+           }
+       }
+       return nil // Завершение потока
+   }
+   ```
+3. **Client Streaming (`UploadMovieViews`):**
+   Сервер вычитывает поток от клиента через `stream.Recv()` до ошибки `io.EOF`, после чего отправляет итоговый ответ методом `stream.SendAndClose()`:
+   ```go
+   func (s *MovieServer) UploadMovieViews(stream moviev1.MovieService_UploadMovieViewsServer) error {
+       var count int32
+       for {
+           event, err := stream.Recv()
+           if errors.Is(err, io.EOF) {
+               return stream.SendAndClose(&moviev1.UploadSummary{ProcessedCount: count})
+           }
+           if err != nil {
+               return err
+           }
+           count++
+       }
+   }
+   ```
+4. **Bidirectional Streaming (`LiveChat`):**
+   Клиент и сервер параллельно отправляют (`Send`) и читают (`Recv`) сообщения через общий мультиплексированный HTTP/2 поток. В Go обработчик обычно запускает две горутины: одна читает из `stream.Recv()`, вторая пишет в `stream.Send()`.
 
 Генерация Go-кода:
 
@@ -1950,16 +2014,22 @@ func releaseLock(ctx context.Context, rdb *redis.Client, lockKey, uniqueToken st
 
 Apache Kafka представляет собой распределенный горизонтально масштабируемый журнал коммитов (Distributed Commit Log). В отличие от классических брокеров (RabbitMQ), где сообщения удаляются сразу после подтверждения (ACK), Kafka сохраняет все события на диск в течение заданного времени хранения (Retention Period).
 
-#### 1. Сравнение RabbitMQ и Apache Kafka:
+#### 1. Сравнение брокеров сообщений: RabbitMQ, Apache Kafka и NATS (Core & JetStream):
 
-| Характеристика | RabbitMQ | Apache Kafka |
-| :--- | :--- | :--- |
-| **Модель доставки** | **Push-модель** (брокер отправляет потребителю) | **Pull-модель** (потребитель сам вычитывает пакеты) |
-| **Хранение сообщений** | В очереди (в памяти и, для durable-очередей, на диске), удаляются после ACK | На диске в append-only логе, хранятся в течение срока хранения (retention) |
-| **Маршрутизация** | Гибкая (Exchange: direct, topic, fanout, headers) | Простая (по топикам и партициям через ключ) |
-| **Повторное чтение** | Нет (сообщения удаляются) | **Да** (перемещение Offset назад во времени) |
-| **Пропускная способность** (порядок величин, зависит от железа и настроек) | ~10k–50k сообщений/сек | **100k–1M+ сообщений/сек** (Sequential I/O, Zero-Copy) |
-| **Сценарии** | Сложная маршрутизация задач, RPC | Event Sourcing, аудит, потоковая аналитика, CDC |
+| Характеристика | RabbitMQ | Apache Kafka | NATS (Core NATS / JetStream) |
+| :--- | :--- | :--- | :--- |
+| **Модель доставки** | **Push-модель** (брокер отправляет потребителю) | **Pull-модель** (потребитель сам вычитывает пакеты) | **Push** (Core NATS) или **Pull/Push** (JetStream) |
+| **Хранение сообщений** | В очереди (в памяти/диске), удаляются после ACK | На диске в append-only логе (срок retention) | В RAM (Core) или персистентный append-only лог (JetStream) |
+| **Маршрутизация** | Гибкая (Exchange: direct, topic, fanout, headers) | Простая (по топикам и партициям через ключ) | Иерархическая (Subject-based: `orders.eu.created`, wildcards `*`, `>`) |
+| **Повторное чтение** | Нет (сообщения удаляются) | **Да** (перемещение Consumer Offset назад) | Core: нет; JetStream: **Да** (потребители с Replay policy) |
+| **Пропускная способность** | ~10k–50k сообщений/сек | **100k–1M+ сообщений/сек** (Zero-Copy) | **1M–10M+ сообщений/сек** (написан на Go, суб-миллисекунды) |
+| **Ресурсоёмкость** | Средняя (Erlang VM) | Высокая (JVM, тяжелый диск, ZooKeeper/KRaft) | **Минимальная** (~20 МБ RAM, один бинарник на Go) |
+| **Сценарии** | Сложная маршрутизация задач, AMQP, фоновые воркеры | Event Sourcing, аудит, потоковая аналитика, CDC, Big Data | Cloud-Native микросервисный RPC, mesh, IoT, telemetry, pub-sub |
+
+> 💡 **Как выбирать брокер на собеседовании:**
+> - **Apache Kafka:** если нужен строгий порядок по ключу в рамках партиции, хранение истории (Replay), Event Sourcing или аналитика high-throughput (встречается в 90% вакансий).
+> - **RabbitMQ:** если нужна сложная топология маршрутизации (AMQP routing keys), приоритетные очереди, задачи типа Celery/Asynq или Dead Letter Exchange.
+> - **NATS:** если разрабатывается Cloud-Native микросервисная сеть на Go, важна экстремально низкая задержка (< 100 мкс), минимальный расход RAM и легковесный встроенный брокер. Core NATS — для эфемерного Pub-Sub/RPC, NATS JetStream — для персистентного хранения событий с At-Least-Once/Exactly-Once гарантиями.
 
 #### 2. Реализация Kafka Producer (`segmentio/kafka-go`):
 
@@ -2231,7 +2301,63 @@ func (s *statusRecorder) WriteHeader(code int) {
 > [!WARNING]
 > **Кардинальность меток (label cardinality):** каждая уникальная комбинация значений меток создаёт отдельный временной ряд в памяти Prometheus. Если поместить в метку `user_id` или реальный URL с идентификаторами, число рядов вырастет до миллионов, и Prometheus «умрёт» от нехватки памяти. Метки — только для значений из небольшого фиксированного набора (метод, шаблон маршрута, код статуса).
 
-Перцентили ($p95$, $p99$) считаются на стороне Prometheus запросом PromQL: `histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, path))`.
+#### 4. Архитектура надежности: SLA, SLO и SLI (Золотой стандарт SRE)
+
+На собеседованиях уровня Middle+/Senior часто проверяют понимание триады метрик доступности:
+
+```mermaid
+flowchart TD
+    SLI["1. SLI (Service Level Indicator)\nЧто мы реально измеряем прямо сейчас в проде\n(например: 99.85% успешных ответов < 100мс)"] --> SLO["2. SLO (Service Level Objective)\nВнутренняя цель команды инженеров и продакта\n(например: 99.9% запросов быстрее 150мс за 30 дней)"]
+    SLO --> SLA["3. SLA (Service Level Agreement)\nЮридический контракт с клиентами со штрафами\n(например: 99.5% доступности, иначе возврат денег)"]
+    SLO -.-> EB["Error Budget (Бюджет ошибок)\n100% - SLO = 0.1% права на сбои и смелые релизы"]
+```
+
+| Понятие | Расшифровка | Смысл для инженера | Пример |
+| :--- | :--- | :--- | :--- |
+| **SLI** | **Service Level Indicator** | Количественная метрика работы системы прямо сейчас: $\frac{\text{Успешные события}}{\text{Все события}} \times 100\%$. | Процент HTTP 2xx/3xx ответов или доля запросов с задержкой $\le 100$ мс. |
+| **SLO** | **Service Level Objective** | Внутренний ориентир надежности, цель для команды. Если SLI падает ниже SLO — релизы замораживаются, команда чинит надежность. | «99.9% запросов за месяц должны завершаться с кодом 200 за время $< 200$ мс». |
+| **SLA** | **Service Level Agreement** | Юридический договор с клиентами и бизнесом. При нарушении SLA компания платит прямые финансовые штрафы. SLA всегда **мягче**, чем SLO (запас прочности). | «Доступность API 99.5% в квартал, при просадке — компенсация 20% абонплаты». |
+| **Error Budget** | **Бюджет ошибок** | Допустимая доля сбоев ($100\% - \text{SLO}$). Пока бюджет ошибок не исчерпан, команда может рисковать и выкатывать смелые фичи. | При SLO 99.9% за месяц бюджет ошибок равен $0.1\%$ запросов. |
+
+---
+
+#### 5. Почему среднее арифметическое (Average Latency) — обманчиво, и зачем нужны Перцентили
+
+> [!WARNING]
+> **Никогда не оценивайте задержку сервиса по среднему арифметическому!**  
+> Представьте 100 запросов: 99 из них выполнились за **10 мс**, а один запрос завис в дедлоке базы данных на **10 000 мс (10 секунд)**.  
+> Среднее арифметическое: $\frac{99 \times 10 + 10\,000}{100} = 109.9 \text{ мс}$.  
+> По графику средней задержки кажется, что «всё в порядке, около 100 мс». Но в реальности один реальный пользователь ждал 10 секунд и закрыл вкладку!  
+> В микросервисной цепи из 20 сервисов вероятность того, что пользователь заденет этот $1\%$ аномалий ($p99$), равна $1 - (0.99)^{20} \approx \mathbf{18.2\%}$ — то есть **каждый пятый запрос пользователя будет аварийно тормозить**!
+
+Поэтому в продакшене задержку оценивают исключительно через **Перцентили (Quantiles)**:
+- **$p50$ (Медиана):** 50% пользователей получили ответ быстрее этого порога (типичный средний пользователь).
+- **$p90$ / $p95$:** граница, отсекающая легкие сетевые колебания и сборку мусора.
+- **$p99$:** 99% запросов быстрее этого времени. Отражает «хвост» распределения (Tail Latency) — долгие дисковые задержки, перегрузки очередей.
+- **$p99.9$:** экстремальные выбросы (Top-1 из 1000 запросов).
+
+---
+
+#### 6. Внутреннее устройство Prometheus Histogram и PromQL квантили
+
+В отличие от APM-систем, сохраняющих каждый тайминг, Prometheus не хранит сырые миллисекунды (это взорвало бы память TSDB). Вместо этого клиент `prometheus/client_golang` раскладывает наблюдения по **фиксированным интервалам (Buckets)**:
+
+При создании гистограммы с `Buckets: [0.01, 0.05, 0.1, 0.5, 1.0, 5.0]` Prometheus автоматически генерирует **три типа временных рядов**:
+1. `http_request_duration_seconds_bucket{le="0.05"}` — кумулятивный счетчик (Counter) числа запросов с задержкой $\le 50$ мс (`le` = less or equal).
+2. `http_request_duration_seconds_sum` — суммарное время всех выполненных запросов.
+3. `http_request_duration_seconds_count` — общее число запросов (идентично бакету `le="+Inf"`).
+
+Расчет перцентилей $p95$ и $p99$ на стороне Prometheus выполняется с помощью функции **линейной интерполяции** внутри подходящего бакета:
+
+```promql
+# Расчет 95-го перцентиля задержки запросов за последние 5 минут:
+histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, path))
+
+# Расчет 99-го перцентиля задержки:
+histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, path))
+```
+
+> 💡 **Правило подбора бакетов для Go:** бакеты должны концентрироваться вокруг вашего целевого SLO. Если ваше SLO равно 100 мс, не используйте стандартные бакеты с огромным шагом между 0.1 и 1.0 — задайте точную сетку: `[]float64{0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.25, 0.5, 1.0, 2.5}`.
 
 ---
 
@@ -2340,40 +2466,87 @@ func LoadConfig() (*Config, error) {
 
 ---
 
-### 23.2. Health checks: Liveness & Readiness Probes для Kubernetes
+### 23.2. Kubernetes для Go-разработчика: Pods, Deployments, 3 типа проб, Управление ресурсами и HPA
 
-В контейнерах Kubernetes разделяют 2 типа проверок здоровья:
+Для прохождения собеседований на позиции Middle+/Senior Go Developer не требуется быть DevOps-инженером, но необходимо понимать архитектуру оркестрации контейнеров и то, как Go-приложения взаимодействуют с инфраструктурой Kubernetes.
 
-- **`/healthz/liveness` (Жив ли процесс):** проверяет, что процесс не завис в дедлоке. Если возвращает ошибку (не 200 OK) — Kubernetes **перезапускает (restart)** контейнер.
-- **`/healthz/readiness` (Готов ли принимать трафик):** проверяет доступность зависимостей (успешный `Ping()` в PostgreSQL и Redis, прогрев кэша). Если не готов — Kubernetes временно **снимает с пода входящий трафик**, не убивая его.
+#### 1. Основные абстракции Kubernetes:
+
+```mermaid
+flowchart TD
+    Ingress["Ingress Controller (L7 Роутинг)"] --> Service["Service (ClusterIP / LoadBalancer)"]
+    Service -->|Label Selector: app=order-service| Pod1["Pod 1 (Order App + Envoy/Sidecar)"]
+    Service -->|Балансировка трафика| Pod2["Pod 2 (Order App)"]
+    Service -->|Балансировка трафика| Pod3["Pod 3 (Order App)"]
+    Deployment["Deployment Controller"] -->|Управление версиями| ReplicaSet["ReplicaSet (replicas: 3)"]
+    ReplicaSet --> Pod1
+    ReplicaSet --> Pod2
+    ReplicaSet --> Pod3
+    ConfigMap["ConfigMap / Secret"] -.->|Env / Volume| Pod1
+```
+
+- **Pod (Под):** наименьшая развёртываемая единица K8s. Состоит из одного или нескольких контейнеров, делящих общий сетевой стек (`localhost`) и дисковые тома.
+- **Deployment & ReplicaSet:** декларативный контроллер, гарантирующий поддержание нужного числа реплик (`replicas: 3`), бесшовный перезапуск без даунтайма (**Rolling Update**) и мгновенный откат версии (**Rollback**).
+- **Service (ClusterIP, NodePort, LoadBalancer):** стабильный виртуальный IP-адрес и внутренний балансировщик, распределяющий запросы между подами по селекторам меток (`app: order-service`).
+- **ConfigMap & Secret:** хранилища конфигураций и секретов (пароли, JWT-ключи), передаваемые в контейнер в виде переменных окружения или монтируемых файлов.
+
+---
+
+#### 2. Три типа проверок здоровья (Health Probes):
+
+В Kubernetes строго разделяют 3 типа проб, которые жизненно важно настроить в Go-сервисе:
+
+| Тип пробы | Назначение | Поведение при ошибке | Что проверять в Go |
+| :--- | :--- | :--- | :--- |
+| **`startupProbe`** | Проверяет, завершил ли сервис холодный старт (прогрев кэша, чтение тяжелых данных). | Блокирует остальные пробы до успеха. При превышении лимита — контейнер убивается. | Внутренний флаг готовности инициализации `isStarted`. |
+| **`livenessProbe`** | Проверяет, что процесс жив и не застрял в дедлоке или бесконечном цикле. | Kubelet **убивает и перезапускает** контейнер (`Restart`). | Только легковесный HTTP 200 OK. **Нельзя проверять внешние зависимости (БД, Redis)!** |
+| **`readinessProbe`** | Проверяет, готов ли под принимать входящий пользовательский трафик прямо сейчас. | Kubelet временно **убирает IP пода из Service** (трафик не идет, но под не перезапускается). | Доступность зависимостей (`db.Ping()`, доступность Redis, Kafka connection). |
 
 > [!WARNING]
-> Liveness-проба **не должна** проверять внешние зависимости (БД, Redis): если БД временно недоступна, Kubernetes начнёт перезапускать все поды сразу — и усугубит аварию. Зависимости проверяет только readiness.
-
-Подключение проб в манифесте Deployment:
+> **Фатальная ошибка Liveness Probe:**  
+> Если в `livenessProbe` добавить проверку `db.Ping()`, то при временной недоступности PostgreSQL Kubernetes решит, что упали все ваши Go-сервисы, и **начнет одновременно циклически перезапускать сотни подов**. Это вызовет лавину рестартов (CrashLoopBackOff) и добьет базу данных тысячами новых подключений при старте. Внешние зависимости проверяет **только Readiness**!
 
 ```yaml
-livenessProbe:
-  httpGet: { path: /healthz/liveness, port: 8080 }
-  periodSeconds: 10
-readinessProbe:
-  httpGet: { path: /healthz/readiness, port: 8080 }
-  periodSeconds: 5
-# startupProbe нужен медленно стартующим сервисам: пока он не пройдёт, liveness не запускается
+# Пример настройки трех проб в манифесте Deployment:
+spec:
+  containers:
+  - name: order-service
+    image: company/order-service:v1.2.0
+    startupProbe:
+      httpGet: { path: /healthz/startup, port: 8080 }
+      failureThreshold: 30
+      periodSeconds: 2 # Даем сервису до 60 секунд на холодный старт
+    livenessProbe:
+      httpGet: { path: /healthz/liveness, port: 8080 }
+      periodSeconds: 10
+      timeoutSeconds: 2
+    readinessProbe:
+      httpGet: { path: /healthz/readiness, port: 8080 }
+      periodSeconds: 5
+      timeoutSeconds: 2
 ```
 
 ```go
-func RegisterHealthRoutes(mux *http.ServeMux, db *pgxpool.Pool) {
-    // 1. Liveness:
+func RegisterHealthRoutes(mux *http.ServeMux, db *pgxpool.Pool, isReady *atomic.Bool) {
+    // 1. Startup Probe:
+    mux.HandleFunc("GET /healthz/startup", func(w http.ResponseWriter, r *http.Request) {
+        if isReady.Load() {
+            w.WriteHeader(http.StatusOK)
+            return
+        }
+        http.Error(w, "warming up", http.StatusServiceUnavailable)
+    })
+
+    // 2. Liveness Probe (только проверка рантайма, никаких внешних БД):
     mux.HandleFunc("GET /healthz/liveness", func(w http.ResponseWriter, r *http.Request) {
         w.WriteHeader(http.StatusOK)
         _, _ = w.Write([]byte(`{"status":"alive"}`))
     })
 
-    // 2. Readiness:
+    // 3. Readiness Probe (проверка доступности внешних ресурсов):
     mux.HandleFunc("GET /healthz/readiness", func(w http.ResponseWriter, r *http.Request) {
         if err := db.Ping(r.Context()); err != nil {
-            http.Error(w, `{"status":"database unreachable"}`, http.StatusServiceUnavailable)
+            http.Error(w, `{"status":"db unreachable"}`, http.StatusServiceUnavailable)
             return
         }
         w.WriteHeader(http.StatusOK)
@@ -2381,6 +2554,31 @@ func RegisterHealthRoutes(mux *http.ServeMux, db *pgxpool.Pool) {
     })
 }
 ```
+
+---
+
+#### 3. Управление ресурсами, CFS Throttling и OOMKilled в Go
+
+В манифестах подов задаются 2 типа ограничений:
+```yaml
+resources:
+  requests:
+    cpu: "500m"      # 0.5 ядра (используется планировщиком для выбора ноды)
+    memory: "512Mi"  # 512 МБ гарантированной памяти
+  limits:
+    cpu: "2"         # Максимум 2 ядра (cgroups CFS quota)
+    memory: "1Gi"    # Жесткий потолок памяти (OOM Killer)
+```
+
+1. **Memory Limits и статус `OOMKilled` (Exit Code 137):**
+   Если память контейнера превышает `limits.memory`, ядро Linux немедленно убивает процесс сигналом `SIGKILL (9)`.
+   - **Ловушка:** Сборщик мусора Go (GC) по умолчанию ориентируется на свободную память всей ноды, а не контейнера.
+   - **Решение:** Начиная с Go 1.19 в контейнере **всегда задают переменную `GOMEMLIMIT`** (например, `GOMEMLIMIT=900MiB` при лимите `1Gi`). GC начнет агрессивно очищать память при приближении к 900 МБ, предотвращая OOMKilled.
+2. **CPU Limits и скрытый CFS CPU Throttling:**
+   - **Ловушка:** При `limits.cpu: "2"` на ноде с 64 ядрами стандартная функция `runtime.GOMAXPROCS(0)` в Go вернет **64**! Планировщик Go создаст 64 системных потока $M$. Эти потоки параллельно исчерпают квоту 200 мс за считанные миллисекунды, и ядро Linux **заморозит процесс на остаток 100-миллисекундного окна** (`nr_throttled`). Это приводит к колоссальным спайкам $p99$ задержек.
+   - **Решение:** Обязательный импорт библиотеки `_ "go.uber.org/automaxprocs"` в `main.go`. Она автоматически считывает квоты cgroups контейнера и устанавливает `GOMAXPROCS = 2`.
+3. **Автомасштабирование подов (Horizontal Pod Autoscaler — HPA):**
+   HPA отслеживает метрики метрик-сервера (CPU/Memory) или внешние метрики через Prometheus Adapter (RPS сервиса, лаг консьюмера Kafka) и автоматически изменяет поле `replicas` в Deployment от `minReplicas: 2` до `maxReplicas: 20`.
 
 ---
 

@@ -283,17 +283,18 @@
    - [Transactional Outbox Pattern (Решение проблемы Dual Write)](05-go-core-testing-arch.md#213-transactional-outbox-pattern-решение-проблемы-dual-write)
    - [Распределенные блокировки (Distributed Locks)](05-go-core-testing-arch.md#214-распределенные-блокировки-distributed-locks)
    - [Практика работы с Apache Kafka в Go (segmentio/kafka-go)](05-go-core-testing-arch.md#215-практика-работы-с-apache-kafka-в-go-segmentiokafka-go)
+   - [Сравнение брокеров: RabbitMQ vs Apache Kafka vs NATS](05-go-core-testing-arch.md#2151-сравнение-брокеров-сообщений-rabbitmq-vs-apache-kafka-vs-nats)
    - [Отказоустойчивость Apache Kafka: Rebalance, Poison Pill, DLQ и Debezium CDC](05-go-core-testing-arch.md#216-отказоустойчивость-apache-kafka-rebalance-poison-pill-dlq-и-debezium-cdc)
 
 22. [**Наблюдаемость систем (Observability: Prometheus & OpenTelemetry)**](05-go-core-testing-arch.md#22-наблюдаемость-систем-observability-prometheus--opentelemetry)
 
-   - [Метрики Prometheus](05-go-core-testing-arch.md#221-метрики-prometheus)
+   - [Метрики Prometheus, SLA/SLO/SLI, Процентили и Гистограммы](05-go-core-testing-arch.md#221-метрики-prometheus)
    - [Распределенная трассировка (OpenTelemetry / Jaeger)](05-go-core-testing-arch.md#222-распределенная-трассировка-opentelemetry--jaeger)
 
 23. [**Cloud-Ready приложения и 12-Factor App в Go**](05-go-core-testing-arch.md#23-cloud-ready-приложения-и-12-factor-app-в-go)
 
    - [Конфигурация через переменные окружения](05-go-core-testing-arch.md#231-конфигурация-через-переменные-окружения)
-   - [Health checks: Liveness & Readiness Probes для Kubernetes](05-go-core-testing-arch.md#232-health-checks-liveness--readiness-probes-для-kubernetes)
+   - [Kubernetes для Go-разработчика: Pods, Deployments, 3 типа проб, Управление ресурсами и HPA](05-go-core-testing-arch.md#232-kubernetes-для-go-разработчика-pods-deployments-3-типа-проб-управление-ресурсами-и-hpa)
    - [Docker: Multi-Stage Build для Go-приложений](05-go-core-testing-arch.md#233-docker-multi-stage-build-для-go-приложений)
 
 24. [**Production-экосистема Go: Топ сторонних библиотек и инструментов**](05-go-core-testing-arch.md#24-production-экосистема-go-топ-сторонних-библиотек-и-инструментов)
@@ -391,7 +392,8 @@
    - [Топ-5 смертельных ловушек в Live-кодинге](06-go-core-algorithms-interview.md#363-топ-5-смертельных-ловушек-в-live-кодинге)
    - [Поведенческое интервью (Behavioral) и методология STAR](06-go-core-algorithms-interview.md#364-поведенческое-интервью-behavioral-и-методология-star)
    - [Структура собеседования Go-разработчика и методология прохождения (Вебинар Дмитрия Титова, ВК)](06-go-core-algorithms-interview.md#365-структура-собеседования-go-разработчика-и-методология-прохождения-вебинар-дмитрия-титова-вк)
-   - [Золотая библиотека первоисточников и ресурсов Go-разработчика](06-go-core-algorithms-interview.md#366-золотая-библиотека-первоисточников-и-ресурсов-go-разработчика)
+   - [Карьерная стратегия: Воронка HeadHunter, ATS/AI-фильтры резюме, Самопрезентация, Мотивационные вопросы и Торг за оффер](06-go-core-algorithms-interview.md#366-карьерная-стратегия-воронка-headhunter-atsai-фильтры-резюме-самопрезентация-мотивационные-вопросы-и-торг-за-оффер)
+   - [Золотая библиотека первоисточников и ресурсов Go-разработчика](06-go-core-algorithms-interview.md#367-золотая-библиотека-первоисточников-и-ресурсов-go-разработчика)
 
 ---
 
