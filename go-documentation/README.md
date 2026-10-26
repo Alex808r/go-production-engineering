@@ -16,7 +16,7 @@
 
 > [!TIP]
 > 🎯 **Практические задачники и гайды курса:**
-> - 🚀 **[go-modern-features-guide.md (Гайд по Modern Go 1.21–1.24)](go-modern-features-guide.md)** — разбор `log/slog`, `iter.Seq` (Range over func), ServeMux `{id}`, `testing.F`, `slices`, `maps`, `cmp`.
+> - 🚀 **[go-modern-features-guide.md (Гайд по Modern Go 1.21–1.26+)](go-modern-features-guide.md)** — разбор `log/slog`, `iter.Seq`, Swiss Tables, `weak`, `testing/synctest`, `sync.WaitGroup.Go`, `os.Root`, `GOMEMLIMIT` и `automaxprocs`.
 > - ⚡ **[go-std-collections-guide.md (Справочник по strings, slices, maps и errors)](go-std-collections-guide.md)** — шпаргалка и cookbook по самым частым операциям, методам и ловушкам стандартных пакетов Go.
 > - 💡 **[go-secrets-and-traps-guide.md (Секреты, подводные камни и Best Practices Go)](go-secrets-and-traps-guide.md)** — глубокие знания из Uber Go Style Guide и 100 Go Mistakes: struct padding, утечки памяти срезов и map, time.After leak, CFS CPU Throttling в k8s, typed nil.
 > - 🏭 **[go-production-backend-guide.md (Гайд по Промышленной разработке на Go)](go-production-backend-guide.md)** — от учебного кода к боевому Enterprise-сервису: Cleanenv (12-Factor), Graceful Shutdown, `sqlc` + миграции, Prometheus + OpenTelemetry, Resilient HTTP-Client, валидация DTO, JWT, Multi-Stage Dockerfile, GitHub Actions CI/CD, Apache Kafka (Transactional Outbox & DLQ), gRPC Interceptors и AppSec (OWASP Top-10).
