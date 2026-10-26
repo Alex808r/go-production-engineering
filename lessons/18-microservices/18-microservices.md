@@ -60,7 +60,7 @@
 
 ```bash
 # Тесты домашнего задания (URL Shortener)
-cd go_course_4
+cd go-production-engineering
 go test -v -race ./lessons/18-microservices/homework-18/...
 
 # Запуск с бенчмарками

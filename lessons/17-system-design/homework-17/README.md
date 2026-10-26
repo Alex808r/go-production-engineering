@@ -176,7 +176,7 @@ homework-17/
 ### Запуск всех тестов:
 
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -v -race ./lessons/17-system-design/homework-17/...
 ```
 

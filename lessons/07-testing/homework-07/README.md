@@ -121,7 +121,7 @@ func TestSortInts(t *testing.T) {
 
 ### 1. Запуск всех тестов проекта с выводом подробного отчета (`-v`):
 ```bash
-cd /Users/user/workspace/golang_projects/go-core-4/go_course_4
+cd /Users/user/workspace/golang_projects/go-core-4/go-production-engineering
 go test -v ./lessons/07-testing/homework-07/...
 ```
 

@@ -74,7 +74,7 @@
 ### Прогон unit-тестов синтаксиса и ограничений схемы:
 
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -v ./lessons/15-sql/homework-15/...
 ```
 

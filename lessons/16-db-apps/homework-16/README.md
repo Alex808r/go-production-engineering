@@ -123,7 +123,7 @@ type Interface interface {
 ### Запуск тестов:
 
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -v -race -cover ./lessons/16-db-apps/homework-16/...
 ```
 

@@ -21,7 +21,7 @@ func TestMemcacheAPI_SetAndGet(t *testing.T) {
 	appAPI := New(memStore, logger)
 
 	// 1. POST /api/v1/cache
-	reqBody := `{"shortUrl":"qz6d7","destination":"https://github.com/thinknetica/go_course_4"}`
+	reqBody := `{"shortUrl":"qz6d7","destination":"https://github.com/Alex808r/go-production-engineering"}`
 	req := httptest.NewRequest(http.MethodPost, "/api/v1/cache", bytes.NewBufferString(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
@@ -36,7 +36,7 @@ func TestMemcacheAPI_SetAndGet(t *testing.T) {
 	if err := json.Unmarshal(rec.Body.Bytes(), &pair); err != nil {
 		t.Fatalf("failed to decode response: %v", err)
 	}
-	if pair.ShortURL != "qz6d7" || pair.Destination != "https://github.com/thinknetica/go_course_4" {
+	if pair.ShortURL != "qz6d7" || pair.Destination != "https://github.com/Alex808r/go-production-engineering" {
 		t.Errorf("unexpected saved pair: %+v", pair)
 	}
 
@@ -53,7 +53,7 @@ func TestMemcacheAPI_SetAndGet(t *testing.T) {
 	if err := json.Unmarshal(rec2.Body.Bytes(), &fetched); err != nil {
 		t.Fatalf("failed to decode: %v", err)
 	}
-	if fetched.Destination != "https://github.com/thinknetica/go_course_4" {
+	if fetched.Destination != "https://github.com/Alex808r/go-production-engineering" {
 		t.Errorf("expected destination match, got %s", fetched.Destination)
 	}
 

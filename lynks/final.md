@@ -17,7 +17,7 @@
 curl --location 'https://lynks.org' \
 --header 'Content-Type: application/json' \
 --data '{
-    "destination": "https://github.com/thinknetica/go_course_4"
+    "destination": "https://github.com/Alex808r/go-production-engineering"
 }'
 ```
 
@@ -25,10 +25,10 @@ curl --location 'https://lynks.org' \
 ```
 {
     "shortUrl": "https://lynks.org/qz6d7",
-    "destination": "https://github.com/thinknetica/go_course_4"
+    "destination": "https://github.com/Alex808r/go-production-engineering"
 }
 ```
-Далее, если пользователь перейдёт по ссылке `https://lynks.org/qz6d7` то сервис выполнит HTTP Redirect (https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections) на страницу `https://github.com/thinknetica/go_course_4`.
+Далее, если пользователь перейдёт по ссылке `https://lynks.org/qz6d7` то сервис выполнит HTTP Redirect (https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections) на страницу `https://github.com/Alex808r/go-production-engineering`.
 
 ### Состав компонентов и схема
 Сервис должен состоять из следующих компонентов:  
@@ -39,7 +39,7 @@ curl --location 'https://lynks.org' \
 
 ### Структура приложения
 Каждый микросервис должен иметь структуру каталогов как принято в курсе (см. занятие по архитектуре приложения).  
-Пример структуры каталогов проекта находится в репозитории курса: https://github.com/thinknetica/go_course_4/tree/master/lynks  
+Пример структуры каталогов проекта находится в репозитории курса: https://github.com/Alex808r/go-production-engineering/tree/master/lynks  
 Можно разместить оба микросервиса в одном общем каталоге внутри модуля всего курса. Создавать отдельный репозиторий не требуется.
 
 ### Дополнительные требования
