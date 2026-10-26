@@ -12,7 +12,7 @@ func TestMemoryStorage_CRUD(t *testing.T) {
 	ctx := context.Background()
 
 	// 1. Сохранение
-	err := s.Save(ctx, "qz6d7", "https://github.com/thinknetica/go_course_4")
+	err := s.Save(ctx, "qz6d7", "https://github.com/Alex808r/go-production-engineering")
 	if err != nil {
 		t.Fatalf("unexpected Save error: %v", err)
 	}
@@ -22,12 +22,12 @@ func TestMemoryStorage_CRUD(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected FindByShort error: %v", err)
 	}
-	if dest != "https://github.com/thinknetica/go_course_4" {
+	if dest != "https://github.com/Alex808r/go-production-engineering" {
 		t.Errorf("destination mismatch: %s", dest)
 	}
 
 	// 3. Поиск по длинной ссылке
-	short, err := s.FindByDestination(ctx, "https://github.com/thinknetica/go_course_4")
+	short, err := s.FindByDestination(ctx, "https://github.com/Alex808r/go-production-engineering")
 	if err != nil {
 		t.Fatalf("unexpected FindByDestination error: %v", err)
 	}

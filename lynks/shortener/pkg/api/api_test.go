@@ -51,7 +51,7 @@ func TestShortenerAPI_CreateAndRedirect_CacheAside(t *testing.T) {
 	appAPI := New(store, cache, "https://lynks.org", logger)
 
 	// 1. POST / (Создание короткой ссылки)
-	reqBody := `{"destination":"https://github.com/thinknetica/go_course_4"}`
+	reqBody := `{"destination":"https://github.com/Alex808r/go-production-engineering"}`
 	req := httptest.NewRequest(http.MethodPost, "/", bytes.NewBufferString(reqBody))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
@@ -81,13 +81,13 @@ func TestShortenerAPI_CreateAndRedirect_CacheAside(t *testing.T) {
 	if rec2.Code != http.StatusFound {
 		t.Fatalf("expected 302 Found, got %d", rec2.Code)
 	}
-	if rec2.Header().Get("Location") != "https://github.com/thinknetica/go_course_4" {
+	if rec2.Header().Get("Location") != "https://github.com/Alex808r/go-production-engineering" {
 		t.Errorf("unexpected redirect location: %s", rec2.Header().Get("Location"))
 	}
 
 	// 3. GET /{short} повторно (Cache Hit)
 	// Добавим напрямую в mock кэш
-	_ = cache.Set(context.Background(), shortID, "https://github.com/thinknetica/go_course_4")
+	_ = cache.Set(context.Background(), shortID, "https://github.com/Alex808r/go-production-engineering")
 
 	req3 := httptest.NewRequest(http.MethodGet, "/"+shortID, nil)
 	rec3 := httptest.NewRecorder()

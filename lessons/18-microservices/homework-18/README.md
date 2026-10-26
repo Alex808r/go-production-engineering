@@ -101,7 +101,7 @@ homework-18/
 ### 1. Локальный запуск:
 
 ```bash
-cd go_course_4
+cd go-production-engineering
 go run ./lessons/18-microservices/homework-18/cmd/shortener/main.go
 ```
 
@@ -154,7 +154,7 @@ curl http://localhost:8080/metrics
 ## Результаты тестирования
 
 ```bash
-$ cd go_course_4 && go test -v -race -cover ./lessons/18-microservices/homework-18/...
+$ cd go-production-engineering && go test -v -race -cover ./lessons/18-microservices/homework-18/...
 === RUN   TestAPI_CreateAndGetLink
 --- PASS: TestAPI_CreateAndGetLink (0.00s)
 === RUN   TestAPI_ErrorCases

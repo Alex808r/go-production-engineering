@@ -122,6 +122,6 @@ func WriteOnlyStrings(w io.Writer, args ...any) (int, error) {
 
 Запуск тестов пакета с проверкой покрытия:
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -v -cover ./lessons/09-interfaces/homework-09/pkg/users/...
 ```

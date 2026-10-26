@@ -216,7 +216,7 @@ curl http://localhost:8081/healthz
 Все пакеты протестированы с детектором гонок (`-race`) и проверкой покрытия:
 
 ```bash
-$ cd go_course_4 && go test -v -race ./lessons/19-queue/homework-19/...
+$ cd go-production-engineering && go test -v -race ./lessons/19-queue/homework-19/...
 === RUN   TestE2E_ShortenerToAnalytics_AsyncFlow
 --- PASS: TestE2E_ShortenerToAnalytics_AsyncFlow (0.02s)
 PASS

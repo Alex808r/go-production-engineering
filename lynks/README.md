@@ -73,13 +73,13 @@ sequenceDiagram
 - **`POST /`** — Сокращение гиперссылки.
   - Request body:
     ```json
-    { "destination": "https://github.com/thinknetica/go_course_4" }
+    { "destination": "https://github.com/Alex808r/go-production-engineering" }
     ```
   - Response (201 Created):
     ```json
     {
       "shortUrl": "http://localhost:8080/qz6d7",
-      "destination": "https://github.com/thinknetica/go_course_4"
+      "destination": "https://github.com/Alex808r/go-production-engineering"
     }
     ```
 - **`GET /{short}`** — Переход по короткой ссылке.
@@ -89,7 +89,7 @@ sequenceDiagram
 
 ### 2. Сервис `memcache` (порт `8082`)
 - **`POST /api/v1/cache`** — Сохранение пары в кэш.
-  - Request body: `{ "key": "qz6d7", "value": "https://github.com/thinknetica/go_course_4" }`
+  - Request body: `{ "key": "qz6d7", "value": "https://github.com/Alex808r/go-production-engineering" }`
   - Response: `201 Created`.
 - **`GET /api/v1/cache/{key}`** — Получение пары из кэша.
   - Response: `200 OK` `{ "key": "qz6d7", "value": "https://..." }` или `404 Not Found`.
@@ -131,7 +131,7 @@ docker compose -f ./lynks/docker-compose.yml ps
 # 1. Создание короткой ссылки
 curl -X POST http://localhost:8080/ \
   -H "Content-Type: application/json" \
-  -d '{"destination": "https://github.com/thinknetica/go_course_4"}'
+  -d '{"destination": "https://github.com/Alex808r/go-production-engineering"}'
 
 # 2. Переход по короткой ссылке (проверка редиректа 302)
 curl -i http://localhost:8080/<короткий_код>

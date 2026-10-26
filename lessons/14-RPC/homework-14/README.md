@@ -64,7 +64,7 @@
 ### Запуск тестов:
 
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -v -race -cover ./lessons/14-RPC/homework-14/...
 ```
 

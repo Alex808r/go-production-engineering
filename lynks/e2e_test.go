@@ -47,7 +47,7 @@ func TestE2E_Lynks_FullFlow(t *testing.T) {
 	defer shortServer.Close()
 
 	// 3. Создание ссылки: POST /
-	targetURL := "https://github.com/thinknetica/go_course_4"
+	targetURL := "https://github.com/Alex808r/go-production-engineering"
 	createBody, _ := json.Marshal(map[string]string{"destination": targetURL})
 	resp, err := http.Post(shortServer.URL+"/", "application/json", bytes.NewReader(createBody))
 	if err != nil {

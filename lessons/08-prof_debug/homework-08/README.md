@@ -265,20 +265,20 @@ go tool trace trace.out
 
 ### 1. Запуск всех тестов и бенчмарков TwoSum:
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -v -bench=. ./lessons/08-prof_debug/homework-08/pkg/twosum/...
 ```
 
 ### 2. Запуск бенчмарков поиска и генерация профилей pprof:
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -bench=BenchmarkBinarySearch_100k -benchmem -cpuprofile=homework-08/cpu.out -memprofile=homework-08/mem.out ./lessons/08-prof_debug/homework-08/pkg/search/...
 go tool pprof -text ./lessons/08-prof_debug/homework-08/cpu.out
 ```
 
 ### 3. Запуск сервиса профилирования:
 ```bash
-cd go_course_4
+cd go-production-engineering
 go run ./lessons/08-prof_debug/homework-08/cmd/app_profile/main.go
 # В отдельном терминале:
 go tool pprof -text http://localhost:6060/debug/pprof/profile?seconds=5
@@ -286,7 +286,7 @@ go tool pprof -text http://localhost:6060/debug/pprof/profile?seconds=5
 
 ### 4. Генерация и просмотр трассировки:
 ```bash
-cd go_course_4
+cd go-production-engineering
 go run ./lessons/08-prof_debug/homework-08/cmd/app_trace/main.go
 go tool trace ./lessons/08-prof_debug/homework-08/trace.out
 ```

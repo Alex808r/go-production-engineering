@@ -97,15 +97,15 @@ func (geom Geom) CalculateDistance() (distance float64) {
 
 ```bash
 cd /Users/user/workspace/golang_projects/go-core-4
-go test -v -bench=. ./go_course_4/06-oop/homework-06/...
+go test -v -bench=. ./lessons/06-oop/homework-06/...
 ```
 
 ### Запуск поисковика GoSearch:
 
 ```bash
 # 1. Поиск по слову через флаг:
-go run ./go_course_4/06-oop/homework-06/cmd/gosearch -mem -s "golang"
+go run ./lessons/06-oop/homework-06/cmd/gosearch -mem -s "golang"
 
 # 2. Интерактивный режим:
-go run ./go_course_4/06-oop/homework-06/cmd/gosearch -mem
+go run ./lessons/06-oop/homework-06/cmd/gosearch -mem
 ```

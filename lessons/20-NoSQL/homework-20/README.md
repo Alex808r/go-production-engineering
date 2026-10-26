@@ -130,7 +130,7 @@ docker-compose up --build -d
 curl --location 'http://localhost:8080' \
   --header 'Content-Type: application/json' \
   --data '{
-    "destination": "https://github.com/thinknetica/go_course_4"
+    "destination": "https://github.com/Alex808r/go-production-engineering"
   }'
 ```
 
@@ -138,7 +138,7 @@ curl --location 'http://localhost:8080' \
 ```json
 {
   "shortUrl": "https://lynks.org/qz6d7",
-  "destination": "https://github.com/thinknetica/go_course_4"
+  "destination": "https://github.com/Alex808r/go-production-engineering"
 }
 ```
 
@@ -150,7 +150,7 @@ curl -I http://localhost:8080/qz6d7
 Ответ:
 ```http
 HTTP/1.1 302 Found
-Location: https://github.com/thinknetica/go_course_4
+Location: https://github.com/Alex808r/go-production-engineering
 ```
 
 ### 3. Проверка наличия в кэше Memcache (порт 8082):
@@ -162,7 +162,7 @@ curl http://localhost:8082/api/v1/cache/qz6d7
 ```json
 {
   "shortUrl": "qz6d7",
-  "destination": "https://github.com/thinknetica/go_course_4"
+  "destination": "https://github.com/Alex808r/go-production-engineering"
 }
 ```
 
@@ -171,7 +171,7 @@ curl http://localhost:8082/api/v1/cache/qz6d7
 ## Результаты тестирования
 
 ```bash
-$ cd go_course_4 && go test -v -race ./lessons/20-NoSQL/homework-20/...
+$ cd go-production-engineering && go test -v -race ./lessons/20-NoSQL/homework-20/...
 === RUN   TestE2E_Lynks_FullFlow
 --- PASS: TestE2E_Lynks_FullFlow (0.02s)
 PASS

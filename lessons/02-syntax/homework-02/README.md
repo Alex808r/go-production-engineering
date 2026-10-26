@@ -58,7 +58,7 @@ homework-02/
 ### Запуск тестов:
 
 ```bash
-cd go_course_4
+cd go-production-engineering
 go test -v -race ./lessons/02-syntax/homework-02/...
 ```
 
