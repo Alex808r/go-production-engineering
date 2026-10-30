@@ -345,6 +345,7 @@ flowchart TD
   * 💡 **[go-secrets-and-traps-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-secrets-and-traps-guide.md)** — 14 рантайм-ловушек Go (Uber Style Guide & 100 Go Mistakes).
   * ⚡ **[go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-std-collections-guide.md)** — справочник по стандартным коллекциям и пакетам Go.
   * ⚡ **[go-core-cheatsheet.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-core-cheatsheet.md)** — экспресс-шпаргалка по синтаксису и командам.
+  * 🏢 **[real-world-go-development-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/real-world-go-development-guide.md)** — реальная коммерческая работа Go-бэкендера: процессы (Agile/RFC/Canary), боевые задачи (идемпотентность, Kafka DLQ, singleflight, cron с lock), стек инструментов и Code Review.
   * 🤖 **[AGENTS.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/AGENTS.md)** — промышленный регламент парного программирования с AI-ассистентами (Git Safety, Code Evidence, мультимодульная верификация).
 
 ---
