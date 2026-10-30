@@ -73,6 +73,7 @@ go-course-4/
 │   ├── go-secrets-and-traps-guide.md       # 14 ловушек и секретов Go (память, утечки горутин, typed nil)
 │   ├── go-std-collections-guide.md         # Справочник по стандартным коллекциям и пакетам Go
 │   ├── go-system-design-guide.md           # Проектирование распределенных систем
+│   ├── real-world-go-development-guide.md  # Реальная работа Go-бэкендера: процессы, задачи с кодом, Code Review
 │   ├── homework-tasks.md                   # Формулировки домашних заданий
 │   ├── sql-livecoding-guide.md             # Практика SQL запросов (33 задачи от базовых до LeetCode Hard)
 │   └── mermaid-diagrams/                  # Стандарты визуализации архитектуры Mermaid
