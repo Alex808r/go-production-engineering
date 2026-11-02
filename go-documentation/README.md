@@ -31,6 +31,7 @@
 > - 🧩 **[go-design-patterns-guide.md (Паттерны проектирования в Go: GoF, Concurrency & Highload)](go-design-patterns-guide.md)** — полное руководство по архитектурным и конкурентным паттернам с обоснованием и антипаттернами
 > - 📊 **[mermaid-diagrams (Стандарты визуализации архитектуры Mermaid)](mermaid-diagrams/README.md)** — скилл и палитра для построения диаграмм C4, Sequence, State Machine и Flowchart.
 > - 🗺️ **[course-codebase-guide.md (Путеводитель по кодовой базе и дорожной карте)](course-codebase-guide.md)** — сквозная карта: 22 лекционных модуля (00–22), продакшен-проекты GoSearch, Lynks и Highload Wallet (1000+ RPS), навигатор по домашним заданиям и гайдам.
+- 🧠 **[anthropic-claude-code-playbook.md (Anthropic Engineering Playbook: Claude Code, Evals, Memory & Teams)](anthropic-claude-code-playbook.md)** — опыт команды Anthropic Applied AI (Code with Claude London): Evals от v0 к Production, Progressive Disclosure через Skills, Verification-First и DOM-контракты, Routines (/schedule), Agent Memory Stores & Dreaming, трансформация инженерной культуры.
 
 ---
 
