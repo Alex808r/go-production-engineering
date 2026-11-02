@@ -1947,11 +1947,11 @@ func getCachedMovie(ctx context.Context, rdb *redis.Client, movieID string) (str
 Мы сохраняем бизнес-сущность и само событие **в одной локальной ACID-транзакции PostgreSQL**:
 
 ```mermaid
-graph LR
-    API["API Gateway"] -->|1. Tx: Save Order + Insert Outbox| DB[("PostgreSQL\norders & outbox tables")]
-    Worker["Background Relay Worker"] -->|2. Poll / CDC (Debezium)| DB
-    Worker -->|3. Publish Event| Kafka["Kafka / RabbitMQ"]
-    Worker -->|4. Mark as Processed| DB
+flowchart LR
+    API["API Gateway"] -->|"1. Tx: Save Order + Insert Outbox"| DB[("PostgreSQL<br/>orders & outbox tables")]
+    Worker["Background Relay Worker"] -->|"2. Poll / CDC (Debezium)"| DB
+    Worker -->|"3. Publish Event"| Kafka["Kafka / RabbitMQ"]
+    Worker -->|"4. Mark as Processed"| DB
 ```
 
 ```go
@@ -2215,10 +2215,10 @@ func (c *ConsumerWithDLQ) sendToDLQ(ctx context.Context, origMsg kafka.Message, 
 Вместо периодического опроса БД (Polling) или двухфазных распределенных транзакций (2PC) современная архитектура использует **CDC (Change Data Capture)**:
 
 ```mermaid
-graph LR
-    App["Go Application"] -->|1. Локальная транзакция| DB[("PostgreSQL\n(Таблица outbox)")]
-    DB -->|2. Чтение WAL (Write-Ahead Log)| Debezium["Debezium CDC Connector"]
-    Debezium -->|3. Streaming без задержек| Kafka["Kafka Topic: events.order"]
+flowchart LR
+    App["Go Application"] -->|"1. Локальная транзакция"| DB[("PostgreSQL<br/>(Таблица outbox)")]
+    DB -->|"2. Чтение WAL (Write-Ahead Log)"| Debezium["Debezium CDC Connector"]
+    Debezium -->|"3. Streaming без задержек"| Kafka["Kafka Topic: events.order"]
 ```
 
 1. Go-сервис пишет в основную бизнес-таблицу и в таблицу `outbox` в рамках **одной локальной SQL-транзакции** (ACID).
@@ -2307,9 +2307,9 @@ func (s *statusRecorder) WriteHeader(code int) {
 
 ```mermaid
 flowchart TD
-    SLI["1. SLI (Service Level Indicator)\nЧто мы реально измеряем прямо сейчас в проде\n(например: 99.85% успешных ответов < 100мс)"] --> SLO["2. SLO (Service Level Objective)\nВнутренняя цель команды инженеров и продакта\n(например: 99.9% запросов быстрее 150мс за 30 дней)"]
-    SLO --> SLA["3. SLA (Service Level Agreement)\nЮридический контракт с клиентами со штрафами\n(например: 99.5% доступности, иначе возврат денег)"]
-    SLO -.-> EB["Error Budget (Бюджет ошибок)\n100% - SLO = 0.1% права на сбои и смелые релизы"]
+    SLI["1. SLI (Service Level Indicator)<br/>Что мы реально измеряем прямо сейчас в проде<br/>(например: 99.85% успешных ответов < 100мс)"] --> SLO["2. SLO (Service Level Objective)<br/>Внутренняя цель команды инженеров и продакта<br/>(например: 99.9% запросов быстрее 150мс за 30 дней)"]
+    SLO --> SLA["3. SLA (Service Level Agreement)<br/>Юридический контракт с клиентами со штрафами<br/>(например: 99.5% доступности, иначе возврат денег)"]
+    SLO -.-> EB["Error Budget (Бюджет ошибок)<br/>100% - SLO = 0.1% права на сбои и смелые релизы"]
 ```
 
 | Понятие | Расшифровка | Смысл для инженера | Пример |
@@ -2366,11 +2366,11 @@ histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by 
 В микросервисной архитектуре один пользовательский клик порождает цепочку вызовов через 10 микросервисов. OpenTelemetry передает `TraceID` и `SpanID` через заголовки (`traceparent`):
 
 ```mermaid
-graph LR
-    Client["Client Request"] -->|TraceID: abc, Span 1| GW["API Gateway"]
-    GW -->|TraceID: abc, Span 2 (traceparent)| Auth["Auth Service"]
-    GW -->|TraceID: abc, Span 3 (traceparent)| Billing["Billing Service"]
-    Billing -->|TraceID: abc, Span 4| DB[(PostgreSQL)]
+flowchart LR
+    Client["Client Request"] -->|"TraceID: abc, Span 1"| GW["API Gateway"]
+    GW -->|"TraceID: abc, Span 2 (traceparent)"| Auth["Auth Service"]
+    GW -->|"TraceID: abc, Span 3 (traceparent)"| Billing["Billing Service"]
+    Billing -->|"TraceID: abc, Span 4"| DB[(PostgreSQL)]
 ```
 
 #### 1. Стандарт W3C TraceContext (`traceparent` header)

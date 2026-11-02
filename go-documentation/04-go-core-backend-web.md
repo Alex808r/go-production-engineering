@@ -1394,9 +1394,9 @@ func UserIDFromCtx(ctx context.Context) int64 {
 **Решение:** Два токена:
 
 ```mermaid
-graph LR
-    AT["Access Token\n(короткий: 15 мин)\nПередаётся в каждом запросе"]
-    RT["Refresh Token\n(длинный: 30 дней)\nХранится безопасно, используется РЕДКО"]
+flowchart LR
+    AT["Access Token<br/>(короткий: 15 мин)<br/>Передаётся в каждом запросе"]
+    RT["Refresh Token<br/>(длинный: 30 дней)<br/>Хранится безопасно, используется РЕДКО"]
 
     AT -->|"Истёк? Используй"| RT
     RT -->|"Выдаёт новый"| AT
