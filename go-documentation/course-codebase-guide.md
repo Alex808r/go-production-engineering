@@ -346,6 +346,7 @@ flowchart TD
   * ⚡ **[go-std-collections-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-std-collections-guide.md)** — справочник по стандартным коллекциям и пакетам Go.
   * ⚡ **[go-core-cheatsheet.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/go-core-cheatsheet.md)** — экспресс-шпаргалка по синтаксису и командам.
   * 🏢 **[real-world-go-development-guide.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/real-world-go-development-guide.md)** — реальная коммерческая работа Go-бэкендера: процессы (Agile/RFC/Canary), боевые задачи (идемпотентность, Kafka DLQ, singleflight, cron с lock), стек инструментов и Code Review.
+  * 🧠 **[anthropic-claude-code-playbook.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/go-documentation/anthropic-claude-code-playbook.md)** — опыт команды Anthropic Applied AI (Code with Claude London): Evals от v0 к Production, Progressive Disclosure через Skills, Verification-First и DOM-контракты, Routines (/schedule), Agent Memory Stores & Dreaming, трансформация инженерной культуры.
   * 🤖 **[AGENTS.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/AGENTS.md)** — промышленный регламент парного программирования с AI-ассистентами (Git Safety, Code Evidence, мультимодульная верификация).
 
 ---
