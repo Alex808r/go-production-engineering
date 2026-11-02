@@ -51,23 +51,20 @@
 > - **Параллелизм (Parallelism)** — это про **физическое исполнение** (_«Doing a lot of things at once»_ — одновременное физическое выполнение множества задач).
 
 ```mermaid
-graph TD
-    subgraph Concurrency["🤹 Конкурентность (1 Ядро CPU)"]
+flowchart TD
+    subgraph Concurrency["Конкурентность: 1 ядро CPU"]
         direction TB
-        C1["Задача A (Чанк 1)"] -->|"Переключение контекста"| C2["Задача B (Чанк 1)"]
-        C2 -->|"Переключение контекста"| C3["Задача A (Чанк 2)"]
-        C3 -->|"Переключение контекста"| C4["Задача B (Чанк 2)"]
+        C1["Задача A (квант времени 1)"] -->|"смена контекста"| C2["Задача B (квант времени 1)"]
+        C2 -->|"смена контекста"| C3["Задача A (квант времени 2)"]
+        C3 -->|"смена контекста"| C4["Задача B (квант времени 2)"]
     end
 
-    subgraph Parallelism["🚀 Параллелизм (Много ядер CPU)"]
+    subgraph Parallelism["Параллелизм: 2+ ядра CPU"]
         direction LR
-        subgraph Core1["Ядро CPU 1"]
-            P1["Задача A (Выполняется полностью)"]
-        end
-        subgraph Core2["Ядро CPU 2"]
-            P2["Задача B (Выполняется одновременно)"]
-        end
+        P1["Ядро CPU 1: Задача A"] <-->|"физически одновременно"| P2["Ядро CPU 2: Задача B"]
     end
+
+    C4 ~~~ P1
 ```
 
 #### 🍳 Наглядная аналогия: Повар на кухне
@@ -218,7 +215,7 @@ bufCh := make(chan int, 3)
 > Канал закрывает **только пишущая сторона (Sender)**, и никогда — читающая: у получателя нет способа узнать, что кто-то ещё собирается писать, а запись в закрытый канал — фатальная паника. Если пишущих горутин несколько, закрытие координируют отдельно (например, дожидаются завершения всех писателей через `sync.WaitGroup` и закрывают канал в одной специально выделенной горутине).  
 > Закрывать канал обязательно **не всегда**: `close` нужен, когда получателям надо явно сообщить «данных больше не будет» (например, для завершения цикла `for range ch`). Канал, на который больше никто не ссылается, автоматически соберёт сборщик мусора (GC).
 
-**Направленные каналы и служебные функции.** Тип `chan<- T` — канал только для отправки, `<-chan T` — только для получения (в сигнатурах функций это документирует намерение и проверяется компилятором; обычный `chan T` неявно приводится к обоим). `len(ch)` — число элементов в буфере, `cap(ch)` — размер буфера (для небуферизованного канала оба равны 0).
+**Направленные каналы и служебные функции.** Тип `chan<- T` — канал только для записи (отправки), `<-chan T` — только для чтения (получения) (в сигнатурах функций это документирует намерение и проверяется компилятором; обычный `chan T` неявно приводится к обоим). `len(ch)` — число элементов в буфере, `cap(ch)` — размер буфера (для небуферизованного канала оба равны 0).
 
 ---
 
@@ -307,13 +304,13 @@ func main() {
 Паттерн **Worker Pool** запускает фиксированное число горутин (например, 3 воркера), которые разбирают общий входящий канал задач:
 
 ```mermaid
-graph LR
-    Producer["Генератор задач (Producer)"] -->|jobs chan| W1["Воркер 1"]
-    Producer -->|jobs chan| W2["Воркер 2"]
-    Producer -->|jobs chan| W3["Воркер 3"]
-    W1 -->|results chan| Collector["Сборщик результатов"]
-    W2 -->|results chan| Collector
-    W3 -->|results chan| Collector
+flowchart LR
+    Producer["Генератор задач (Producer)"] -->|"jobs chan"| W1["Воркер 1"]
+    Producer -->|"jobs chan"| W2["Воркер 2"]
+    Producer -->|"jobs chan"| W3["Воркер 3"]
+    W1 -->|"results chan"| Collector["Сборщик результатов"]
+    W2 -->|"results chan"| Collector
+    W3 -->|"results chan"| Collector
 ```
 
 ```go
@@ -407,8 +404,8 @@ graph TD
     ValCtx["valCtx := WithValue(ReqCtx, traceIDKey, 'abc-123')"]
 
     Root --> ReqCtx
-    ReqCtx -->|При cancel() родителя ➔ все дети отменяются автоматически!| DBCtx
-    ReqCtx -->|Каскадная отмена| APICtx
+    ReqCtx -->|"При cancel() родителя ➔ все дети отменяются автоматически!"| DBCtx
+    ReqCtx -->|"Каскадная отмена"| APICtx
     ReqCtx --> ValCtx
 ```
 
@@ -552,8 +549,8 @@ flowchart LR
         recvq["recvq: Очередь sudog на чтение"]
         sendq["sendq: Очередь sudog на запись"]
     end
-    G1["Горутина G1 (sender)"] -->|ch <- data| sendq
-    recvq -->|<- ch| G2["Горутина G2 (receiver)"]
+    G1["Горутина G1 (sender)"] -->|"ch <- data"| sendq
+    recvq -->|"<- ch"| G2["Горутина G2 (receiver)"]
 ```
 
 #### 2. Что такое `sudog` и как происходит парковка горутин:
@@ -754,19 +751,19 @@ func processAllSafe(files []string) error {
 Go реализует кооперативно-вытесняющий планировщик пространства пользователя (User-space $M:N$ Scheduler). Он решает фундаментальную задачу: отображение $M$ пользовательских горутин ($G$) на $N$ реальных системных потоков ОС ($M$), исполняющихся на доступных логических ядрах процессора ($P$).
 
 ```mermaid
-graph TD
-    subgraph "Go Runtime (GMP Model)"
-        P1["Processor (P1) [LRQ: Local Run Queue]"] --> G1["Goroutine (G1)"]
-        P1 --> G2["Goroutine (G2)"]
-        M1["OS Thread (M1)"] --- P1
+flowchart TD
+    subgraph GMP ["Go Runtime: GMP Model"]
+        P1["Processor P1 (LRQ: Local Run Queue)"] --> G1["Goroutine G1"]
+        P1 --> G2["Goroutine G2"]
+        M1["OS Thread M1"] --- P1
 
-        P2["Processor (P2) [LRQ]"] --> G3["Goroutine (G3)"]
-        M2["OS Thread (M2)"] --- P2
+        P2["Processor P2 (LRQ)"] --> G3["Goroutine G3"]
+        M2["OS Thread M2"] --- P2
 
-        GRQ["GRQ (Global Run Queue)"] -.->|Steal / 1/61 check| P1
-        GRQ -.->|Steal / 1/61 check| P2
+        GRQ["GRQ: Global Run Queue"] -.->|"Steal / 1/61 check"| P1
+        GRQ -.->|"Steal / 1/61 check"| P2
 
-        NetPoller["Сетевой поллер (Netpoller: epoll/kqueue)"] -.->|I/O Ready| P1
+        NetPoller["Сетевой поллер (Netpoller: epoll/kqueue)"] -.->|"I/O Ready"| P1
     end
 ```
 
@@ -850,11 +847,11 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    G1["Горутина G1 (на M1)"] -->|Вызов conn.Read()| NetPoll["Сетевой поллер (epoll / kqueue)"]
-    NetPoll -->|G1 переведена в Waiting| UnblockM1["Поток M1 НЕ блокируется!"]
-    UnblockM1 -->|M1 берет G2 из LRQ| G2["Горутина G2 исполняется на M1"]
-    NetPoll -->|Данные в сокете готовы!| Wakeup["G1 переводится в Runnable"]
-    Wakeup -->|G1 возвращается в LRQ| LRQ["LRQ процессора P"]
+    G1["Горутина G1 (на M1)"] -->|"Вызов conn.Read()"| NetPoll["Сетевой поллер (epoll / kqueue)"]
+    NetPoll -->|"G1 переведена в Waiting"| UnblockM1["Поток M1 НЕ блокируется!"]
+    UnblockM1 -->|"M1 берет G2 из LRQ"| G2["Горутина G2 исполняется на M1"]
+    NetPoll -->|"Данные в сокете готовы!"| Wakeup["G1 переводится в Runnable"]
+    Wakeup -->|"G1 возвращается в LRQ"| LRQ["LRQ процессора P"]
 ```
 
 1. Когда горутина $G_1$ выполняет сетевое чтение (`conn.Read()`), рантайм Go не блокирует поток ОС.
@@ -868,12 +865,12 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    G1["Горутина G1"] -->|Блокирующий syscall (File I/O, CGO)| M1["Поток M1 блокируется в ядре ОС"]
-    P["Процессор P"] -.->|Планировщик отсоединяет P от M1| M1
-    P -->|P захватывает новый поток M2| M2["Поток M2 (из пула или новый)"]
-    M2 -->|M2 исполняет горутину G2| G2["Горутина G2 из LRQ"]
-    M1 -->|Системный вызов G1 завершен| Return["G1 возвращается в LRQ"]
-    M1 -.->|M1 паркуется в спящий пул| Pool["Пул простаивающих потоков M"]
+    G1["Горутина G1"] -->|"Блокирующий syscall (File I/O, CGO)"| M1["Поток M1 блокируется в ядре ОС"]
+    P["Процессор P"] -.->|"Планировщик отсоединяет P от M1"| M1
+    P -->|"P захватывает новый поток M2"| M2["Поток M2 (из пула или новый)"]
+    M2 -->|"M2 исполняет горутину G2"| G2["Горутина G2 из LRQ"]
+    M1 -->|"Системный вызов G1 завершен"| Return["G1 возвращается в LRQ"]
+    M1 -.->|"M1 паркуется в спящий пул"| Pool["Пул простаивающих потоков M"]
 ```
 
 1. Горутина $G_1$ вызывает операцию чтения файла с диска (`os.ReadFile`) или си-функцию через `cgo`.
@@ -1002,14 +999,14 @@ func findRunnable() (gp *g) {
 Все объекты в куче делятся на три логических цвета:
 
 ```mermaid
-graph LR
-    subgraph "Трёхцветная абстракция"
+flowchart LR
+    subgraph Colors ["Трёхцветная абстракция"]
         White["⚪ Белый (Кандидат на удаление / Недостижим)"]
-        Grey["🔘 Серый (Достижим, но дочерние ссылки не проверены)"]
+        Grey["🔘 Серый (Достижим, ссылки не проверены)"]
         Black["⚫ Чёрный (Достижим, гарантированно живой)"]
     end
-    White -->|Найден указатель| Grey
-    Grey -->|Все ссылки просканированы| Black
+    White -->|"Найден указатель"| Grey
+    Grey -->|"Все ссылки просканированы"| Black
 ```
 
 - **⚪ Белые (White):** Объекты, до которых GC ещё не добрался. В конце маркировки все оставшиеся белыми объекты признаются мусором и подлежат уничтожению.
@@ -1043,12 +1040,12 @@ graph LR
 В Go освобождение памяти происходит строго в два уровня:
 
 ```mermaid
-graph TD
-    UserCode["Пользовательский код (make, new)"] -->|1. Запрос памяти| MHeap["Куча Go Runtime (mcache / mcentral / mheap)"]
-    MHeap -->|2. Запрос страниц| OS["Операционная система (RAM / Физическая память)"]
+flowchart TD
+    UserCode["Пользовательский код (make, new)"] -->|"1. Запрос памяти"| MHeap["Куча Go Runtime (mcache / mcentral / mheap)"]
+    MHeap -->|"2. Запрос страниц"| OS["Операционная система (RAM / Физическая память)"]
     
-    GC["Garbage Collector (Sweep)"] -.->|Шаг A: Помечает блоки свободными| MHeap
-    Scavenger["Фоновый Scavenger (MADV_DONTNEED)"] -.->|Шаг B: Возвращает физические страницы| OS
+    GC["Garbage Collector (Sweep)"] -.->|"Шаг A: Помечает блоки свободными"| MHeap
+    Scavenger["Фоновый Scavenger (MADV_DONTNEED)"] -.->|"Шаг B: Возвращает физические страницы"| OS
 ```
 
 ##### Шаг А: Освобождение внутри рантайма Go (Мгновенно)
@@ -1184,13 +1181,13 @@ go build -gcflags="-m" main.go     # -m=2 даёт подробные объяс
 **`cgo`** позволяет вызывать функции языка C из Go и наоборот. Однако в высоконагруженных системах и на интервью Senior/Staff уровня это рассматривается как **архитектурная граница высокой стоимости**:
 
 ```mermaid
-graph LR
+flowchart LR
     subgraph GoWorld ["Мир Go (Managed Runtime)"]
-        G["Горутина (Стек ~2 КБ)"] -->|Вызов cgo| Switch["Смена стека + Сохранение регистров"]
+        G["Горутина (Стек ~2 КБ)"] -->|"Вызов cgo"| Switch["Смена стека + Сохранение регистров"]
         GC["Garbage Collector (Управляет кучей)"]
     end
     subgraph CWorld ["Мир C (Unmanaged OS)"]
-        Switch -->|Context Switch ~100ns| CFunc["C Функция (Фиксированный стек 8 МБ)"]
+        Switch -->|"Context Switch ~100ns"| CFunc["C Функция (Фиксированный стек 8 МБ)"]
         CMalloc["C Heap (malloc / free) — Не видна для GC"]
     end
 ```
@@ -1477,12 +1474,11 @@ deleted := m.CompareAndDelete("key", expectedVal)
 Внутри `sync.Map` использует две отдельные хэш-таблицы для достижения эффективности:
 
 ```mermaid
-graph TD
-    Client["Горутина (Load/Store)"] --> ReadPath
-    ReadPath{Ключ в read map?}
-    ReadPath -->|Да| ReadMap["read map (atomic.Pointer)\nЧтение без блокировки — O(1)\nАбсолютно lock-free"]
-    ReadPath -->|Нет| DirtyMap["dirty map (map[any]*entry)\nЗащищена mu sync.Mutex\nЗаписи идут сюда сначала"]
-    DirtyMap -->|Ключи промотируются при накоплении| ReadMap
+flowchart TD
+    Client["Горутина (Load/Store)"] --> ReadPath{"Ключ в read map?"}
+    ReadPath -->|"Да"| ReadMap["read map (atomic.Pointer)<br/>Чтение без блокировки — O(1)<br/>Абсолютно lock-free"]
+    ReadPath -->|"Нет"| DirtyMap["dirty map: map of any to *entry<br/>Защищена mu sync.Mutex<br/>Записи идут сюда сначала"]
+    DirtyMap -->|"Ключи промотируются при накоплении"| ReadMap
 ```
 
 1. **`read map` (atomic.Pointer):** Хранит «стабильные» ключи. Чтение из неё происходит без единой блокировки через атомарную загрузку указателя — **абсолютно lock-free**.
@@ -1629,8 +1625,8 @@ func fetchAll(ctx context.Context, urls []string) error {
 Данные последовательно проходят через цепочку этапов (stages), где каждый этап — горутина с входным и выходным каналом:
 
 ```mermaid
-graph LR
-    Gen["Generator<br/>(Источник)"] -->|chan int| Sq["Square<br/>(Возведение в квадрат)"] -->|chan int| Print["Printer<br/>(Вывод)"]
+flowchart LR
+    Gen["Generator<br/>(Источник)"] -->|"chan int"| Sq["Square<br/>(Возведение в квадрат)"] -->|"chan int"| Print["Printer<br/>(Вывод)"]
 ```
 
 ```go
@@ -1776,16 +1772,16 @@ func withRateLimit(limit int, fn func()) (handle func() error, cancel func()) {
 Аналог `Promise.all()` в JavaScript и `asyncio.gather()` в Python. Запускает срез функций конкурентно в отдельных горутинах, дожидается завершения всех задач и возвращает результаты **строго в исходном порядке**, независимо от того, какая горутина завершилась раньше.
 
 ```mermaid
-graph TD
+flowchart TD
     subgraph Input["Исходный порядок задач"]
         F0["Task 0 (300ms)"]
         F1["Task 1 (100ms)"]
         F2["Task 2 (200ms)"]
     end
 
-    Input -->|"Запуск в горутинах"| Workers["Буферизованный канал ch<br/>{Index, Result}"]
+    Input -->|"Запуск в горутинах"| Workers["Буферизованный канал ch<br/>(Index, Result)"]
 
-    subgraph Order["Раскладка по индексам results[res.index] = res.val"]
+    subgraph Order["Раскладка по индексам: results.index = res.val"]
         R0["Result 0 (16)"]
         R1["Result 1 (9)"]
         R2["Result 2 (4)"]

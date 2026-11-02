@@ -3908,16 +3908,16 @@ func (c *Cache) Set(k string, v interface{}) {
 flowchart TD
     subgraph Defect1["Баг 1: Локальный Mutex в Get()"]
         M1["var m sync.Mutex"] --> M2["Создаётся в стеке при КАЖДОМ вызове Get!"]
-        M2 --> M3["Блокирует только сам себя.\nСинхронизации между горутинами НЕТ!"]
+        M2 --> M3["Блокирует только сам себя.<br/>Синхронизации между горутинами НЕТ!"]
     end
 
     subgraph Defect2["Баг 2: Отсутствие синхронизации в Set()"]
-        S1["c.data[k] = v"] --> S2["Параллельный Get и Set или Set и Set"]
-        S2 --> S3["fatal error: concurrent map writes\nКрах всего процесса, recover() БЕССИЛЕН!"]
+        S1["c.data(k) = v"] --> S2["Параллельный Get и Set или Set и Set"]
+        S2 --> S3["fatal error: concurrent map writes<br/>Крах всего процесса, recover() БЕССИЛЕН!"]
     end
 
     subgraph Defect3["Баг 3: Неинициализированный map"]
-        N1["c := &Cache{}"] --> N2["c.data == nil"]
+        N1["c := &Cache()"] --> N2["c.data == nil"]
         N2 --> N3["panic: assignment to entry in nil map"]
     end
 ```
@@ -4101,10 +4101,10 @@ func TestSafeCache_Concurrency(t *testing.T) {
 
 ```mermaid
 flowchart TD
-    Step1["Шаг 1: Clarify & Edge Cases\n(Уточнение задачи, типы, ограничения, краевые случаи)"] --> Step2["Шаг 2: Think Out Loud & Brute Force\n(Проговаривание логики, наивное O(N²), поиск O(N))"]
-    Step2 --> Step3["Шаг 3: Согласование идеи\n('Я планирую использовать map/два указателя. Начнем?')"]
-    Step3 --> Step4["Шаг 4: Чистая реализация\n(Идиоматичный Go, проверка nil, говорящие имена)"]
-    Step4 --> Step5["Шаг 5: Ручной трассинг и Table-Driven тесты\n(Прогон граничных кейсов ДО фразы 'Я закончил')"]
+    Step1["Шаг 1: Clarify & Edge Cases<br/>(Уточнение задачи, типы, ограничения, краевые случаи)"] --> Step2["Шаг 2: Think Out Loud & Brute Force<br/>(Проговаривание логики, наивное O(N²), поиск O(N))"]
+    Step2 --> Step3["Шаг 3: Согласование идеи<br/>('Я планирую использовать map/два указателя. Начнем?')"]
+    Step3 --> Step4["Шаг 4: Чистая реализация<br/>(Идиоматичный Go, проверка nil, говорящие имена)"]
+    Step4 --> Step5["Шаг 5: Ручной трассинг и Table-Driven тесты<br/>(Прогон граничных кейсов ДО фразы 'Я закончил')"]
 ```
 
 #### Шаг 1: Уточнение задачи и сбор краевых условий (Clarifying Questions)

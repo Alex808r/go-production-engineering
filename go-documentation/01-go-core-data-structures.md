@@ -931,7 +931,7 @@ flowchart LR
         S2["<b>s_copy (Локальная копия)</b><br/>ptr = 0x1000<br/>len: 2, cap: 2"]
     end
     subgraph Memory ["<b>Куча (0x1000)</b>"]
-        Arr["<b>[ 10, 20 ]</b>"]
+        Arr["<b>Массив: 10, 20</b>"]
     end
 
     S1 -->|"ptr указывает на"| Arr
@@ -1151,29 +1151,29 @@ b = append(b, 999)
 
 ```mermaid
 flowchart TD
-    subgraph Array ["<b>Базовый массив [5]int</b>"]
+    subgraph Array ["Базовый массив из 5 чисел"]
         direction LR
-        Cell0["<b>[0]</b><br/>10"]
-        Cell1["<b>[1]</b><br/>20"]
-        Cell2["<b>[2]</b><br/>30"]
-        Cell3["<b>[3]</b><br/>40"]
-        Cell4["<b>[4]</b><br/>50"]
+        Cell0["Индекс 0<br/>10"]
+        Cell1["Индекс 1<br/>20"]
+        Cell2["Индекс 2<br/>30"]
+        Cell3["Индекс 3<br/>40"]
+        Cell4["Индекс 4<br/>50"]
         Cell0 --- Cell1 --- Cell2 --- Cell3 --- Cell4
     end
 
-    subgraph Slice133 ["<b>b := a[1:3:3]</b>"]
-        B1["<b>ptr: &Cell1</b><br/>len: 2, cap: 2<br/>(шлагбаум на max=3)"]
+    subgraph Slice133 ["b := a(1:3:3)"]
+        B1["ptr: &Cell1<br/>len: 2, cap: 2<br/>(шлагбаум на max=3)"]
     end
 
-    subgraph Slice13 ["<b>b := a[1:3]</b>"]
-        B2["<b>ptr: &Cell1</b><br/>len: 2, cap: 4<br/>(видит хвост массива)"]
+    subgraph Slice13 ["b := a(1:3)"]
+        B2["ptr: &Cell1<br/>len: 2, cap: 4<br/>(видит хвост массива)"]
     end
 
     Slice133 -->|"указывает на"| Cell1
     Slice13 -->|"указывает на"| Cell1
 
-    B1 -.->|"append: len == cap"| Alloc["<b>✅ Защита</b><br/>Новый массив в куче<br/>(a[3] в безопасности)"]
-    B2 -.->|"append: len < cap"| Overwrite["<b>❌ Повреждение</b><br/>Пишет 999 в Cell3<br/>(затирает a[3]!)"]
+    B1 -.->|"append: len == cap"| Alloc["Защита<br/>Новый массив в куче<br/>(ячейка 3 в безопасности)"]
+    B2 -.->|"append: len < cap"| Overwrite["Повреждение<br/>Пишет 999 в Cell3<br/>(затирает ячейку 3!)"]
 
     style Array fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
     style B1 fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
@@ -1264,10 +1264,10 @@ func Insert(slice []int, index, value int) []int {
 
 ```mermaid
 flowchart TD
-    S0["<b>0. Исходный срез</b><br/>len=4, cap=6<br/>[10] [20] [30] [40] [ _ ] [ _ ]"]
-    S1["<b>1. Расширение len</b><br/>slice[0 : len+1]<br/>открыт слот [4]<br/>len = 5"]
-    S2["<b>2. Сдвиг copy</b><br/>хвост сдвинут вправо<br/>ячейка [1] свободна!"]
-    S3["<b>3. Запись в дыру</b><br/>slice[1] = 99<br/>[10, 99, 20, 30, 40]<br/><b>✅ 0 аллокаций!</b>"]
+    S0["<b>0. Исходный срез</b><br/>len=4, cap=6<br/>(10) (20) (30) (40) ( _ ) ( _ )"]
+    S1["<b>1. Расширение len</b><br/>slice: 0 до len+1<br/>открыт слот 4<br/>len = 5"]
+    S2["<b>2. Сдвиг copy</b><br/>хвост сдвинут вправо<br/>ячейка 1 свободна!"]
+    S3["<b>3. Запись в дыру</b><br/>slice(1) = 99<br/>(10, 99, 20, 30, 40)<br/><b>0 аллокаций!</b>"]
 
     S0 ==> S1 ==> S2 ==> S3
 
@@ -1403,35 +1403,35 @@ arr = slices.Delete(arr, 2, len(arr)) // [1 2]
 >
 > Важно: `slices.Delete` возвращает новый слайс (меньшей длины), а исходный слайс после вызова использовать нельзя — его содержимое сдвинуто. Всегда присваивайте результат: `arr = slices.Delete(arr, i, i+1)`.
 >
-> ```mermaid
-> flowchart TD
->     subgraph Initial ["<b>0. Исходный срез items</b>"]
->         direction LR
->         I0["<b>[0]</b><br/>u1"] --- I1["<b>[1]</b><br/>u2 (УДАЛЯЕМ)"] --- I2["<b>[2]</b><br/>u3"]
->     end
->
->     subgraph Bad ["<b>❌ Ручной append</b>"]
->         direction LR
->         B0["<b>[0]</b><br/>u1"] --- B1["<b>[1]</b><br/>u3"] --- B2["<b>[2]</b><br/>u3<br/>⚠️ ВИСЯЧИЙ УКАЗАТЕЛЬ!"]
->     end
->
->     subgraph Good ["<b>✅ slices.Delete</b>"]
->         direction LR
->         G0["<b>[0]</b><br/>u1"] --- G1["<b>[1]</b><br/>u3"] --- G2["<b>[2]</b><br/>nil<br/>✅ СЛОТ ЗАНУЛЕН!"]
->     end
->
->     Initial -->|"Сдвиг без nil"| Bad
->     Initial -->|"Сдвиг + nil"| Good
->
->     B2 -.->|"GC видит cap"| Leak["<b>❌ УТЕЧКА</b><br/>u3 остался в куче!<br/>GC не может удалить"]
->     G2 -.->|"GC видит nil"| Free["<b>✅ ПАМЯТЬ СВОБОДНА</b><br/>u2 удален сборщиком GC!"]
->
->     style Initial fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
->     style Bad fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff
->     style Good fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
->     style Leak fill:#e74c3c,stroke:#c0392b,stroke-width:3px,color:#fff
->     style Free fill:#27ae60,stroke:#229954,stroke-width:3px,color:#fff
-> ```
+```mermaid
+flowchart TD
+    subgraph Initial ["Исходный срез items"]
+        direction LR
+        I0["Индекс 0<br/>u1"] --- I1["Индекс 1<br/>u2 (УДАЛЯЕМ)"] --- I2["Индекс 2<br/>u3"]
+    end
+
+    subgraph Bad ["Ручной append"]
+        direction LR
+        B0["Индекс 0<br/>u1"] --- B1["Индекс 1<br/>u3"] --- B2["Индекс 2<br/>u3 (ВИСЯЧИЙ УКАЗАТЕЛЬ)"]
+    end
+
+    subgraph Good ["slices.Delete"]
+        direction LR
+        G0["Индекс 0<br/>u1"] --- G1["Индекс 1<br/>u3"] --- G2["Индекс 2<br/>nil (СЛОТ ЗАНУЛЕН)"]
+    end
+
+    Initial -->|"Сдвиг без nil"| Bad
+    Initial -->|"Сдвиг + nil"| Good
+
+    B2 -.->|"GC видит cap"| Leak["УТЕЧКА<br/>u3 остался в куче!<br/>GC не может удалить"]
+    G2 -.->|"GC видит nil"| Free["ПАМЯТЬ СВОБОДНА<br/>u2 удален сборщиком GC!"]
+
+    style Initial fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
+    style Bad fill:#e67e22,stroke:#d35400,stroke-width:2px,color:#fff
+    style Good fill:#27ae60,stroke:#229954,stroke-width:2px,color:#fff
+    style Leak fill:#e74c3c,stroke:#c0392b,stroke-width:3px,color:#fff
+    style Free fill:#27ae60,stroke:#229954,stroke-width:3px,color:#fff
+```
 >
 > ```text
 > Сравнение удаления u2 (индекс 1) из среза []*User{u1, u2, u3}:
@@ -1553,7 +1553,7 @@ func makeMatrix(dy, dx int) [][]uint8 {
 ```mermaid
 flowchart TD
     A["<b>Сброс слайса</b>"] --> B["<b>s = nil</b><br/>заголовок nil<br/>массив в GC"]
-    A --> C["<b>s = s[:0]</b><br/>len=0, cap тот же<br/><b>ОПАСНО для []*T:</b><br/>данные не стёрты!"]
+    A --> C["<b>s = s( :0 )</b><br/>len=0, cap тот же<br/><b>ОПАСНО для указателей:</b><br/>данные не стёрты!"]
     A --> D["<b>clear(s)</b><br/>len и cap те же<br/>память занулена<br/>(Zero Value)"]
 
     style A fill:#2c3e50,stroke:#34495e,stroke-width:3px,color:#fff
@@ -2798,9 +2798,9 @@ flowchart TD
         H["<b>count:</b> число пар<br/><b>B:</b> 2^B бакетов<br/><b>buckets:</b> массив bmap"]
     end
     subgraph BMAP ["<b>Бакет bmap</b>"]
-        T["<b>tophash:</b> [8]uint8<br/>старшие 8 бит"]
-        K["<b>keys:</b> [8]Key<br/>8 ключей подряд"]
-        V["<b>values:</b> [8]Value<br/>8 значений подряд"]
+        T["<b>tophash:</b> 8 элементов uint8<br/>старшие 8 бит"]
+        K["<b>keys:</b> массив 8 ключей подряд"]
+        V["<b>values:</b> массив 8 значений подряд"]
         O["<b>overflow:</b> *bmap<br/>ссылка на хвост"]
         T --- K --- V --- O
     end
@@ -2974,15 +2974,15 @@ flowchart LR
 flowchart TD
     subgraph Scalar ["<b>Скалярная обработка (Обычный цикл)</b>"]
         direction LR
-        S1["a[0] + b[0]"] --> S2["a[1] + b[1]"] --> S3["a[2] + b[2]"] --> S4["a[3] + b[3]"]
+        S1["a0 + b0"] --> S2["a1 + b1"] --> S3["a2 + b2"] --> S4["a3 + b3"]
     end
 
-    subgraph SIMD ["<b>SIMD (Векторный регистр 128 бит за 1 такт)</b>"]
+    subgraph SIMD ["<b>SIMD: векторный регистр 128 бит за 1 такт</b>"]
         direction TB
-        R1["<b>Регистр XMM0:</b> [ a3 | a2 | a1 | a0 ]"]
-        R2["<b>Регистр XMM1:</b> [ b3 | b2 | b1 | b0 ]"]
+        R1["<b>Регистр XMM0:</b> ( a3 | a2 | a1 | a0 )"]
+        R2["<b>Регистр XMM1:</b> ( b3 | b2 | b1 | b0 )"]
         OP["<b>1 инструкция CPU (PADDD):</b> 1 такт!"]
-        RES["<b>Результат:</b>   [ a3+b3 | a2+b2 | a1+b1 | a0+b0 ]"]
+        RES["<b>Результат:</b>   ( a3+b3 | a2+b2 | a1+b1 | a0+b0 )"]
         R1 --> OP
         R2 --> OP
         OP --> RES
@@ -3093,8 +3093,8 @@ fmt.Println(sortedKeys) // [alice bob] (гарантированный алфа�
 
 ```mermaid
 flowchart TD
-    A["<b>Обращение к settings['alice']['theme']</b>"] --> B{"Инициализирована ли<br/>вложенная карта?"}
-    B -- "Чтение (get)" --> C["<b>Безопасно:</b><br/>settings['alice'] вернёт nil,<br/>чтение из nil вернёт '' (zero value)"]
+    A["<b>Обращение к settings.alice.theme</b>"] --> B{"Инициализирована ли<br/>вложенная карта?"}
+    B -- "Чтение (get)" --> C["<b>Безопасно:</b><br/>settings alice вернёт nil,<br/>чтение из nil вернёт '' (zero value)"]
     B -- "Запись (set)" --> D["<b>ОПАСНО:</b><br/>Попытка записи в nil-мапу<br/>вызовет <b>panic</b>!"]
 
     style A fill:#2c3e50,stroke:#34495e,stroke-width:2px,color:#fff

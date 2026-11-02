@@ -797,9 +797,9 @@ sequenceDiagram
 Стандартным индексом в PostgreSQL является **B-Tree (сбалансированное дерево)**:
 
 ```mermaid
-graph TD
-    Root["Root Page (Корневая страница)"] --> N1["Internal Page [10..50]"]
-    Root --> N2["Internal Page [60..100]"]
+flowchart TD
+    Root["Root Page (Корневая страница)"] --> N1["Internal Page (10..50)"]
+    Root --> N2["Internal Page (60..100)"]
     N1 --> L1["Leaf Page: 10, 20 (TID: 0x1, 0x2)"]
     N1 --> L2["Leaf Page: 30, 40 (TID: 0x3, 0x4)"]
     N2 --> L3["Leaf Page: 60, 70 (TID: 0x5, 0x6)"]
@@ -1651,17 +1651,17 @@ graph LR
 3. **Раздувание таблицы (Table Bloat):** в PostgreSQL из-за MVCC `UPDATE` не перезаписывает данные на месте, а создает 10 млн новых версий строк и помечает старые мертвыми. Таблица мгновенно распухает на десятки гигабайт, автовакуум не успевает зачищать мусор.
 
 ```mermaid
-graph TD
-    subgraph BadApproach ["❌ Наивный путь (Авария)"]
-        BadScript["Скрипт"] -->|UPDATE 10M строк в одной транзакции| DBMaster["PostgreSQL Master"]
-        DBMaster -->|Гигантский WAL| Lag["🚨 Реплика отстает на 3 часа<br/>🚨 Пул соединений исчерпан<br/>🚨 Deadlocks"]
+flowchart TD
+    subgraph BadApproach ["Наивный путь: авария"]
+        BadScript["Скрипт"] -->|"UPDATE 10M строк в одной транзакции"| DBMaster["PostgreSQL Master"]
+        DBMaster -->|"Гигантский WAL"| Lag["Реплика отстает на 3 часа<br/>Пул соединений исчерпан<br/>Deadlocks"]
     end
 
-    subgraph SafeApproach ["✅ Production-паттерн (Батчинг + Слейв)"]
-        Replica["Read Replica (Слейв)"] -->|Выборка ID без нагрузки на мастер| Script["Go-скрипт датафикса"]
-        Script -->|Сохранение ID в файл/буфер| File["IDs File (chunks of 5000)"]
-        File -->|UPDATE пачками по 5000 по PK| Master["PostgreSQL Master"]
-        Master -.->|Проверка replay_lag| Script
+    subgraph SafeApproach ["Production-паттерн: батчинг и реплика"]
+        Replica["Read Replica (Слейв)"] -->|"Выборка ID без нагрузки на мастер"| Script["Go-скрипт датафикса"]
+        Script -->|"Сохранение ID в файл/буфер"| File["IDs File (chunks of 5000)"]
+        File -->|"UPDATE пачками по 5000 по PK"| Master["PostgreSQL Master"]
+        Master -.->|"Проверка replay_lag"| Script
     end
 ```
 
@@ -1705,16 +1705,16 @@ graph TD
 - Векторизованный движок вычислений обрабатывает данные блоками с использованием инструкций процессора SIMD (SSE, AVX). Скорость агрегации достигает сотен миллионов строк в секунду на ядро.
 
 ```mermaid
-graph LR
-    subgraph RowOriented ["PostgreSQL (Строковое хранилище)"]
-        R1["Строка 1: [ID, User, Amount, Date]"]
-        R2["Строка 2: [ID, User, Amount, Date]"]
+flowchart LR
+    subgraph RowOriented ["PostgreSQL: строковое хранилище"]
+        R1["Строка 1: ID, User, Amount, Date"]
+        R2["Строка 2: ID, User, Amount, Date"]
     end
-    subgraph Columnar ["ClickHouse (Колоночное хранилище)"]
-        C1["Файл ID: [1, 2, ...]"]
-        C2["Файл User: [alice, bob, ...]"]
-        C3["Файл Amount: [100, 250, ...] (сжатие LZ4)"]
-        C4["Файл Date: [2026-09-01, ...] (сжатие DoubleDelta)"]
+    subgraph Columnar ["ClickHouse: колоночное хранилище"]
+        C1["Файл ID: 1, 2, ..."]
+        C2["Файл User: alice, bob, ..."]
+        C3["Файл Amount: 100, 250, ... (сжатие LZ4)"]
+        C4["Файл Date: 2026-09-01, ... (сжатие DoubleDelta)"]
     end
 ```
 
