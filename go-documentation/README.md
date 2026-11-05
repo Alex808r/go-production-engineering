@@ -70,6 +70,7 @@
    - [Базовый консольный ввод и вывод (fmt.Println, fmt.Printf, fmt.Scan)](01-go-core-basics.md#07-базовый-консольный-ввод-и-вывод-fmtprintln-fmtprintf-fmtscan)
    - [Структура проекта и CLI-команды тулчейна Go](01-go-core-basics.md#08-структура-проекта-и-cli-команды-тулчейна-go)
 1. [**Управление потоком (Control Flow)**](01-go-core-basics.md#1-управление-потоком-control-flow)
+   - [Блоки видимости, затенение переменных (Shadowing) и Universe Block](01-go-core-basics.md#10-блоки-видимости-затенение-переменных-shadowing-и-universe-block)
    - [Формы цикла for в Go](01-go-core-basics.md#11-формы-цикла-for-в-go)
    - [Механика цикла for range со всеми типами данных](01-go-core-basics.md#механика-цикла-for-range-со-всеми-типами-данных)
    - [Конструкция if с коротким объявлением (If with Short Statement)](01-go-core-basics.md#12-конструкция-if-с-коротким-объявлением-if-with-short-statement)
@@ -167,6 +168,7 @@
    - [Конкурентность vs Параллелизм (Concurrency is not Parallelism)](03-go-core-concurrency.md#110-конкурентность-vs-параллелизм-concurrency-is-not-parallelism)
    - [Горутины (Goroutines) vs Системные потоки (OS Threads)](03-go-core-concurrency.md#111-горутины-goroutines-vs-системные-потоки-os-threads)
    - [Каналы (Channels): Буферизованные и Небуферизованные](03-go-core-concurrency.md#112-каналы-channels-буферизованные-и-небуферизованные)
+   - [Паттерн Backpressure (Обратное давление) через буферизованные каналы](03-go-core-concurrency.md#️-паттерн-backpressure-обратное-давление-через-буферизованные-каналы)
    - [Конструкция select и Таймауты](03-go-core-concurrency.md#113-конструкция-select-и-таймауты)
    - [Синхронизация: sync.WaitGroup](03-go-core-concurrency.md#114-синхронизация-syncwaitgroup)
    - [Паттерн Worker Pool (Пул воркеров)](03-go-core-concurrency.md#115-паттерн-worker-pool-пул-воркеров)
@@ -215,7 +217,7 @@
 
 15. [**Продвинутая Синхронизация и Паттерны Конкурентности**](03-go-core-concurrency.md#15-продвинутая-синхронизация-и-паттерны-конкурентности)
 
-   - [sync.Mutex, sync.RWMutex, sync.Once и sync.Pool](03-go-core-concurrency.md#151-syncmutex-syncrwmutex-synconce-и-syncpool)
+   - [sync.Mutex, sync.RWMutex, sync.Once (включая OnceValue Go 1.21+) и sync.Pool](03-go-core-concurrency.md#151-syncmutex-syncrwmutex-synconce-и-syncpool)
    - [sync.Map (Потокобезопасная карта: Two-Map Architecture, vs RWMutex)](03-go-core-concurrency.md#4-syncmap-потокобезопасная-карта-без-внешнего-мьютекса)
    - [Пакет sync/atomic и Lock-Free счетчики](03-go-core-concurrency.md#152-пакет-syncatomic-и-lock-free-счетчики)
    - [Паттерны: Fan-Out / Fan-In, Pipeline и ErrGroup](03-go-core-concurrency.md#153-паттерны-fan-out--fan-in-pipeline-и-errgroup)
@@ -229,7 +231,7 @@
 
    - [Философия Generics: Когда, Зачем и Какие проблемы решили](03-go-core-concurrency.md#160-философия-обобщённого-программирования-когда-зачем-и-какие-проблемы-решили-generics)
    - [Type Parameters, Any и Comparable](03-go-core-concurrency.md#161-type-parameters-any-и-comparable)
-   - [Type Constraints, пакет cmp и оператор тильда ~](03-go-core-concurrency.md#162-type-constraints-пакет-cmp-и-оператор-тильда)
+   - [Type Constraints, пакет cmp, оператор тильда ~ и архитектурные ограничения методов](03-go-core-concurrency.md#162-type-constraints-пакет-cmp-и-оператор-тильда)
    - [Итераторы: range over func и пакет iter (Go 1.23+)](03-go-core-concurrency.md#163-итераторы-range-over-func-и-пакет-iter-go-123)
 
 17. [**Тестирование, Бенчмарки и Профилирование (Testing & pprof)**](05-go-core-testing-arch.md#17-тестирование-бенчмарки-и-профилирование-testing--pprof)
@@ -243,7 +245,7 @@
    - [Интеграционные тесты и идемпотентность работы с СУБД](05-go-core-testing-arch.md#177-интеграционные-тесты-и-идемпотентность-работы-с-субд)
    - [Тестирование HTTP-хендлеров (net/http/httptest)](05-go-core-testing-arch.md#178-тестирование-http-хендлеров-nethttphttptest)
    - [Test-Driven Development (TDD): Red, Green, Refactor](05-go-core-testing-arch.md#179-test-driven-development-tdd-red-green-refactor)
-   - [Бенчмаркинг производительности (testing.B)](05-go-core-testing-arch.md#1710-бенчмаркинг-производительности-testingb)
+   - [Бенчмаркинг производительности (testing.B) и паттерн Blackhole](05-go-core-testing-arch.md#1710-бенчмаркинг-производительности-testingb)
    - [Fuzz-тестирование (Go 1.18+)](05-go-core-testing-arch.md#1711-fuzz-тестирование-go-118)
    - [Профилирование бенчмарков (-cpuprofile, -memprofile)](05-go-core-testing-arch.md#1712-профилирование-бенчмарков--cpuprofile--memprofile)
    - [Профилирование живых приложений в runtime (net/http/pprof)](05-go-core-testing-arch.md#1713-профилирование-живых-приложений-в-runtime-nethttppprof)
@@ -265,6 +267,7 @@
 
    - [Ключевые команды go mod](05-go-core-testing-arch.md#191-ключевые-команды-go-mod)
    - [Назначение файлов go.mod и go.sum](05-go-core-testing-arch.md#192-назначение-файлов-gomod-и-gosum)
+   - [Эволюция публичного API через Type Aliases при рефакторинге](05-go-core-testing-arch.md#3-эволюция-публичного-api-через-алиасы-типов-type-aliases-при-рефакторинге)
    - [Встраивание файлов в бинарник: //go:embed (Go 1.16+)](05-go-core-testing-arch.md#193-встраивание-файлов-в-бинарник-goembed-go-116)
    - [Кодогенерация: go generate](05-go-core-testing-arch.md#194-кодогенерация-go-generate)
    - [Чтение метаданных сборки в runtime: debug.ReadBuildInfo()](05-go-core-testing-arch.md#195-чтение-метаданных-сборки-в-runtime-debugreadbuildinfo)
@@ -358,6 +361,7 @@
    - [Инспекция полей структур и тегов](06-go-core-algorithms-interview.md#302-инспекция-полей-структур-и-тегов)
    - [Проверка интерфейса на равенство nil: Value.IsNil()](06-go-core-algorithms-interview.md#303-проверка-интерфейса-на-равенство-nil-через-рефлексию-valueisnil)
    - [Почему рефлексия медленная?](06-go-core-algorithms-interview.md#304-почему-рефлексия-медленная)
+   - [Динамическое создание функций: reflect.MakeFunc](06-go-core-algorithms-interview.md#305-динамическое-создание-функций-reflectmakefunc)
 
 31. [**Низкоуровневый доступ: unsafe.Pointer**](06-go-core-algorithms-interview.md#31-низкоуровневый-доступ-unsafepointer)
 

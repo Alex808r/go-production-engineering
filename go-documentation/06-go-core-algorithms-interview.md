@@ -1449,6 +1449,60 @@ fmt.Println(IsInterfaceNil(i)) // true ✅ Безопасно распознан
 > [!TIP]
 > **Оптимизация:** Библиотеки вроде `encoding/json` кэшируют результаты рефлексии (`reflect.Type` → таблица полей) при первом вызове, используя `sync.Map`.
 
+### 30.5. Динамическое создание функций: `reflect.MakeFunc`
+
+> 📖 *Согласно книге **Джона Боднера «Go: идиомы и паттерны проектирования» (2-е изд., Глава 16 «Рефлексия, Unsafe и Cgo»)**:*  
+> Пакет `reflect` позволяет не только инспектировать типы и структуры, но и динамически конструировать новые функции во время выполнения программы с помощью `reflect.MakeFunc`.
+>
+> Это используется в библиотеках моков, RPC-фреймворках или для построения универсальных декораторов (например, автоматического замера времени или логирования):
+
+```go
+package main
+
+import (
+    "fmt"
+    "reflect"
+    "time"
+)
+
+// MakeTimedDecorator оборачивает любую функцию, замеряя время её выполнения
+func MakeTimedDecorator(fn any) any {
+    fnVal := reflect.ValueOf(fn)
+    fnType := fnVal.Type()
+
+    if fnType.Kind() != reflect.Func {
+        panic("MakeTimedDecorator принимает только функции!")
+    }
+
+    // Создаем новую функцию с точно такой же сигнатурой (параметры и возврат):
+    timedVal := reflect.MakeFunc(fnType, func(args []reflect.Value) []reflect.Value {
+        start := time.Now()
+        // Динамический вызов оригинальной функции:
+        out := fnVal.Call(args)
+        fmt.Printf("⏱️ Время вызова: %v\n", time.Since(start))
+        return out
+    })
+
+    return timedVal.Interface()
+}
+
+func slowAdd(a, b int) int {
+    time.Sleep(10 * time.Millisecond)
+    return a + b
+}
+
+func main() {
+    // Оборачиваем slowAdd динамически без кодогенерации:
+    timedAdd := MakeTimedDecorator(slowAdd).(func(int, int) int)
+    res := timedAdd(10, 20)
+    fmt.Println("Результат:", res) // 30
+}
+```
+
+> [!WARNING]
+> **Цена динамизма `MakeFunc` (по Боднеру):**  
+> Каждый вызов через `reflect.MakeFunc` требует среза `[]reflect.Value` для аргументов и результатов, вызывая множественные аллокации в куче (heap allocations) и отключение инлайнинга компилятора. Используйте `MakeFunc` в тестах, моках или при инициализации, но избегайте его на горячем пути (hot path) высоконагруженных сервисов.
+
 ---
 
 ## 31. Низкоуровневый доступ: `unsafe.Pointer`
