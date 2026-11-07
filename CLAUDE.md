@@ -1,9 +1,9 @@
 # CLAUDE.md
 
-Все правила и стандарты работы ассистента в этом репозитории консолидированы в едином файле [AGENTS.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/AGENTS.md).
-
-Пожалуйста, всегда следуйте инструкциям из [AGENTS.md](file:///Users/user/workspace/golang_projects/go-core-4/go-production-engineering/AGENTS.md), включая:
-- **Строгий запрет на автоматический коммит и пуш без подтверждения пользователя.**
-- Обязательную верификацию через `go test ./...` и `go test -race ./...`.
-- Правило доказательств в коде (Code Evidence).
-- Правила синхронизации оглавления `go-documentation/README.md`.
+Перед работой прочитай [AGENTS.md](AGENTS.md) и следуй общим правилам проекта.
+Каталог процедур — [.agents/skills](.agents/skills); читай только подходящие задаче навыки.
+`.claude/skills` ссылается на этот общий каталог; редактируй исходники в `.agents/skills`.
+Подключение помощников описано в
+[руководстве](go-documentation/ai-agents-guide.md).
+Названия инструментов в процедурах обозначают операции, используй доступные аналоги.
+Навыки не разрешают commit, push, создание веток, PR или запуск инфраструктуры.
