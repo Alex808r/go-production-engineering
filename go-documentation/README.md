@@ -118,6 +118,7 @@
    - [Неупорядоченность итерации и сортировка ключей](01-go-core-data-structures.md#64-неупорядоченность-итерации-и-сортировка-ключей)
    - [Конкурентный доступ: Фатальная ошибка (fatal error: concurrent map writes)](01-go-core-data-structures.md#65-конкурентный-доступ-фатальная-ошибка-fatal-error-concurrent-map-writes)
    - [Почему в Go запрещено брать адрес элемента мапы (&m[k])?](01-go-core-data-structures.md#66-почему-в-go-запрещено-брать-адрес-элемента-мапы-mk)
+   - [Хеш-функции и реализация собственной хэш-таблицы с нуля](01-go-core-data-structures.md#661-хеш-функции-и-реализация-собственной-хэш-таблицы-с-нуля-по-адитье-бхаргаве)
    - [Внутреннее устройство Map: Старая реализация (hmap) vs Новая реализация (Swiss Tables в Go 1.24+)](01-go-core-data-structures.md#67-внутреннее-устройство-map-старая-реализация-hmap-vs-новая-реализация-swiss-tables-в-go-124)
    - [Практические паттерны использования карт (Map Idioms & Best Practices)](01-go-core-data-structures.md#68-практические-паттерны-использования-карт-map-idioms--best-practices)
 7. [**Указатели в деталях (Pointers)**](01-go-core-data-structures.md#7-указатели-в-деталях-pointers)
@@ -325,18 +326,19 @@
    - [Бинарный поиск: ручной, sort.Search и slices.BinarySearch](06-go-core-algorithms-interview.md#262-бинарный-поиск-ручной-sortsearch-и-slicesbinarysearch)
    - [Алгоритмы сортировки и стандартный пакет sort (QuickSort, pdqsort, sort.Interface)](06-go-core-algorithms-interview.md#263-алгоритмы-сортировки-и-стандартный-пакет-sort-quicksort-pdqsort-sortinterface)
    - [Рекурсия и Стек вызовов (Call Stack & Stack Overflow)](06-go-core-algorithms-interview.md#264-рекурсия-и-стек-вызовов-call-stack--stack-overflow)
-   - [Парадигмы алгоритмов: «Разделяй и властвуй», Динамическое программирование и Жадные алгоритмы](06-go-core-algorithms-interview.md#265-парадигмы-алгоритмов-разделяй-и-властвуй-динамическое-программирование-и-жадные-алгоритмы)
+   - [Парадигмы алгоритмов: «Разделяй и властвуй», Динамическое программирование (Knapsack DP) и Жадные алгоритмы (NP-Complete)](06-go-core-algorithms-interview.md#265-парадигмы-алгоритмов-разделяй-и-властвуй-динамическое-программирование-и-жадные-алгоритмы)
    - [Поисковый обратный индекс (Inverted Index) и быстрая выборка документов](06-go-core-algorithms-interview.md#266-поисковый-обратный-индекс-inverted-index-и-быстрая-выборка-документов)
    - [Топ-4 паттерна алгоритмических интервью (Шаблоны с наглядными аналогиями)](06-go-core-algorithms-interview.md#267-топ-4-паттерна-алгоритмических-интервью-шаблоны-с-наглядными-аналогиями)
 
 27. [**Классические Структуры Данных (Data Structures в Go)**](06-go-core-algorithms-interview.md#27-классические-структуры-данных-data-structures-в-go)
 
-   - [Связные списки (container/list vs Slice)](06-go-core-algorithms-interview.md#271-связные-списки-containerlist-vs-slice)
+   - [Связные списки: Модель «Кинотеатр vs Квест», кастомный список и Reverse (container/list vs Slice)](06-go-core-algorithms-interview.md#271-связные-списки-containerlist-vs-slice)
    - [Стек (LIFO) и Очередь (FIFO)](06-go-core-algorithms-interview.md#272-стек-lifo-и-очередь-fifo)
    - [Бинарные деревья поиска (BST: Binary Search Tree)](06-go-core-algorithms-interview.md#273-бинарные-деревья-поиска-bst-binary-search-tree)
-   - [Графы и алгоритмы обхода (Представление в Go, BFS, DFS и остовные деревья)](06-go-core-algorithms-interview.md#274-графы-и-алгоритмы-обхода-представление-в-go-bfs-dfs-и-остовные-деревья)
+   - [Графы и алгоритмы обхода (Представление в Go, BFS, DFS, остовные деревья и Алгоритм Дейкстры)](06-go-core-algorithms-interview.md#274-графы-и-алгоритмы-обхода-представление-в-go-bfs-dfs-и-остовные-деревья)
    - [Кольцевой список (Пакет container/ring: Round-Robin и циклический буфер)](06-go-core-algorithms-interview.md#275-кольцевой-список-пакет-containerring-round-robin-и-циклический-буфер)
    - [Двоичная куча и Очередь с приоритетами (Пакет container/heap)](06-go-core-algorithms-interview.md#276-двоичная-куча-и-очередь-с-приоритетами-пакет-containerheap)
+   - [Вероятностные структуры данных: Фильтр Блума (Bloom Filter)](06-go-core-algorithms-interview.md#277-вероятностные-структуры-данных-фильтр-блума-bloom-filter-в-highload-системах)
 
 
 28. [**Сетевое Программирование: TCP и UDP сокеты (Пакет net)**](04-go-core-backend-web.md#28-сетевое-программирование-tcp-и-udp-сокеты-пакет-net)
