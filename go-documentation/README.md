@@ -326,9 +326,9 @@
 
    - [Оценка сложности алгоритмов (Big-O Notation)](06-go-core-algorithms-interview.md#261-оценка-сложности-алгоритмов-big-o-notation)
    - [Бинарный поиск: ручной, sort.Search и slices.BinarySearch](06-go-core-algorithms-interview.md#262-бинарный-поиск-ручной-sortsearch-и-slicesbinarysearch)
-   - [Алгоритмы сортировки и стандартный пакет sort (QuickSort, pdqsort, sort.Interface)](06-go-core-algorithms-interview.md#263-алгоритмы-сортировки-и-стандартный-пакет-sort-quicksort-pdqsort-sortinterface)
+   - [Алгоритмы сортировки и стандартный пакет sort (SelectionSort, QuickSort, pdqsort, sort.Interface)](06-go-core-algorithms-interview.md#263-алгоритмы-сортировки-и-стандартный-пакет-sort-selectionsort-quicksort-pdqsort-sortinterface)
    - [Рекурсия и Стек вызовов (Call Stack & Stack Overflow)](06-go-core-algorithms-interview.md#264-рекурсия-и-стек-вызовов-call-stack--stack-overflow)
-   - [Парадигмы алгоритмов: «Разделяй и властвуй», Динамическое программирование (Knapsack DP) и Жадные алгоритмы (NP-Complete)](06-go-core-algorithms-interview.md#265-парадигмы-алгоритмов-разделяй-и-властвуй-динамическое-программирование-и-жадные-алгоритмы)
+   - [Парадигмы алгоритмов: «Разделяй и властвуй» (НОД / Алгоритм Евклида), Динамическое программирование (Knapsack DP) и Жадные алгоритмы (NP-Complete)](06-go-core-algorithms-interview.md#265-парадигмы-алгоритмов-разделяй-и-властвуй-динамическое-программирование-и-жадные-алгоритмы)
    - [Поисковый обратный индекс (Inverted Index) и быстрая выборка документов](06-go-core-algorithms-interview.md#266-поисковый-обратный-индекс-inverted-index-и-быстрая-выборка-документов)
    - [Топ-4 паттерна алгоритмических интервью (Шаблоны с наглядными аналогиями)](06-go-core-algorithms-interview.md#267-топ-4-паттерна-алгоритмических-интервью-шаблоны-с-наглядными-аналогиями)
 
